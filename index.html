@@ -413,6 +413,537 @@ select.form-control-lc { cursor: pointer; }
   .card-lc { padding: 18px 16px; }
   .saldo-monto { font-size: 2rem; }
 }
+
+/* ============================================================= */
+/* TUTORIAL INTERACTIVO                                           */
+/* ============================================================= */
+
+.tut-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 20, 40, 0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 100000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: tutFadeIn 0.3s ease;
+}
+.tut-overlay.show { display: flex; }
+
+@keyframes tutFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tut-container {
+  width: 100%;
+  max-width: 500px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  animation: tutSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes tutSlideUp {
+  from { transform: translateY(60px) scale(0.9); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.tut-progress {
+  height: 5px;
+  background: #e8edf2;
+  position: relative;
+  overflow: hidden;
+}
+.tut-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary, #1a5490), var(--accent, #2ecc71));
+  width: 0%;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0 5px 5px 0;
+}
+
+.tut-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.06);
+  color: #6b7280;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tut-close:hover {
+  background: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+  transform: rotate(90deg);
+}
+
+.tut-illustration {
+  background: linear-gradient(135deg, #f0f4f8 0%, #e8eef5 100%);
+  padding: 32px 20px;
+  min-height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.tut-illustration::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(46, 204, 113, 0.12), transparent 70%);
+  border-radius: 50%;
+}
+.tut-illustration::after {
+  content: '';
+  position: absolute;
+  bottom: -40%;
+  left: -20%;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(26, 84, 144, 0.12), transparent 70%);
+  border-radius: 50%;
+}
+
+.tut-mockup {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 320px;
+  animation: tutMockIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes tutMockIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.tut-mock-phone {
+  background: #1a1a2e;
+  border-radius: 24px;
+  padding: 10px;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+  max-width: 260px;
+  margin: 0 auto;
+}
+.tut-mock-screen {
+  background: #f0f4f8;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 210px;
+  position: relative;
+}
+
+.tut-mock-header {
+  background: linear-gradient(135deg, var(--primary, #1a5490), #0f3a66);
+  color: white;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.tut-mock-header-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+.tut-mock-saldo {
+  background: linear-gradient(135deg, var(--primary, #1a5490), #0f3a66);
+  color: white;
+  padding: 16px;
+  margin: 10px;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.tut-mock-saldo-label {
+  font-size: 0.55rem;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.tut-mock-saldo-monto {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.tut-mock-saldo-casa {
+  font-size: 0.6rem;
+  opacity: 0.8;
+  margin-top: 6px;
+}
+
+.tut-mock-colonia {
+  background: white;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.tut-mock-colonia-title {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--primary, #1a5490);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.tut-mock-colonia-title span:last-child {
+  background: var(--primary, #1a5490);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.5rem;
+}
+.tut-mock-colonia-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+}
+.tut-mock-colonia-item {
+  text-align: center;
+  padding: 6px 3px;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+.tut-mock-colonia-item.green { background: rgba(46, 204, 113, 0.12); }
+.tut-mock-colonia-item.red { background: rgba(231, 76, 60, 0.12); }
+.tut-mock-colonia-item.blue { background: rgba(26, 84, 144, 0.12); }
+.tut-mock-colonia-item-label {
+  font-size: 0.48rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #7f8c8d;
+  letter-spacing: 0.5px;
+}
+.tut-mock-colonia-item-value {
+  font-size: 0.62rem;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.tut-mock-tabs {
+  display: flex;
+  gap: 5px;
+  margin: 10px;
+  background: white;
+  padding: 4px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+.tut-mock-tab {
+  flex: 1;
+  padding: 5px 3px;
+  text-align: center;
+  font-size: 0.5rem;
+  font-weight: 600;
+  border-radius: 5px;
+  color: #7f8c8d;
+}
+.tut-mock-tab.active {
+  background: var(--primary, #1a5490);
+  color: white;
+}
+
+.tut-mock-fab {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent, #2ecc71);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.5);
+}
+
+.tut-mock-list {
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.tut-mock-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+.tut-mock-item-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  flex-shrink: 0;
+}
+.tut-mock-item-icon.green { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+.tut-mock-item-icon.orange { background: rgba(243, 156, 18, 0.15); color: #f39c12; }
+.tut-mock-item-icon.red { background: rgba(231, 76, 60, 0.15); color: #e74c3c; }
+.tut-mock-item-body {
+  flex: 1;
+  min-width: 0;
+}
+.tut-mock-item-title {
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+.tut-mock-item-sub {
+  font-size: 0.45rem;
+  color: #7f8c8d;
+}
+.tut-mock-item-amount {
+  font-size: 0.58rem;
+  font-weight: 800;
+}
+
+/* ========================================= */
+/* BADGE PULSANTE (reemplaza las flechas)   */
+/* ========================================= */
+.tut-badge-pulse {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff3b30, #c0392b);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 800;
+  box-shadow: 0 4px 15px rgba(255, 59, 48, 0.55);
+  border: 3px solid white;
+  animation: tutBadgePulse 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.tut-badge-pulse::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 59, 48, 0.6);
+  animation: tutBadgeRing 1.8s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes tutBadgePulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 59, 48, 0.55); }
+  50% { transform: scale(1.15); box-shadow: 0 6px 25px rgba(255, 59, 48, 0.85); }
+}
+
+@keyframes tutBadgeRing {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+.tut-badge-pulse.top-right { top: -8px; right: -8px; }
+.tut-badge-pulse.top-left { top: -8px; left: -8px; }
+.tut-badge-pulse.bottom-right { bottom: -8px; right: -8px; }
+.tut-badge-pulse.bottom-left { bottom: -8px; left: -8px; }
+.tut-badge-pulse.center { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+/* Card que se está señalando */
+.tut-target {
+  position: relative;
+  border-radius: 14px;
+  box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.35),
+              0 0 20px 5px rgba(255, 59, 48, 0.3);
+  animation: tutTargetGlow 2s ease-in-out infinite;
+}
+
+@keyframes tutTargetGlow {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.35), 0 0 20px 5px rgba(255, 59, 48, 0.3); }
+  50% { box-shadow: 0 0 0 5px rgba(255, 59, 48, 0.5), 0 0 30px 10px rgba(255, 59, 48, 0.45); }
+}
+
+.tut-content {
+  padding: 20px 24px 24px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.tut-step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(26, 84, 144, 0.1);
+  color: var(--primary, #1a5490);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  align-self: flex-start;
+}
+.tut-step-badge i { font-size: 0.75rem; }
+
+.tut-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.tut-text {
+  font-size: 0.92rem;
+  color: #5a6b7d;
+  line-height: 1.55;
+  margin: 0 0 8px;
+}
+
+.tut-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(46, 204, 113, 0.08);
+  border-left: 3px solid var(--accent, #2ecc71);
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: #1e8449;
+  line-height: 1.4;
+}
+.tut-tip i {
+  color: var(--accent, #2ecc71);
+  font-size: 0.9rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.tut-footer {
+  padding: 14px 24px 20px;
+  border-top: 1px solid #e8edf2;
+  background: #fafbfc;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tut-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.tut-btn-primary {
+  background: linear-gradient(135deg, var(--primary, #1a5490), #0f3a66);
+  color: white;
+  flex: 1;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(26, 84, 144, 0.3);
+}
+.tut-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(26, 84, 144, 0.4);
+}
+.tut-btn-primary:active { transform: translateY(0); }
+.tut-btn-ghost {
+  background: transparent;
+  color: #6b7280;
+  padding: 10px 14px;
+}
+.tut-btn-ghost:hover {
+  background: #e8edf2;
+  color: #2c3e50;
+}
+
+.tut-dots {
+  display: flex;
+  gap: 4px;
+  margin-right: auto;
+}
+.tut-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d1d8e0;
+  transition: all 0.3s ease;
+}
+.tut-dot.active {
+  width: 20px;
+  border-radius: 4px;
+  background: var(--primary, #1a5490);
+}
+.tut-dot.done {
+  background: var(--accent, #2ecc71);
+}
+
+@media (max-width: 576px) {
+  .tut-container {
+    max-width: 100%;
+    border-radius: 16px;
+  }
+  .tut-illustration {
+    padding: 24px 12px;
+    min-height: 200px;
+  }
+  .tut-content {
+    padding: 16px 18px 18px;
+  }
+  .tut-title { font-size: 1.05rem; }
+  .tut-text { font-size: 0.85rem; }
+  .tut-footer { padding: 12px 18px 16px; }
+  .tut-btn { padding: 9px 14px; font-size: 0.82rem; }
+  .tut-mock-phone { max-width: 220px; padding: 8px; }
+  .tut-mock-screen { min-height: 180px; }
+}
+
+
 </style>
 </head>
 <body>
@@ -506,14 +1037,17 @@ select.form-control-lc { cursor: pointer; }
         <div class="header-brand-subtitle" id="vecinoHeaderCasa">Casa -</div>
       </div>
     </div>
-    <div class="header-actions">
-      <button class="header-btn" onclick="abrirCambiarPassword()" title="Cambiar contraseña">
-        <i class="fas fa-key"></i>
-      </button>
-      <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
-    </div>
+<div class="header-actions">
+  <button class="header-btn" onclick="reabrirTutorial()" title="Ver tutorial">
+    <i class="fas fa-question"></i>
+  </button>
+  <button class="header-btn" onclick="abrirCambiarPassword()" title="Cambiar contraseña">
+    <i class="fas fa-key"></i>
+  </button>
+  <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión">
+    <i class="fas fa-sign-out-alt"></i>
+  </button>
+</div>
   </div>
 
   <div class="container-main">
@@ -646,14 +1180,17 @@ select.form-control-lc { cursor: pointer; }
         <div class="header-brand-subtitle">Panel del Tesorero</div>
       </div>
     </div>
-    <div class="header-actions">
-      <button class="header-btn" onclick="verDashboardPublico()" title="Estado público">
-        <i class="fas fa-chart-pie"></i>
-      </button>
-      <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
-    </div>
+<div class="header-actions">
+  <button class="header-btn" onclick="reabrirTutorial()" title="Ver tutorial">
+    <i class="fas fa-question"></i>
+  </button>
+  <button class="header-btn" onclick="verDashboardPublico()" title="Estado público">
+    <i class="fas fa-chart-pie"></i>
+  </button>
+  <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión">
+    <i class="fas fa-sign-out-alt"></i>
+  </button>
+</div>
   </div>
 
   <div class="container-main">
@@ -1081,6 +1618,46 @@ select.form-control-lc { cursor: pointer; }
   </div>
 </div>
 
+<!-- ============================ TUTORIAL ============================ -->
+<div class="tut-overlay" id="tutOverlay">
+  <div class="tut-container">
+    <div class="tut-progress">
+      <div class="tut-progress-bar" id="tutProgressBar"></div>
+    </div>
+    <button class="tut-close" onclick="cerrarTutorial()" title="Cerrar">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <div class="tut-illustration" id="tutIllustration"></div>
+
+    <div class="tut-content">
+      <div class="tut-step-badge">
+        <i class="fas fa-graduation-cap"></i>
+        <span id="tutStepBadge">Paso 1 de 5</span>
+      </div>
+      <h3 class="tut-title" id="tutTitle"></h3>
+      <p class="tut-text" id="tutText"></p>
+      <div class="tut-tip" id="tutTip" style="display: none;">
+        <i class="fas fa-lightbulb"></i>
+        <span id="tutTipText"></span>
+      </div>
+    </div>
+
+    <div class="tut-footer">
+      <div class="tut-dots" id="tutDots"></div>
+      <button class="tut-btn tut-btn-ghost" id="tutPrevBtn" onclick="pasoAnteriorTutorial()">
+        <i class="fas fa-arrow-left"></i> Atrás
+      </button>
+      <button class="tut-btn tut-btn-primary" id="tutNextBtn" onclick="pasoSiguienteTutorial()">
+        <span id="tutNextBtnText">Siguiente</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
 <script>
 // =========================================================================
 // LA CONCORDIA - JS FRONTEND
@@ -1438,6 +2015,8 @@ document.getElementById("formLoginVecino").addEventListener("submit", async (e) 
     await cargarVistaVecino();
     mostrarPantalla("vecino");
     sincronizarPendientes();
+    verificarTutorialAutomatico("vecino");
+
   } catch (err) {
     Swal.fire("Error de acceso", err.message, "error");
   } finally {
@@ -1469,6 +2048,8 @@ document.getElementById("formLoginAdmin").addEventListener("submit", async (e) =
 
     await cargarVistaAdmin();
     mostrarPantalla("admin");
+    verificarTutorialAutomatico("admin");
+
   } catch (err) {
     Swal.fire("Acceso denegado", err.message, "error");
   } finally {
@@ -3091,7 +3672,476 @@ const swalObserver = new MutationObserver(() => {
 swalObserver.observe(document.body, { childList: true, subtree: true });
 
 console.log("La Concordia - App cargada correctamente");
-</script>
 
+
+// =============================================================
+// SISTEMA DE TUTORIAL INTERACTIVO
+// =============================================================
+
+// ---- Definición de pasos del tutorial del VECINO ----
+const TUTORIAL_VECINO = [
+  {
+    titulo: "¡Bienvenido a La Concordia!",
+    texto: "Aquí podrás ver tus aportaciones, tu saldo personal y el estado de la colonia. Todo desde tu celular, cuando quieras.",
+    tip: "Tu casa tiene su propia contraseña privada. Nadie más puede ver tus aportaciones.",
+    ilustracion: `
+      <div class="tut-mockup">
+        <div class="tut-mock-phone">
+          <div class="tut-mock-screen" style="min-height: 210px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center;">
+            <div style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #1a5490, #0f3a66); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; margin-bottom: 14px; box-shadow: 0 8px 20px rgba(26, 84, 144, 0.4);">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <div style="font-size: 1rem; font-weight: 800; color: #1a5490;">La Concordia</div>
+            <div style="font-size: 0.6rem; color: #7f8c8d; margin-top: 3px;">Tesorería Vecinal</div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  {
+    titulo: "Tu saldo personal",
+    texto: "Esta tarjeta muestra el total que has aportado a la colonia. Solo cuenta lo que el tesorero ya aprobó. Si algo está pendiente, no aparece aquí todavía.",
+    tip: "Cuando el tesorero aprueba una aportación, tu saldo se actualiza automáticamente.",
+    ilustracion: `
+      <div class="tut-mockup">
+        <div class="tut-mock-phone">
+          <div class="tut-mock-screen">
+            <div class="tut-mock-header">
+              <div class="tut-mock-header-icon"><i class="fas fa-handshake"></i></div>
+              <span>La Concordia</span>
+            </div>
+            <div class="tut-mock-saldo tut-target" style="position: relative;">
+              <div class="tut-mock-saldo-label">Total Aportado</div>
+              <div class="tut-mock-saldo-monto">L. 900</div>
+              <div class="tut-mock-saldo-casa">Casa F10 · En línea</div>
+              <div class="tut-badge-pulse top-right"><i class="fas fa-eye"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  {
+    titulo: "Estado de la Colonia",
+    texto: "Aquí todos vemos cuánto se ha recaudado, cuánto se ha gastado y cuál es el saldo actual. Transparencia total. Toca 'Ver Egresos' para ver en qué se gastó cada Lempira.",
+    tip: "Los egresos muestran su motivo y hasta la foto del comprobante. Nada se oculta.",
+    ilustracion: `
+      <div class="tut-mockup">
+        <div class="tut-mock-phone">
+          <div class="tut-mock-screen">
+            <div class="tut-mock-colonia tut-target" style="position: relative;">
+              <div class="tut-mock-colonia-title">
+                <span><i class="fas fa-users"></i> Colonia</span>
+                <span>Ver Egresos</span>
+              </div>
+              <div class="tut-mock-colonia-grid">
+                <div class="tut-mock-colonia-item green">
+                  <div class="tut-mock-colonia-item-label">Recaudado</div>
+                  <div class="tut-mock-colonia-item-value" style="color: #2ecc71;">L. 5,400</div>
+                </div>
+                <div class="tut-mock-colonia-item red">
+                  <div class="tut-mock-colonia-item-label">Egresos</div>
+                  <div class="tut-mock-colonia-item-value" style="color: #e74c3c;">L. 1,200</div>
+                </div>
+                <div class="tut-mock-colonia-item blue">
+                  <div class="tut-mock-colonia-item-label">Saldo</div>
+                  <div class="tut-mock-colonia-item-value" style="color: #1a5490;">L. 4,200</div>
+                </div>
+              </div>
+              <div class="tut-badge-pulse top-right"><i class="fas fa-eye"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  {
+    titulo: "Subir una aportación",
+    texto: "Toca el botón verde flotante para subir tu comprobante de transferencia. Solo necesitas: el mes que pagas, el monto, la fecha y una foto del comprobante.",
+    tip: "¿No tienes internet? No hay problema. Tu aportación se guarda en el celular y se envía sola cuando recuperes señal.",
+    ilustracion: `
+      <div class="tut-mockup">
+        <div class="tut-mock-phone">
+          <div class="tut-mock-screen" style="position: relative; min-height: 210px;">
+            <div class="tut-mock-header">
+              <div class="tut-mock-header-icon"><i class="fas fa-handshake"></i></div>
+              <span>La Concordia</span>
+            </div>
+            <div class="tut-mock-list" style="margin-top: 8px;">
+              <div class="tut-mock-item">
+                <div class="tut-mock-item-icon green"><i class="fas fa-check"></i></div>
+                <div class="tut-mock-item-body">
+                  <div class="tut-mock-item-title">Noviembre 2026</div>
+                  <div class="tut-mock-item-sub">01/11/2026</div>
+                </div>
+                <div class="tut-mock-item-amount" style="color: #2ecc71;">+ L. 300</div>
+              </div>
+            </div>
+            <div style="position: absolute; bottom: 10px; right: 10px;">
+              <div class="tut-mock-fab" style="position: relative;">
+                <i class="fas fa-plus"></i>
+                <div class="tut-badge-pulse top-right" style="width: 26px; height: 26px; font-size: 0.7rem; border-width: 2px;"><i class="fas fa-hand-pointer"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  {
+    titulo: "Tu historial y meses",
+    texto: "En las pestañas ves tu historial completo de aportaciones y qué meses ya pagaste del año. Cada aportación muestra su estado: Aprobada, Pendiente o Rechazada.",
+    tip: "Si una aportación fue rechazada, puedes volver a subirla corrigiendo el error.",
+    ilustracion: `
+      <div class="tut-mockup">
+        <div class="tut-mock-phone">
+          <div class="tut-mock-screen">
+            <div class="tut-mock-tabs">
+              <div class="tut-mock-tab">Resumen</div>
+              <div class="tut-mock-tab active">Meses</div>
+              <div class="tut-mock-tab">Historial</div>
+            </div>
+            <div class="tut-mock-list" style="position: relative;">
+              <div class="tut-target" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 4px; border-radius: 8px;">
+                <div style="background: rgba(46,204,113,0.15); border-radius: 4px; padding: 5px 3px; text-align: center; font-size: 0.45rem;">
+                  <div style="font-weight: 700; color: #2c3e50;">Ene</div>
+                  <div style="color: #2ecc71; margin-top: 2px;"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <div style="background: rgba(46,204,113,0.15); border-radius: 4px; padding: 5px 3px; text-align: center; font-size: 0.45rem;">
+                  <div style="font-weight: 700; color: #2c3e50;">Feb</div>
+                  <div style="color: #2ecc71; margin-top: 2px;"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <div style="background: rgba(46,204,113,0.15); border-radius: 4px; padding: 5px 3px; text-align: center; font-size: 0.45rem;">
+                  <div style="font-weight: 700; color: #2c3e50;">Mar</div>
+                  <div style="color: #2ecc71; margin-top: 2px;"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <div style="background: rgba(243,156,18,0.15); border-radius: 4px; padding: 5px 3px; text-align: center; font-size: 0.45rem;">
+                  <div style="font-weight: 700; color: #2c3e50;">Abr</div>
+                  <div style="color: #f39c12; margin-top: 2px;"><i class="fas fa-exclamation-circle"></i></div>
+                </div>
+              </div>
+              <div class="tut-badge-pulse top-right" style="top: -10px; right: -10px;"><i class="fas fa-calendar-check"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  }
+];
+
+// ---- Definición de pasos del tutorial del ADMIN ----
+const TUTORIAL_ADMIN = [
+  {
+    titulo: "¡Bienvenido, Tesorero!",
+    texto: "Este es tu panel de control. Desde aquí gestionas las casas, apruebas las aportaciones de los vecinos y llevas las cuentas claras de la colonia.",
+    tip: "Solo tú tienes acceso a este panel. Los vecinos nunca pueden ver las aportaciones de otras casas.",
+    ilustracion: `
+      <div class="tut-mockup">
+        <div class="tut-mock-phone">
+          <div class="tut-mock-screen" style="min-height: 210px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; background: linear-gradient(135deg, #0f3a66, #1a5490);">
+            <div style="width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; margin-bottom: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.3);">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <div style="font-size: 0.95rem; font-weight: 800; color: white;">Panel del Tesorero</div>
+            <div style="font-size: 0.6rem; color: rgba(255,255,255,0.7); margin-top: 3px;">La Concordia · Admin</div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  {
+    titulo: "Crear casas nuevas",
+    texto: "En la pestaña 'Casas' registras cada vivienda de la colonia. Al crearla, el sistema genera una contraseña temporal única que debes entregar al vecino.",
+    tip: "El vecino deberá cambiar esa contraseña en su primer login. Así nadie más puede ver sus datos.",
+    ilustracion: `
+      <div class="tut-mockup">
+        <div class="tut-mock-phone">
+          <div class="tut-mock-screen">
+            <div class="tut-mock-tabs">
+              <div class="tut-mock-tab">Pendientes</div>
+              <div class="tut-mock-tab active">Casas</div>
+              <div class="tut-mock-tab">Movimientos</div>
+            </div>
+            <div style="padding: 8px 10px; display: flex; justify-content: space-between; align-items: center;">
+              <div style="font-size: 0.55rem; font-weight: 700; color: #2c3e50;">Casas Registradas</div>
+              <div style="background: #2ecc71; color: white; padding: 3px 8px; border-radius: 10px; font-size: 0.5rem; font-weight: 700; position: relative;">
+                + Nueva
+                <div class="tut-badge-pulse" style="top: -12px; right: -12px; width: 24px; height: 24px; font-size: 0.6rem; border-width: 2px;"><i class="fas fa-hand-pointer"></i></div>
+              </div>
+            </div>
+            <div style="padding: 0 10px;">
+              <div style="background: white; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <span style="font-size: 0.55rem; font-weight: 700; color: #2c3e50;">F10</span>
+                <span style="font-size: 0.5rem; color: #2ecc71; font-weight: 700;">L. 900</span>
+                <div style="display: flex; gap: 3px;">
+                  <div style="background: #f39c12; color: white; width: 14px; height: 14px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.45rem;"><i class="fas fa-key"></i></div>
+                  <div style="background: #e74c3c; color: white; width: 14px; height: 14px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.45rem;"><i class="fas fa-ban"></i></div>
+                </div>
+              </div>
+              <div style="background: white; padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <span style="font-size: 0.55rem; font-weight: 700; color: #2c3e50;">F11</span>
+                <span style="font-size: 0.5rem; color: #2ecc71; font-weight: 700;">L. 300</span>
+                <div style="display: flex; gap: 3px;">
+                  <div style="background: #f39c12; color: white; width: 14px; height: 14px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.45rem;"><i class="fas fa-key"></i></div>
+                  <div style="background: #e74c3c; color: white; width: 14px; height: 14px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.45rem;"><i class="fas fa-ban"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  {
+    titulo: "Aprobar aportaciones",
+    texto: "Aquí llegan las aportaciones que suben los vecinos. Verifica en tu banca en línea que el depósito llegó, revisa el comprobante y apruébala o recházala con un motivo.",
+    tip: "Solo las aportaciones aprobadas suman al saldo del vecino. Las rechazadas no afectan su cuenta.",
+    ilustracion: `
+      <div class="tut-mockup">
+        <div class="tut-mock-phone">
+          <div class="tut-mock-screen">
+            <div class="tut-mock-tabs">
+              <div class="tut-mock-tab active">Pendientes</div>
+              <div class="tut-mock-tab">Casas</div>
+              <div class="tut-mock-tab">Movimientos</div>
+            </div>
+            <div style="padding: 8px 10px;">
+              <div class="tut-target" style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <span style="font-size: 0.55rem; font-weight: 700; color: #2c3e50;">Casa F10</span>
+                  <span style="font-size: 0.6rem; font-weight: 800; color: #2ecc71;">+ L. 300</span>
+                </div>
+                <div style="font-size: 0.45rem; color: #7f8c8d; margin-bottom: 6px;">Noviembre 2026 · 01/11/2026</div>
+                <div style="display: flex; gap: 4px;">
+                  <div style="background: #f0f0f0; color: #7f8c8d; padding: 3px 6px; border-radius: 4px; font-size: 0.45rem; font-weight: 600;">Ver</div>
+                  <div style="background: #2ecc71; color: white; padding: 3px 6px; border-radius: 4px; font-size: 0.45rem; font-weight: 700;">Aprobar</div>
+                  <div style="background: #e74c3c; color: white; padding: 3px 6px; border-radius: 4px; font-size: 0.45rem; font-weight: 700;">Rechazar</div>
+                </div>
+                <div class="tut-badge-pulse top-right"><i class="fas fa-check"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  {
+    titulo: "Movimientos y egresos",
+    texto: "Consulta todos los movimientos históricos y registra los egresos de la colonia (vigilancia, reparaciones, etc.). Cada egreso queda con su motivo y comprobante.",
+    tip: "Los vecinos ven los egresos en su propia app. Transparencia total: todos saben en qué se gasta.",
+    ilustracion: `
+      <div class="tut-mockup">
+        <div class="tut-mock-phone">
+          <div class="tut-mock-screen">
+            <div class="tut-mock-tabs">
+              <div class="tut-mock-tab">Pendientes</div>
+              <div class="tut-mock-tab">Casas</div>
+              <div class="tut-mock-tab active">Egresos</div>
+            </div>
+            <div style="padding: 8px 10px;">
+              <div class="tut-target" style="background: white; padding: 7px; border-radius: 6px; display: flex; align-items: center; gap: 6px; margin-bottom: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative;">
+                <div style="width: 18px; height: 18px; border-radius: 50%; background: rgba(231,76,60,0.15); color: #e74c3c; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; flex-shrink: 0;"><i class="fas fa-arrow-up"></i></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-size: 0.5rem; font-weight: 700; color: #2c3e50;">Pago vigilancia</div>
+                  <div style="font-size: 0.4rem; color: #7f8c8d;">15/10/2026</div>
+                </div>
+                <div style="font-size: 0.5rem; font-weight: 800; color: #e74c3c;">- L. 800</div>
+                <div class="tut-badge-pulse top-right"><i class="fas fa-eye"></i></div>
+              </div>
+              <div style="background: white; padding: 7px; border-radius: 6px; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <div style="width: 18px; height: 18px; border-radius: 50%; background: rgba(231,76,60,0.15); color: #e74c3c; display: flex; align-items: center; justify-content: center; font-size: 0.5rem; flex-shrink: 0;"><i class="fas fa-arrow-up"></i></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-size: 0.5rem; font-weight: 700; color: #2c3e50;">Reparación portón</div>
+                  <div style="font-size: 0.4rem; color: #7f8c8d;">20/10/2026</div>
+                </div>
+                <div style="font-size: 0.5rem; font-weight: 800; color: #e74c3c;">- L. 400</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+  {
+    titulo: "Solicitudes de contraseña",
+    texto: "Si un vecino olvida su contraseña, aparecerá aquí una solicitud. Resetéala con un clic y entrégale la nueva contraseña temporal.",
+    tip: "La nueva contraseña temporal solo la puedes ver tú. El vecino deberá cambiarla en su próximo login.",
+    ilustracion: `
+      <div class="tut-mockup">
+        <div class="tut-mock-phone">
+          <div class="tut-mock-screen">
+            <div class="tut-mock-tabs">
+              <div class="tut-mock-tab">Pendientes</div>
+              <div class="tut-mock-tab">Casas</div>
+              <div class="tut-mock-tab active">Solicitudes</div>
+            </div>
+            <div style="padding: 8px 10px;">
+              <div class="tut-target" style="background: white; padding: 7px; border-radius: 6px; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative;">
+                <div style="width: 20px; height: 20px; border-radius: 50%; background: rgba(243,156,18,0.15); color: #f39c12; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; flex-shrink: 0;"><i class="fas fa-key"></i></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-size: 0.5rem; font-weight: 700; color: #2c3e50;">Casa F12</div>
+                  <div style="font-size: 0.4rem; color: #7f8c8d;">Solicitada hoy</div>
+                </div>
+                <div style="background: #f39c12; color: white; padding: 3px 8px; border-radius: 10px; font-size: 0.45rem; font-weight: 700;">Resetear</div>
+                <div class="tut-badge-pulse top-right"><i class="fas fa-redo"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  }
+];
+
+// ---- Estado del tutorial ----
+let tutPasosActuales = [];
+let tutPasoActual = 0;
+let tutTipoActual = null;
+
+function iniciarTutorial(tipo) {
+  tutTipoActual = tipo;
+  tutPasosActuales = tipo === "admin" ? TUTORIAL_ADMIN : TUTORIAL_VECINO;
+  tutPasoActual = 0;
+  mostrarPasoActual();
+
+  const overlay = document.getElementById("tutOverlay");
+  overlay.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function mostrarPasoActual() {
+  if (tutPasoActual < 0 || tutPasoActual >= tutPasosActuales.length) return;
+
+  const paso = tutPasosActuales[tutPasoActual];
+  const total = tutPasosActuales.length;
+
+  const progreso = ((tutPasoActual + 1) / total) * 100;
+  document.getElementById("tutProgressBar").style.width = progreso + "%";
+
+  document.getElementById("tutStepBadge").textContent = `Paso ${tutPasoActual + 1} de ${total}`;
+  document.getElementById("tutTitle").textContent = paso.titulo;
+  document.getElementById("tutText").textContent = paso.texto;
+
+  const tipEl = document.getElementById("tutTip");
+  if (paso.tip) {
+    tipEl.style.display = "flex";
+    document.getElementById("tutTipText").textContent = paso.tip;
+  } else {
+    tipEl.style.display = "none";
+  }
+
+  document.getElementById("tutIllustration").innerHTML = paso.ilustracion;
+
+  const dotsEl = document.getElementById("tutDots");
+  dotsEl.innerHTML = "";
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement("div");
+    dot.className = "tut-dot";
+    if (i < tutPasoActual) dot.classList.add("done");
+    if (i === tutPasoActual) dot.classList.add("active");
+    dotsEl.appendChild(dot);
+  }
+
+  const prevBtn = document.getElementById("tutPrevBtn");
+  prevBtn.style.visibility = tutPasoActual === 0 ? "hidden" : "visible";
+
+  const nextBtn = document.getElementById("tutNextBtn");
+  const nextTxt = document.getElementById("tutNextBtnText");
+  if (tutPasoActual === total - 1) {
+    nextTxt.textContent = "¡Listo!";
+    nextBtn.querySelector("i").className = "fas fa-check";
+  } else {
+    nextTxt.textContent = "Siguiente";
+    nextBtn.querySelector("i").className = "fas fa-arrow-right";
+  }
+}
+
+function pasoSiguienteTutorial() {
+  if (tutPasoActual < tutPasosActuales.length - 1) {
+    tutPasoActual++;
+    mostrarPasoActual();
+  } else {
+    finalizarTutorial();
+  }
+}
+
+function pasoAnteriorTutorial() {
+  if (tutPasoActual > 0) {
+    tutPasoActual--;
+    mostrarPasoActual();
+  }
+}
+
+function cerrarTutorial() {
+  const overlay = document.getElementById("tutOverlay");
+  overlay.classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+function finalizarTutorial() {
+  cerrarTutorial();
+
+  if (tutTipoActual) {
+    localStorage.setItem(`tutVisto_${tutTipoActual}`, "true");
+  }
+
+  Swal.fire({
+    icon: "success",
+    title: "¡Tutorial completado!",
+    text: "Ya conoces todas las funciones. Puedes reabrir el tutorial con el botón ? del encabezado.",
+    confirmButtonText: "¡A empezar!",
+    confirmButtonColor: "#2ecc71",
+    timer: 3500,
+    timerProgressBar: true
+  });
+}
+
+function reabrirTutorial() {
+  // Detectar automáticamente qué tutorial mostrar según el perfil activo
+  let tipo = tutTipoActual;
+  if (!tipo) {
+    if (state.esAdmin) tipo = "admin";
+    else if (state.casa) tipo = "vecino";
+    else return;
+  }
+  iniciarTutorial(tipo);
+}
+
+function verificarTutorialAutomatico(tipo) {
+  tutTipoActual = tipo;
+  const visto = localStorage.getItem(`tutVisto_${tipo}`);
+  if (!visto) {
+    setTimeout(() => {
+      Swal.fire({
+        icon: "info",
+        title: "¡Te damos la bienvenida!",
+        html: `<p>¿Quieres ver un tutorial rápido de <b>5 pasos</b> para aprender a usar la app?</p>
+               <p style="font-size: 0.85rem; color: #7f8c8d; margin-top: 8px;">Solo toma 30 segundos.</p>`,
+        showCancelButton: true,
+        confirmButtonText: "¡Sí, mostrar!",
+        cancelButtonText: "Saltar",
+        confirmButtonColor: "#2ecc71",
+        cancelButtonColor: "#95a5a6"
+      }).then((r) => {
+        if (r.isConfirmed) {
+          iniciarTutorial(tipo);
+        } else {
+          localStorage.setItem(`tutVisto_${tipo}`, "true");
+        }
+      });
+    }, 800);
+  }
+}
+
+// =============================================================
+// LIMPIEZA DEL BOTÓN FLOTANTE VIEJO (por si quedó residuo)
+// =============================================================
+document.addEventListener("DOMContentLoaded", () => {
+  const btnViejo = document.getElementById("tutReopenBtn");
+  if (btnViejo) btnViejo.remove();
+});
+
+
+</script>
 </body>
 </html>
