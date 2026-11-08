@@ -140,33 +140,19 @@ a.header-btn { text-decoration: none; }
   transition: var(--transition);
   user-select: none;
 }
-.recordar-sesion-wrap:hover {
-  background: #e8eef5;
-}
+.recordar-sesion-wrap:hover { background: #e8eef5; }
 .recordar-sesion-wrap input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  accent-color: var(--primary);
-  flex-shrink: 0;
+  width: 20px; height: 20px; cursor: pointer;
+  accent-color: var(--primary); flex-shrink: 0;
 }
-.recordar-sesion-wrap .recordar-info {
-  flex: 1;
-  min-width: 0;
-}
+.recordar-sesion-wrap .recordar-info { flex: 1; min-width: 0; }
 .recordar-sesion-wrap .recordar-label {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--text);
-  display: block;
-  line-height: 1.2;
+  font-size: 0.88rem; font-weight: 700; color: var(--text);
+  display: block; line-height: 1.2;
 }
 .recordar-sesion-wrap .recordar-sub {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  margin-top: 2px;
-  display: block;
-  line-height: 1.2;
+  font-size: 0.72rem; color: var(--text-muted);
+  margin-top: 2px; display: block; line-height: 1.2;
 }
 
 .form-label-lc { font-weight: 600; color: var(--text); font-size: 0.9rem; margin-bottom: 6px; display: block; }
@@ -178,37 +164,14 @@ a.header-btn { text-decoration: none; }
 .form-control-lc:focus { outline: none; border-color: var(--info); box-shadow: 0 0 0 3px rgba(52,152,219,0.15); }
 select.form-control-lc { cursor: pointer; }
 
-.form-control-lc.is-error {
-  border-color: var(--danger) !important;
-  box-shadow: 0 0 0 3px rgba(231,76,60,0.15) !important;
-}
-.form-control-lc.is-ok {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 3px rgba(46,204,113,0.15) !important;
-}
-.input-error {
-  display: none;
-  font-size: 0.78rem;
-  color: var(--danger);
-  margin-top: 5px;
-  font-weight: 600;
-}
+.form-control-lc.is-error { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(231,76,60,0.15) !important; }
+.form-control-lc.is-ok { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(46,204,113,0.15) !important; }
+.input-error { display: none; font-size: 0.78rem; color: var(--danger); margin-top: 5px; font-weight: 600; }
 .input-error.show { display: flex; align-items: center; gap: 4px; }
-.input-ok {
-  display: none;
-  font-size: 0.78rem;
-  color: #1e8449;
-  margin-top: 5px;
-  font-weight: 600;
-}
+.input-ok { display: none; font-size: 0.78rem; color: #1e8449; margin-top: 5px; font-weight: 600; }
 .input-ok.show { display: flex; align-items: center; gap: 4px; }
 
-.pass-strength {
-  display: none;
-  font-size: 0.78rem;
-  margin-top: 5px;
-  font-weight: 600;
-}
+.pass-strength { display: none; font-size: 0.78rem; margin-top: 5px; font-weight: 600; }
 .pass-strength.show { display: flex; align-items: center; gap: 5px; }
 .pass-strength.weak { color: var(--danger); }
 .pass-strength.medium { color: var(--warning); }
@@ -428,7 +391,7 @@ select.form-control-lc { cursor: pointer; }
 .perfil-tab-content.active { display: block; animation: fadeIn 0.25s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ============ COMPROBANTE DROPZONE ============ */
+/* COMPROBANTE DROPZONE */
 .comprobante-bloque {
   border: 2px dashed #cbd5e0;
   border-radius: 12px;
@@ -437,262 +400,112 @@ select.form-control-lc { cursor: pointer; }
   transition: border-color 0.25s ease, background-color 0.25s ease;
   margin-top: 6px;
 }
-.comprobante-bloque.drag-over {
-  border-color: var(--info);
-  background-color: rgba(52, 152, 219, 0.06);
-}
-.comprobante-bloque.has-image {
-  border-style: solid;
-  border-color: #d6e4f0;
-  background-color: #ffffff;
-}
+.comprobante-bloque.drag-over { border-color: var(--info); background-color: rgba(52, 152, 219, 0.06); }
+.comprobante-bloque.has-image { border-style: solid; border-color: #d6e4f0; background-color: #ffffff; }
 .comprobante-dropzone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 26px 16px;
-  color: #718096;
-  cursor: pointer;
-  text-align: center;
-  transition: background-color 0.2s ease;
-  user-select: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 26px 16px; color: #718096; cursor: pointer; text-align: center;
+  transition: background-color 0.2s ease; user-select: none;
 }
 .comprobante-bloque.has-image .comprobante-dropzone { display: none; }
 .comprobante-dropzone:hover { background-color: rgba(52, 152, 219, 0.05); }
-.comprobante-dropzone i {
-  font-size: 2rem;
-  color: #a0aec0;
-  margin-bottom: 8px;
-  transition: color 0.2s ease;
-}
+.comprobante-dropzone i { font-size: 2rem; color: #a0aec0; margin-bottom: 8px; transition: color 0.2s ease; }
 .comprobante-dropzone:hover i { color: var(--info); }
-.comprobante-dropzone .dz-titulo {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #4a5568;
-  margin-bottom: 2px;
-}
-.comprobante-dropzone .dz-subtitulo {
-  font-size: 0.78rem;
-  color: #a0aec0;
-}
+.comprobante-dropzone .dz-titulo { font-weight: 600; font-size: 0.9rem; color: #4a5568; margin-bottom: 2px; }
+.comprobante-dropzone .dz-subtitulo { font-size: 0.78rem; color: #a0aec0; }
 .comprobante-bloque.drag-over .comprobante-dropzone i,
-.comprobante-bloque.drag-over .comprobante-dropzone .dz-titulo {
-  color: var(--info);
-}
-.comprobante-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 14px;
-}
+.comprobante-bloque.drag-over .comprobante-dropzone .dz-titulo { color: var(--info); }
+.comprobante-grid { display: flex; flex-wrap: wrap; gap: 10px; padding: 14px; }
 .comprobante-grid:empty { display: none; }
 .comprobante-bloque:not(.has-image) .comprobante-grid { display: none; }
-
 .comprobante-preview-item {
-  position: relative;
-  width: 110px;
-  height: 110px;
-  overflow: hidden;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+  position: relative; width: 110px; height: 110px;
+  overflow: hidden; border-radius: 10px; border: 1px solid var(--border);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
-.comprobante-preview-item img {
-  width: 100%; height: 100%; object-fit: cover;
-  display: block;
-}
+.comprobante-preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .comprobante-preview-item .comprobante-remove {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: rgba(231, 76, 60, 0.95);
-  color: #fff;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  cursor: pointer;
-  z-index: 3;
+  position: absolute; top: 4px; right: 4px;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: rgba(231, 76, 60, 0.95); color: #fff; border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; cursor: pointer; z-index: 3;
   transition: transform 0.15s ease, background-color 0.15s ease;
   box-shadow: 0 2px 4px rgba(0,0,0,0.25);
 }
-.comprobante-preview-item .comprobante-remove:hover {
-  transform: scale(1.12);
-  background: #c0392b;
-}
+.comprobante-preview-item .comprobante-remove:hover { transform: scale(1.12); background: #c0392b; }
+@media (max-width: 576px) { .comprobante-preview-item { width: 90px; height: 90px; } }
 
-@media (max-width: 576px) {
-  .comprobante-preview-item { width: 90px; height: 90px; }
-}
-
-/* ============ VISOR DE COMPROBANTE CON ZOOM (v2 - responsive móvil) ============ */
-#modalVerComprobante .modal-dialog {
-  max-width: 95vw;
-  width: 95vw;
-  height: 90vh;
-  max-height: 90vh;
-  margin: 5vh auto;
-}
-#modalVerComprobante .modal-content {
-  height: 100%;
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-#modalVerComprobante .modal-header {
-  flex-shrink: 0;
-}
+/* VISOR DE COMPROBANTE CON ZOOM */
+#modalVerComprobante .modal-dialog { max-width: 95vw; width: 95vw; height: 90vh; max-height: 90vh; margin: 5vh auto; }
+#modalVerComprobante .modal-content { height: 100%; max-height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+#modalVerComprobante .modal-header { flex-shrink: 0; }
 #modalVerComprobante .modal-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  padding: 0;
-  background: #000;
-  overflow: hidden;
-  position: relative;
-  touch-action: none;
+  flex: 1 1 auto; min-height: 0; padding: 0;
+  background: #000; overflow: hidden; position: relative; touch-action: none;
 }
-
 .comprobante-viewer {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  cursor: grab;
+  position: absolute; inset: 0; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: #000; cursor: grab;
 }
 .comprobante-viewer.dragging { cursor: grabbing; }
-
 .comprobante-viewer img {
-  max-width: none;
-  max-height: none;
-  width: auto;
-  height: auto;
-  user-select: none;
-  -webkit-user-drag: none;
-  pointer-events: none;
-  transform-origin: center center;
-  will-change: transform;
+  max-width: none; max-height: none; width: auto; height: auto;
+  user-select: none; -webkit-user-drag: none; pointer-events: none;
+  transform-origin: center center; will-change: transform;
 }
-
 .comprobante-zoom-toolbar {
-  position: absolute;
-  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  background: rgba(0, 0, 0, 0.75);
-  padding: 8px 10px;
-  border-radius: 30px;
-  backdrop-filter: blur(8px);
-  z-index: 10;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  position: absolute; bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px;
+  background: rgba(0, 0, 0, 0.75); padding: 8px 10px;
+  border-radius: 30px; backdrop-filter: blur(8px);
+  z-index: 10; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 .comprobante-zoom-toolbar button {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
+  width: 42px; height: 42px; border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.12);
-  color: #fff;
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: rgba(255,255,255,0.12); color: #fff;
+  font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
   transition: all 0.2s ease;
 }
-.comprobante-zoom-toolbar button:hover {
-  background: rgba(255,255,255,0.28);
-  transform: translateY(-1px);
-}
-.comprobante-zoom-toolbar button:active {
-  transform: scale(0.92);
-}
+.comprobante-zoom-toolbar button:hover { background: rgba(255,255,255,0.28); transform: translateY(-1px); }
+.comprobante-zoom-toolbar button:active { transform: scale(0.92); }
 .comprobante-zoom-toolbar .zoom-level {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 0.85rem;
-  font-weight: 700;
-  min-width: 56px;
-  padding: 0 4px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 0.85rem; font-weight: 700;
+  min-width: 56px; padding: 0 4px;
 }
-
 .comprobante-zoom-hint {
-  position: absolute;
-  top: 12px;
-  left: 50%;
+  position: absolute; top: 12px; left: 50%;
   transform: translateX(-50%);
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  font-size: 0.72rem;
-  padding: 6px 14px;
-  border-radius: 20px;
-  backdrop-filter: blur(6px);
-  z-index: 10;
-  pointer-events: none;
-  white-space: nowrap;
-  transition: opacity 0.4s ease;
-  max-width: 90%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  background: rgba(0,0,0,0.6); color: #fff;
+  font-size: 0.72rem; padding: 6px 14px;
+  border-radius: 20px; backdrop-filter: blur(6px);
+  z-index: 10; pointer-events: none; white-space: nowrap;
+  transition: opacity 0.4s ease; max-width: 90%;
+  overflow: hidden; text-overflow: ellipsis;
 }
 .comprobante-zoom-hint.hide { opacity: 0; }
-
 @media (max-width: 768px) {
   #modalVerComprobante .modal-dialog {
-    max-width: 100vw;
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    max-height: 100vh;
-    max-height: 100dvh;
+    max-width: 100vw; width: 100vw;
+    height: 100vh; height: 100dvh;
+    max-height: 100vh; max-height: 100dvh;
     margin: 0;
   }
-  #modalVerComprobante .modal-content {
-    border-radius: 0;
-    height: 100%;
-    max-height: 100%;
-  }
-  #modalVerComprobante .modal-header {
-    padding: 10px 14px;
-  }
-  #modalVerComprobante .modal-title {
-    font-size: 0.95rem;
-  }
-  .comprobante-zoom-toolbar {
-    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-    gap: 6px;
-    padding: 6px 8px;
-  }
-  .comprobante-zoom-toolbar button {
-    width: 38px;
-    height: 38px;
-    font-size: 0.9rem;
-  }
-  .comprobante-zoom-toolbar .zoom-level {
-    font-size: 0.75rem;
-    min-width: 44px;
-  }
-  .comprobante-zoom-hint {
-    font-size: 0.68rem;
-    padding: 5px 10px;
-    top: 8px;
-  }
+  #modalVerComprobante .modal-content { border-radius: 0; height: 100%; max-height: 100%; }
+  #modalVerComprobante .modal-header { padding: 10px 14px; }
+  #modalVerComprobante .modal-title { font-size: 0.95rem; }
+  .comprobante-zoom-toolbar { bottom: calc(10px + env(safe-area-inset-bottom, 0px)); gap: 6px; padding: 6px 8px; }
+  .comprobante-zoom-toolbar button { width: 38px; height: 38px; font-size: 0.9rem; }
+  .comprobante-zoom-toolbar .zoom-level { font-size: 0.75rem; min-width: 44px; }
+  .comprobante-zoom-hint { font-size: 0.68rem; padding: 5px 10px; top: 8px; }
 }
 
-/* Compat */
+/* COMPAT */
 .upload-zone {
   border: 2px dashed var(--info); border-radius: var(--radius-sm);
   padding: 30px 20px; text-align: center; cursor: pointer;
@@ -755,10 +568,7 @@ select.form-control-lc { cursor: pointer; }
   cursor: pointer; padding: 4px; font-size: 1rem;
 }
 
-.dash-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 10px; margin-bottom: 16px;
-}
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px; }
 .dash-item {
   background: #fff; border-radius: var(--radius-sm);
   padding: 14px 10px; text-align: center;
@@ -777,8 +587,7 @@ select.form-control-lc { cursor: pointer; }
 .matriz-leyenda {
   display: flex; flex-wrap: wrap; gap: 10px;
   padding: 12px 14px; background: var(--bg);
-  border-radius: var(--radius-sm); margin-bottom: 14px;
-  font-size: 0.82rem;
+  border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 0.82rem;
 }
 .matriz-leyenda-item {
   display: inline-flex; align-items: center; gap: 6px;
@@ -859,13 +668,9 @@ select.form-control-lc { cursor: pointer; }
   font-size: 1rem; font-weight: 800; color: var(--primary);
 }
 
-.comparativo-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
-}
+.comparativo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
 @media (max-width: 768px) { .comparativo-grid { grid-template-columns: 1fr; } }
-.comparativo-card {
-  padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border);
-}
+.comparativo-card { padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
 .comparativo-card.anterior { background: #f7f9fb; border-left: 4px solid #95a5a6; }
 .comparativo-card.actual { background: #eff9f3; border-left: 4px solid var(--accent); }
 .comparativo-card .comp-label {
@@ -878,9 +683,7 @@ select.form-control-lc { cursor: pointer; }
   font-weight: 800; font-size: 0.92rem;
 }
 
-.filtro-bar {
-  display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center;
-}
+.filtro-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
 .filtro-bar input, .filtro-bar select {
   flex: 1; min-width: 140px; padding: 9px 12px;
   border: 1.5px solid var(--border); border-radius: var(--radius-sm);
@@ -891,9 +694,7 @@ select.form-control-lc { cursor: pointer; }
   box-shadow: 0 0 0 3px rgba(52,152,219,0.15);
 }
 
-.mes-anio-row {
-  display: grid; grid-template-columns: 2fr 1fr; gap: 10px;
-}
+.mes-anio-row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
 
 .rango-preview {
   background: var(--bg); padding: 12px; border-radius: var(--radius-sm);
@@ -926,35 +727,25 @@ select.form-control-lc { cursor: pointer; }
   text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;
   margin-bottom: 4px;
 }
-.dato-item .dato-value {
-  font-size: 1.15rem; font-weight: 800; color: var(--text);
-  word-break: break-all;
-}
+.dato-item .dato-value { font-size: 1.15rem; font-weight: 800; color: var(--text); word-break: break-all; }
 .dato-item.banco .dato-value { color: var(--primary); }
 .dato-item .btn-copiar {
   background: var(--bg); border: 1.5px solid var(--border);
   padding: 8px 12px; border-radius: var(--radius-sm);
   cursor: pointer; transition: var(--transition);
   font-size: 0.85rem; font-weight: 700; color: var(--primary);
-  display: inline-flex; align-items: center; gap: 6px;
-  flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
 }
 .dato-item .btn-copiar:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 .dato-item .btn-copiar:active { transform: scale(0.95); }
 
 .grupo-card {
   background: #fff; border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  overflow: hidden;
+  border: 1px solid var(--border); overflow: hidden;
   transition: var(--transition);
 }
 .grupo-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-.grupo-header {
-  padding: 14px;
-  display: flex; align-items: center; gap: 12px;
-  cursor: pointer;
-  user-select: none;
-}
+.grupo-header { padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none; }
 .grupo-header:hover { background: rgba(0,0,0,0.02); }
 .grupo-info { flex: 1; min-width: 0; }
 .grupo-titulo {
@@ -964,49 +755,37 @@ select.form-control-lc { cursor: pointer; }
 .grupo-titulo .grupo-badge {
   display: inline-flex; align-items: center; gap: 4px;
   background: rgba(142,68,173,0.12); color: var(--purple);
-  font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;
-  font-weight: 700;
+  font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 700;
 }
-.grupo-sub {
-  font-size: 0.78rem; color: var(--text-muted); margin-top: 3px;
-}
+.grupo-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; }
 .grupo-monto { font-weight: 800; color: var(--accent); font-size: 1rem; white-space: nowrap; }
 .grupo-toggle {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--bg); border: none;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: var(--transition);
-  flex-shrink: 0;
+  cursor: pointer; transition: var(--transition); flex-shrink: 0;
 }
 .grupo-toggle i { transition: transform 0.25s ease; }
 .grupo-card.expandido .grupo-toggle i { transform: rotate(45deg); }
-.grupo-detalle {
-  display: none;
-  padding: 0 14px 14px;
-  border-top: 1px solid var(--border);
-}
+.grupo-detalle { display: none; padding: 0 14px 14px; border-top: 1px solid var(--border); }
 .grupo-card.expandido .grupo-detalle { display: block; }
 .grupo-mes-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--bg);
+  padding: 8px 0; border-bottom: 1px solid var(--bg);
 }
 .grupo-mes-row:last-child { border-bottom: none; }
 .grupo-mes-row .grupo-mes-label { font-size: 0.85rem; font-weight: 600; }
 .grupo-mes-row .grupo-mes-monto { font-size: 0.85rem; font-weight: 700; color: var(--accent); }
 .grupo-acciones {
-  display: flex; gap: 6px; margin-top: 12px;
-  flex-wrap: wrap;
-  padding-top: 12px;
-  border-top: 1px dashed var(--border);
+  display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap;
+  padding-top: 12px; border-top: 1px dashed var(--border);
 }
 
 #pantallaCompletarPerfil {
   position: fixed; inset: 0; z-index: 250000;
   background: linear-gradient(135deg, #1a5490, #0f3a66);
   display: none; align-items: center; justify-content: center;
-  padding: 20px;
-  overflow-y: auto;
+  padding: 20px; overflow-y: auto;
 }
 #pantallaCompletarPerfil.show { display: flex; }
 
@@ -1014,116 +793,57 @@ select.form-control-lc { cursor: pointer; }
   position: fixed; inset: 0; z-index: 240000;
   background: linear-gradient(135deg, #1a5490, #0f3a66);
   display: flex; align-items: center; justify-content: center;
-  flex-direction: column;
-  color: #fff;
+  flex-direction: column; color: #fff;
 }
 #pantallaEspera .espera-logo {
   width: 90px; height: 90px; border-radius: 50%;
   background: rgba(255,255,255,0.15);
   display: flex; align-items: center; justify-content: center;
-  font-size: 2.4rem;
-  margin-bottom: 18px;
+  font-size: 2.4rem; margin-bottom: 18px;
   animation: pulseLogo 1.8s ease-in-out infinite;
 }
-@keyframes pulseLogo {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.06); opacity: 0.85; }
-}
-#pantallaEspera .espera-titulo {
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin: 0 0 6px;
-  letter-spacing: 0.5px;
-}
-#pantallaEspera .espera-sub {
-  font-size: 0.85rem;
-  opacity: 0.8;
-  margin: 0;
-}
+@keyframes pulseLogo { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
+#pantallaEspera .espera-titulo { font-size: 1.4rem; font-weight: 800; margin: 0 0 6px; letter-spacing: 0.5px; }
+#pantallaEspera .espera-sub { font-size: 0.85rem; opacity: 0.8; margin: 0; }
 
 #modalIframeAyuda {
   position: fixed; inset: 0; z-index: 260000;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.5); display: none;
+  align-items: center; justify-content: center;
+  padding: 16px; backdrop-filter: blur(4px);
 }
 #modalIframeAyuda.show { display: flex; }
 .iframe-ayuda-container {
-  width: 100%;
-  height: 100%;
-  max-width: 1200px;
-  max-height: 95vh;
-  background: #fff;
-  border-radius: var(--radius);
+  width: 100%; height: 100%; max-width: 1200px; max-height: 95vh;
+  background: #fff; border-radius: var(--radius);
   box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  overflow: hidden; position: relative;
+  display: flex; flex-direction: column;
   animation: modalIframeIn 0.25s ease;
 }
-@keyframes modalIframeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
+@keyframes modalIframeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 .iframe-ayuda-header {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: #fff;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-shrink: 0;
+  color: #fff; padding: 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; flex-shrink: 0;
 }
 .iframe-ayuda-header .ifa-title {
-  font-weight: 700;
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-weight: 700; font-size: 0.95rem;
+  display: flex; align-items: center; gap: 8px;
 }
 .iframe-ayuda-header .ifa-close {
-  background: rgba(255,255,255,0.15);
-  border: none;
-  color: #fff;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  transition: var(--transition);
-  flex-shrink: 0;
+  background: rgba(255,255,255,0.15); border: none; color: #fff;
+  width: 36px; height: 36px; border-radius: 50%;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: var(--transition); flex-shrink: 0;
 }
-.iframe-ayuda-header .ifa-close:hover {
-  background: rgba(231,76,60,0.4);
-  transform: rotate(90deg);
-}
-.iframe-ayuda-body {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-}
-.iframe-ayuda-body iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-}
+.iframe-ayuda-header .ifa-close:hover { background: rgba(231,76,60,0.4); transform: rotate(90deg); }
+.iframe-ayuda-body { flex: 1; overflow: hidden; position: relative; }
+.iframe-ayuda-body iframe { width: 100%; height: 100%; border: none; display: block; }
 @media (max-width: 576px) {
   #modalIframeAyuda { padding: 0; }
-  .iframe-ayuda-container {
-    border-radius: 0;
-    max-height: 100vh;
-    height: 100vh;
-    max-width: 100%;
-  }
+  .iframe-ayuda-container { border-radius: 0; max-height: 100vh; height: 100vh; max-width: 100%; }
   .iframe-ayuda-header .ifa-title { font-size: 0.85rem; }
 }
 
@@ -1133,6 +853,66 @@ select.form-control-lc { cursor: pointer; }
   .grupo-monto { font-size: 0.88rem; }
   .dato-item { flex-direction: column; align-items: flex-start; }
   .dato-item .btn-copiar { width: 100%; justify-content: center; }
+}
+
+/* QR RESIDENTE - LOADER Y CARD */
+.qr-residente-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  text-align: center;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.qr-residente-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: var(--text-muted);
+  padding: 30px 10px;
+}
+.qr-residente-loader .qr-loader-icon {
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  background: rgba(26,84,144,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem;
+  color: var(--primary);
+  animation: pulseQR 1.5s ease-in-out infinite;
+}
+@keyframes pulseQR { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.06); opacity: 0.6; } }
+.qr-residente-loader .spinner-border { color: var(--primary); }
+.qr-residente-loader p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
+.qr-residente-img-wrap {
+  display: none;
+  width: 100%;
+  justify-content: center;
+}
+.qr-residente-img-wrap.visible { display: flex; }
+.qr-residente-img-wrap img {
+  max-width: 260px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border: 4px solid var(--border);
+  border-radius: 14px;
+  background: #fff;
+}
+.qr-residente-token {
+  font-family: monospace;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 12px;
+  word-break: break-all;
+  text-align: center;
 }
 </style>
 </head>
@@ -1523,12 +1303,18 @@ select.form-control-lc { cursor: pointer; }
           <i class="fas fa-info-circle"></i>
           <div>Este QR es permanente. Puedes descargarlo o compartirlo con tus familiares autorizados.</div>
         </div>
-        <div style="text-align: center; padding: 20px;">
-          <img id="miQRResidenteImg" src="" alt="Mi QR" style="max-width: 260px; width: 100%; border: 4px solid var(--border); border-radius: 14px; display: none;">
-          <div id="miQRResidenteLoader" style="padding: 20px;"><div class="spinner-border text-primary" role="status"></div></div>
-          <div id="miQRResidenteToken" style="font-family: monospace; font-size: 0.82rem; color: var(--text-muted); margin-top: 10px; word-break: break-all;"></div>
+        <div class="qr-residente-card">
+          <div id="miQRResidenteLoader" class="qr-residente-loader">
+            <div class="qr-loader-icon"><i class="fas fa-qrcode"></i></div>
+            <div class="spinner-border" role="status"></div>
+            <p>Generando tu QR...</p>
+          </div>
+          <div id="miQRResidenteWrap" class="qr-residente-img-wrap">
+            <img id="miQRResidenteImg" src="" alt="Mi QR">
+          </div>
+          <div id="miQRResidenteToken" class="qr-residente-token"></div>
         </div>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 16px;">
           <button class="btn-lc btn-lc-primary btn-lc-sm" style="width: auto;" onclick="descargarMiQRResidente()">
             <i class="fas fa-download"></i> Descargar
           </button>
@@ -1552,7 +1338,12 @@ select.form-control-lc { cursor: pointer; }
       </div>
 
       <div class="card-lc">
-        <div class="card-lc-title"><i class="fas fa-history"></i> Historial de Accesos</div>
+        <div class="card-lc-title" style="justify-content: space-between;">
+          <span><i class="fas fa-history"></i> Historial de Accesos</span>
+          <button class="btn-lc btn-lc-danger btn-lc-sm" style="width: auto;" onclick="limpiarHistorialQR()">
+            <i class="fas fa-trash"></i> Limpiar
+          </button>
+        </div>
         <div id="historialQRVecino" class="mov-list"></div>
       </div>
     </div>
@@ -2208,14 +1999,74 @@ select.form-control-lc { cursor: pointer; }
   </div>
 </div>
 
+<div class="modal fade modal-lc" id="modalEditarQR" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background: var(--warning);">
+        <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Editar QR de Visitante</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert-lc warning" style="margin-bottom:14px;">
+          <i class="fas fa-info-circle"></i>
+          <div>Si el QR estaba vencido, usado o revocado, al guardar se <strong>reactivará</strong> con la nueva duración.</div>
+        </div>
+        <div class="mb-3-lc">
+          <label class="form-label-lc">Nombre del visitante *</label>
+          <input type="text" class="form-control-lc" id="qrEditNombre" autocomplete="off">
+        </div>
+        <div class="mb-3-lc">
+          <label class="form-label-lc">Placa del vehículo (opcional)</label>
+          <input type="text" class="form-control-lc" id="qrEditPlaca" autocapitalize="characters">
+        </div>
+        <div class="mb-3-lc">
+          <label class="form-label-lc">Cantidad de personas</label>
+          <input type="number" class="form-control-lc" id="qrEditPersonas" min="1" inputmode="numeric">
+        </div>
+        <div class="mb-3-lc">
+          <label class="form-label-lc">Duración *</label>
+          <select class="form-control-lc" id="qrEditDuracion">
+            <option value="1">1 hora</option>
+            <option value="4">4 horas</option>
+            <option value="8">8 horas</option>
+            <option value="12">12 horas</option>
+            <option value="24">24 horas</option>
+            <option value="48">48 horas</option>
+            <option value="168">1 semana</option>
+          </select>
+        </div>
+        <div class="mb-3-lc">
+          <label class="recordar-sesion-wrap" style="margin: 0;">
+            <input type="checkbox" id="qrEditMultiuso">
+            <div class="recordar-info">
+              <span class="recordar-label">Permitir múltiples usos</span>
+              <span class="recordar-sub">Si no se marca, el QR solo sirve 1 vez</span>
+            </div>
+          </label>
+        </div>
+        <div class="mb-3-lc">
+          <label class="form-label-lc">Notas (opcional)</label>
+          <textarea class="form-control-lc" id="qrEditNotas" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-lc btn-lc-ghost btn-lc-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn-lc btn-lc-warning" id="btnGuardarEdicionQR" onclick="guardarEdicionQRVisitante()">
+          <i class="fas fa-save"></i> Guardar cambios
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // =========================================================================
-// LA CONCORDIA - JS v20
-// Cambios v20:
-//   · Campo "Comprobante" tipo dropzone con drag&drop y botón X
-//   · Visor de comprobantes con zoom
-//   · Pestaña "Accesos QR" con residente, visitantes e historial
-//   · cargarAccesosQR secuencial (evita carreras al crear hojas)
+// LA CONCORDIA - JS v21
+// Cambios v21:
+//   · Loader QR residente mejorado
+//   · Bloqueo global en operaciones QR (evita lag / doble-click)
+//   · Refresco selectivo (sin recargar todo tras eliminar/editar)
+//   · Editar / eliminar QRs de visitantes + limpiar historial
 // =========================================================================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzskS77FkyY8Mr7KsBAJ7q8qE-f3tqT9Ck1jk33B8SrnKI1GQVHn9_YyLHlNC8NsZAnQ/exec";
 const QR_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeMDkfE-CW2wij3gy0M0LE65yrSevu_SdRqIb3kEp5yjReP7eHRn62FPdHZ-JUqVSD/exec";
@@ -4205,7 +4056,14 @@ async function descargarEstadoCuentaAdmin() {
 // =========================================================================
 // ACCESOS QR
 // =========================================================================
-const _qrState = { miResidente: null, visitantes: [], historial: [], qrVerActual: null };
+const _qrState = {
+  miResidente: null,
+  visitantes: [],
+  historial: [],
+  qrVerActual: null,
+  qrEditActual: null,
+  procesando: false
+};
 
 async function apiQR(payload, timeoutMs = 20000) {
   const controller = new AbortController();
@@ -4228,8 +4086,23 @@ async function apiQR(payload, timeoutMs = 20000) {
 }
 function _qrImgUrl(token) { return "https://api.qrserver.com/v1/create-qr-code/?size=500x500&margin=10&data=" + encodeURIComponent(token); }
 
+function _qrLoaderVisible(visible) {
+  const loader = document.getElementById("miQRResidenteLoader");
+  const wrap = document.getElementById("miQRResidenteWrap");
+  const tokenEl = document.getElementById("miQRResidenteToken");
+  if (visible) {
+    loader.style.display = "flex";
+    wrap.classList.remove("visible");
+    if (tokenEl) tokenEl.textContent = "";
+  } else {
+    loader.style.display = "none";
+    wrap.classList.add("visible");
+  }
+}
+
 async function cargarAccesosQR() {
   if (!state.casa) return;
+  _qrLoaderVisible(true);
   try {
     // Secuencial para evitar carreras de creación de hojas en el servidor
     const resRes = await apiQR({ action: "qrObtenerMiResidente", casa: state.casa, password: state.password });
@@ -4244,19 +4117,58 @@ async function cargarAccesosQR() {
     _qrState.historial = resHist.accesos || [];
     renderHistorialQR();
   } catch (err) {
+    _qrLoaderVisible(false);
     Swal.fire("Error QR", err.message, "error");
   }
 }
 
+async function _recargarSoloResidente() {
+  try {
+    const res = await apiQR({ action: "qrObtenerMiResidente", casa: state.casa, password: state.password });
+    _qrState.miResidente = res;
+    renderMiQRResidente();
+  } catch (err) { /* silencioso */ }
+}
+async function _recargarSoloVisitantes() {
+  try {
+    const res = await apiQR({ action: "qrListarVisitantes", casa: state.casa, password: state.password });
+    _qrState.visitantes = res.visitantes || [];
+    renderQRVisitantes();
+  } catch (err) { /* silencioso */ }
+}
+async function _recargarSoloHistorial() {
+  try {
+    const res = await apiQR({ action: "qrHistorialAccesos", casa: state.casa, password: state.password });
+    _qrState.historial = res.accesos || [];
+    renderHistorialQR();
+  } catch (err) { /* silencioso */ }
+}
+
 function renderMiQRResidente() {
   const img = document.getElementById("miQRResidenteImg");
-  const loader = document.getElementById("miQRResidenteLoader");
   const tokenEl = document.getElementById("miQRResidenteToken");
+  const wrap = document.getElementById("miQRResidenteWrap");
   if (!_qrState.miResidente) return;
-  img.src = _qrImgUrl(_qrState.miResidente.token);
-  img.style.display = "block";
-  loader.style.display = "none";
-  tokenEl.textContent = _qrState.miResidente.token;
+  const url = _qrImgUrl(_qrState.miResidente.token);
+
+  // Precargar la imagen y solo mostrarla cuando el navegador la tenga
+  const pre = new Image();
+  pre.onload = () => {
+    img.src = url;
+    img.style.display = "block";
+    img.style.margin = "0 auto";
+    tokenEl.textContent = _qrState.miResidente.token;
+    _qrLoaderVisible(false);
+  };
+  pre.onerror = () => {
+    // Si falla, igual mostramos la URL
+    img.src = url;
+    img.style.display = "block";
+    img.style.margin = "0 auto";
+    tokenEl.textContent = _qrState.miResidente.token;
+    _qrLoaderVisible(false);
+  };
+  pre.src = url;
 }
 
 function renderQRVisitantes() {
@@ -4271,9 +4183,30 @@ function renderQRVisitantes() {
     else if (v.estado === "Vencido") badge = '<span class="badge-estado pendiente">Vencido</span>';
     else if (v.estado === "Usado") badge = '<span class="badge-estado rechazado">Usado</span>';
     else if (v.estado === "Revocado") badge = '<span class="badge-estado rechazado">Revocado</span>';
-    const btnVer = v.estado === "Activo" ? `<button class="btn-lc btn-lc-info btn-lc-sm" style="padding:4px 10px; font-size:0.72rem;" onclick="verQRVisitante('${escapeHtml(v.id)}')"><i class="fas fa-eye"></i></button>` : "";
-    const btnRev = v.estado === "Activo" ? `<button class="btn-lc btn-lc-danger btn-lc-sm" style="padding:4px 10px; font-size:0.72rem;" onclick="revocarQRVisitante('${escapeHtml(v.id)}')"><i class="fas fa-ban"></i></button>` : "";
-    return `<div class="mov-item" style="flex-wrap: wrap;"><div class="mov-icon interes"><i class="fas fa-qrcode"></i></div><div class="mov-body"><div class="mov-title">${escapeHtml(v.nombreVisitante)} ${badge}</div><div class="mov-meta"><span><i class="far fa-clock"></i> Expira: ${escapeHtml(v.expira)}</span>${v.placa ? `<span><i class="fas fa-car"></i> ${escapeHtml(v.placa)}</span>` : ""}<span><i class="fas fa-users"></i> ${v.cantidadPersonas}</span>${v.usosMax > 0 ? `<span><i class="fas fa-redo"></i> ${v.usosActuales}/${v.usosMax}</span>` : `<span><i class="fas fa-infinity"></i> ilimitado</span>`}</div></div><div style="display:flex; gap:6px;">${btnVer}${btnRev}</div></div>`;
+
+    const idEsc = escapeHtml(v.id);
+    const btnVer = `<button class="btn-lc btn-lc-info btn-lc-sm" style="padding:4px 10px; font-size:0.72rem;" onclick="verQRVisitante('${idEsc}')" title="Ver"><i class="fas fa-eye"></i></button>`;
+    const btnEditar = `<button class="btn-lc btn-lc-warning btn-lc-sm" style="padding:4px 10px; font-size:0.72rem;" onclick="abrirModalEditarQR('${idEsc}')" title="Editar"><i class="fas fa-edit"></i></button>`;
+    const btnDeshabilitar = v.estado === "Activo"
+      ? `<button class="btn-lc btn-lc-ghost btn-lc-sm" style="padding:4px 10px; font-size:0.72rem;" onclick="revocarQRVisitante('${idEsc}')" title="Deshabilitar"><i class="fas fa-ban"></i></button>`
+      : "";
+    const btnEliminar = `<button class="btn-lc btn-lc-danger btn-lc-sm" style="padding:4px 10px; font-size:0.72rem;" onclick="eliminarQRVisitante('${idEsc}')" title="Eliminar"><i class="fas fa-trash"></i></button>`;
+
+    return `<div class="mov-item" style="flex-wrap: wrap;">
+      <div class="mov-icon interes"><i class="fas fa-qrcode"></i></div>
+      <div class="mov-body">
+        <div class="mov-title">${escapeHtml(v.nombreVisitante)} ${badge}</div>
+        <div class="mov-meta">
+          <span><i class="far fa-clock"></i> Expira: ${escapeHtml(v.expira)}</span>
+          ${v.placa ? `<span><i class="fas fa-car"></i> ${escapeHtml(v.placa)}</span>` : ""}
+          <span><i class="fas fa-users"></i> ${v.cantidadPersonas}</span>
+          ${v.usosMax > 0 ? `<span><i class="fas fa-redo"></i> ${v.usosActuales}/${v.usosMax}</span>` : `<span><i class="fas fa-infinity"></i> ilimitado</span>`}
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; flex-wrap: wrap;">
+        ${btnVer}${btnEditar}${btnDeshabilitar}${btnEliminar}
+      </div>
+    </div>`;
   }).join("");
 }
 
@@ -4300,6 +4233,7 @@ function abrirModalQRVisitante() {
 }
 
 async function crearQRVisitante() {
+  if (_qrState.procesando) return;
   const nombre = document.getElementById("qrVisNombre").value.trim();
   const placa = document.getElementById("qrVisPlaca").value.trim().toUpperCase();
   const personas = Math.max(1, parseInt(document.getElementById("qrVisPersonas").value, 10) || 1);
@@ -4307,16 +4241,27 @@ async function crearQRVisitante() {
   const multiuso = document.getElementById("qrVisMultiuso").checked;
   const notas = document.getElementById("qrVisNotas").value.trim();
   if (!nombre) return Swal.fire("Falta nombre", "Ingresa el nombre del visitante.", "warning");
+
+  _qrState.procesando = true;
+  showLoading("Creando QR...");
   const btn = document.getElementById("btnCrearQRVisitante");
   const htmlOrig = btn.innerHTML;
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando...';
+
   try {
     const res = await apiQR({ action: "qrCrearVisitante", casa: state.casa, password: state.password, nombreVisitante: nombre, placa, cantidadPersonas: personas, duracionHoras: duracion, multiuso, notas });
     bootstrap.Modal.getInstance(document.getElementById("modalQRVisitante"))?.hide();
-    await cargarAccesosQR();
+    // Solo recargamos la lista de visitantes (no todo)
+    await _recargarSoloVisitantes();
+    hideLoading();
     verQRVisitante(res.id);
-  } catch (err) { Swal.fire("Error", err.message, "error"); }
-  finally { btn.disabled = false; btn.innerHTML = htmlOrig; }
+  } catch (err) {
+    hideLoading();
+    Swal.fire("Error", err.message, "error");
+  } finally {
+    _qrState.procesando = false;
+    btn.disabled = false; btn.innerHTML = htmlOrig;
+  }
 }
 
 function verQRVisitante(id) {
@@ -4329,25 +4274,159 @@ function verQRVisitante(id) {
   new bootstrap.Modal(document.getElementById("modalVerQR")).show();
 }
 
+function abrirModalEditarQR(id) {
+  const v = _qrState.visitantes.find(x => String(x.id) === String(id));
+  if (!v) return;
+  _qrState.qrEditActual = v;
+
+  document.getElementById("qrEditNombre").value = v.nombreVisitante || "";
+  document.getElementById("qrEditPlaca").value = v.placa || "";
+  document.getElementById("qrEditPersonas").value = String(v.cantidadPersonas || 1);
+  document.getElementById("qrEditDuracion").value = "8";
+  document.getElementById("qrEditMultiuso").checked = (v.usosMax === 0);
+  document.getElementById("qrEditNotas").value = v.notas || "";
+
+  new bootstrap.Modal(document.getElementById("modalEditarQR")).show();
+}
+
+async function guardarEdicionQRVisitante() {
+  if (_qrState.procesando || !_qrState.qrEditActual) return;
+  const id = _qrState.qrEditActual.id;
+  const nombre = document.getElementById("qrEditNombre").value.trim();
+  const placa = document.getElementById("qrEditPlaca").value.trim().toUpperCase();
+  const personas = Math.max(1, parseInt(document.getElementById("qrEditPersonas").value, 10) || 1);
+  const duracion = Number(document.getElementById("qrEditDuracion").value);
+  const multiuso = document.getElementById("qrEditMultiuso").checked;
+  const notas = document.getElementById("qrEditNotas").value.trim();
+  if (!nombre) return Swal.fire("Falta nombre", "Ingresa el nombre del visitante.", "warning");
+
+  _qrState.procesando = true;
+  showLoading("Guardando cambios...");
+  const btn = document.getElementById("btnGuardarEdicionQR");
+  const htmlOrig = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+  try {
+    await apiQR({
+      action: "qrEditarVisitante",
+      casa: state.casa,
+      password: state.password,
+      id,
+      nombreVisitante: nombre,
+      placa,
+      cantidadPersonas: personas,
+      duracionHoras: duracion,
+      multiuso,
+      notas
+    });
+    bootstrap.Modal.getInstance(document.getElementById("modalEditarQR"))?.hide();
+    await _recargarSoloVisitantes();
+    hideLoading();
+    Swal.fire({ icon: "success", title: "QR actualizado", timer: 1600, showConfirmButton: false });
+  } catch (err) {
+    hideLoading();
+    Swal.fire("Error", err.message, "error");
+  } finally {
+    _qrState.procesando = false;
+    btn.disabled = false; btn.innerHTML = htmlOrig;
+  }
+}
+
 async function revocarQRVisitante(id) {
-  const conf = await Swal.fire({ title: "¿Revocar este QR?", text: "El visitante ya no podrá ingresar con él.", icon: "warning", showCancelButton: true, confirmButtonColor: "#e74c3c", confirmButtonText: "Sí, revocar", cancelButtonText: "Cancelar" });
+  if (_qrState.procesando) return;
+  const conf = await Swal.fire({ title: "¿Deshabilitar este QR?", text: "El visitante ya no podrá ingresar con él.", icon: "warning", showCancelButton: true, confirmButtonColor: "#e74c3c", confirmButtonText: "Sí, deshabilitar", cancelButtonText: "Cancelar" });
   if (!conf.isConfirmed) return;
+  _qrState.procesando = true;
+  showLoading("Deshabilitando...");
   try {
     await apiQR({ action: "qrRevocarVisitante", casa: state.casa, password: state.password, id });
-    await cargarAccesosQR();
-    Swal.fire({ icon: "success", title: "Revocado", timer: 1500, showConfirmButton: false });
-  } catch (err) { Swal.fire("Error", err.message, "error"); }
+    await _recargarSoloVisitantes();
+    hideLoading();
+    Swal.fire({ icon: "success", title: "Deshabilitado", timer: 1500, showConfirmButton: false });
+  } catch (err) {
+    hideLoading();
+    Swal.fire("Error", err.message, "error");
+  } finally {
+    _qrState.procesando = false;
+  }
+}
+
+async function eliminarQRVisitante(id) {
+  if (_qrState.procesando) return;
+  const v = _qrState.visitantes.find(x => String(x.id) === String(id));
+  if (!v) return;
+  const conf = await Swal.fire({
+    title: "¿Eliminar este QR?",
+    html: `Se eliminará permanentemente el QR de <strong>${escapeHtml(v.nombreVisitante)}</strong>.<br><small style="color:#7f8c8d;">Esta acción no se puede deshacer.</small>`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#e74c3c",
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar"
+  });
+  if (!conf.isConfirmed) return;
+  _qrState.procesando = true;
+  showLoading("Eliminando...");
+  try {
+    await apiQR({ action: "qrEliminarVisitante", casa: state.casa, password: state.password, id });
+    await _recargarSoloVisitantes();
+    hideLoading();
+    Swal.fire({ icon: "success", title: "Eliminado", timer: 1500, showConfirmButton: false });
+  } catch (err) {
+    hideLoading();
+    Swal.fire("Error", err.message, "error");
+  } finally {
+    _qrState.procesando = false;
+  }
 }
 
 async function regenerarMiQRResidente() {
+  if (_qrState.procesando) return;
   const conf = await Swal.fire({ title: "¿Regenerar tu QR?", text: "El QR anterior dejará de funcionar. Deberás compartir el nuevo con tus familiares.", icon: "warning", showCancelButton: true, confirmButtonColor: "#f39c12", confirmButtonText: "Sí, regenerar", cancelButtonText: "Cancelar" });
   if (!conf.isConfirmed) return;
+  _qrState.procesando = true;
+  _qrLoaderVisible(true);
+  showLoading("Regenerando QR...");
   try {
     const res = await apiQR({ action: "qrRegenerarResidente", casa: state.casa, password: state.password });
     _qrState.miResidente = res;
     renderMiQRResidente();
+    hideLoading();
     Swal.fire({ icon: "success", title: "QR actualizado", timer: 1500, showConfirmButton: false });
-  } catch (err) { Swal.fire("Error", err.message, "error"); }
+  } catch (err) {
+    hideLoading();
+    _qrLoaderVisible(false);
+    Swal.fire("Error", err.message, "error");
+  } finally {
+    _qrState.procesando = false;
+  }
+}
+
+async function limpiarHistorialQR() {
+  if (_qrState.procesando) return;
+  const conf = await Swal.fire({
+    title: "¿Limpiar el historial?",
+    html: "Se eliminarán <strong>todos los accesos registrados</strong> de tu casa.<br><small style='color:#7f8c8d;'>Esto no afecta a los QRs activos.</small>",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#e74c3c",
+    confirmButtonText: "Sí, limpiar",
+    cancelButtonText: "Cancelar"
+  });
+  if (!conf.isConfirmed) return;
+  _qrState.procesando = true;
+  showLoading("Limpiando...");
+  try {
+    const res = await apiQR({ action: "qrLimpiarHistorial", casa: state.casa, password: state.password });
+    await _recargarSoloHistorial();
+    hideLoading();
+    Swal.fire({ icon: "success", title: "Historial limpiado", text: `${res.eliminados || 0} registros eliminados.`, timer: 2000, showConfirmButton: false });
+  } catch (err) {
+    hideLoading();
+    Swal.fire("Error", err.message, "error");
+  } finally {
+    _qrState.procesando = false;
+  }
 }
 
 async function descargarMiQRResidente() {
@@ -4443,7 +4522,7 @@ const swalObserver = new MutationObserver(() => {
 });
 swalObserver.observe(document.body, { childList: true, subtree: true });
 
-console.log("La Concordia - App v20 cargada");
+console.log("La Concordia - App v21 cargada");
 </script>
 </body>
 </html>
