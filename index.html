@@ -1812,13 +1812,51 @@ select.form-control-lc { cursor: pointer; }
 
 <script>
 // =========================================================================
-// LA CONCORDIA - JS v15 (IndexedDB session + iframe ayuda)
+// LA CONCORDIA - JS v16 (con caché cliente + fetch unificado)
 // =========================================================================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzskS77FkyY8Mr7KsBAJ7q8qE-f3tqT9Ck1jk33B8SrnKI1GQVHn9_YyLHlNC8NsZAnQ/exec";
 const ANIO_MINIMO = 2025;
 const ANIO_MAXIMO_MATRIZ = 2100;
 
-// BD IndexedDB para sesión
+// === CACHÉ CLIENTE (localStorage) ===
+const CACHE_CLIENTE = {
+  TTL_DASHBOARD_MS: 60 * 1000,     // 1 min para dashboard
+  TTL_CASAS_MS: 3 * 60 * 1000,     // 3 min para casas
+  TTL_MATRIZ_MS: 2 * 60 * 1000,    // 2 min para matriz
+  PREFIX: "lc_cache_"
+};
+
+function cacheGet(key, ttlMs) {
+  try {
+    const raw = localStorage.getItem(CACHE_CLIENTE.PREFIX + key);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (!obj || !obj.ts) return null;
+    if (Date.now() - obj.ts > ttlMs) return null; // expirado
+    return obj.data;
+  } catch (e) { return null; }
+}
+
+function cacheSet(key, data) {
+  try {
+    localStorage.setItem(CACHE_CLIENTE.PREFIX + key, JSON.stringify({ data: data, ts: Date.now() }));
+  } catch (e) {}
+}
+
+function cacheClear(prefix) {
+  try {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(CACHE_CLIENTE.PREFIX + (prefix || ""))) keys.push(k);
+    }
+    keys.forEach(k => localStorage.removeItem(k));
+  } catch (e) {}
+}
+
+// =========================================================================
+// INDEXEDDB - SESIÓN
+// =========================================================================
 const DB_SESION_NAME = "LaConcordiaSesionDB";
 const DB_SESION_VERSION = 1;
 const STORE_SESION = "sesiones";
@@ -2260,7 +2298,6 @@ function mostrarPantalla(cual) {
 function abrirAyudaIframe() {
   const modal = document.getElementById("modalIframeAyuda");
   const iframe = document.getElementById("iframeAyuda");
-  // Cargar el iframe solo si no se ha cargado antes
   if (!iframe.src || iframe.src === "about:blank" || iframe.src === window.location.href) {
     iframe.src = "Menú Ayuda.html";
   }
@@ -2274,14 +2311,12 @@ function cerrarAyudaIframe() {
   document.body.style.overflow = "";
 }
 
-// Escuchar el postMessage del iframe cuando el usuario hace clic en "Volver"
 window.addEventListener("message", (event) => {
   if (event && event.data && event.data.tipo === "cerrarAyudaIframe") {
     cerrarAyudaIframe();
   }
 });
 
-// Cerrar con Escape
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     const modal = document.getElementById("modalIframeAyuda");
@@ -2329,8 +2364,6 @@ document.getElementById("formLoginVecino").addEventListener("submit", async (e) 
 
     if (!perfilCompleto || debeCambiar) {
       state.perfilCompletadoEnSesion = false;
-      // Solo guardar si el usuario marcó "recordar" y el perfil está completo
-      // (si falta perfil, se guardará cuando termine)
       if (recordar) {
         await guardarSesionDB(SESSION_KEY_VECINO, { casa: res.casa, password: password, recordar: true });
       }
@@ -2345,6 +2378,8 @@ document.getElementById("formLoginVecino").addEventListener("submit", async (e) 
     } else {
       await borrarSesionDB(SESSION_KEY_VECINO);
     }
+    // Limpiar caché del vecino anterior para evitar datos mezclados
+    cacheClear("vecino_");
     await cargarVistaVecino();
     mostrarPantalla("vecino");
   } catch (err) {
@@ -2378,6 +2413,7 @@ document.getElementById("formLoginAdmin").addEventListener("submit", async (e) =
       await borrarSesionDB(SESSION_KEY_ADMIN);
     }
 
+    cacheClear("admin_");
     await cargarVistaAdmin();
     mostrarPantalla("admin");
   } catch (err) {
@@ -2396,6 +2432,7 @@ function cerrarSesion() {
   }).then(async (r) => {
     if (r.isConfirmed) {
       await borrarTodasLasSesiones();
+      cacheClear(""); // borra toda la caché cliente
       state.casa = null; state.password = null; state.esAdmin = false; state.passwordAdmin = null;
       state.datosVecino = null;
       state.datosAdmin = { casas: [], pendientes: [], movimientos: [] };
@@ -2413,6 +2450,7 @@ async function refrescarPanelVecino(btn) {
   if (!state.casa) return;
   btn.classList.add("spinning");
   try {
+    cacheClear("vecino_");
     await cargarVistaVecino();
     Swal.fire({ icon: "success", title: "Actualizado", timer: 1200, showConfirmButton: false, toast: true, position: "top-end" });
   } catch (e) { Swal.fire("Error", e.message, "error"); }
@@ -2422,6 +2460,7 @@ async function refrescarPanelAdmin(btn) {
   if (!state.esAdmin) return;
   btn.classList.add("spinning");
   try {
+    cacheClear("admin_");
     await cargarVistaAdmin();
     Swal.fire({ icon: "success", title: "Actualizado", timer: 1200, showConfirmButton: false, toast: true, position: "top-end" });
   } catch (e) { Swal.fire("Error", e.message, "error"); }
@@ -2432,7 +2471,6 @@ async function refrescarPanelAdmin(btn) {
 // AUTO-LOGIN SILENCIOSO
 // =========================================================================
 async function intentarAutoLogin() {
-  // Primero admin
   const sesionAdmin = await obtenerSesionDB(SESSION_KEY_ADMIN);
   if (sesionAdmin && sesionAdmin.password) {
     try {
@@ -2448,7 +2486,6 @@ async function intentarAutoLogin() {
     }
   }
 
-  // Luego vecino
   const sesionVecino = await obtenerSesionDB(SESSION_KEY_VECINO);
   if (sesionVecino && sesionVecino.casa && sesionVecino.password) {
     try {
@@ -2591,7 +2628,6 @@ async function guardarCompletarPassword() {
   try {
     await apiCall({ action: "cambiarPassword", casa: state.casa, passActual: actual, passNueva: nueva });
     state.password = nueva;
-    // Actualizar la sesión guardada con la nueva contraseña
     const sesion = await obtenerSesionDB(SESSION_KEY_VECINO);
     if (sesion && sesion.recordar) {
       await guardarSesionDB(SESSION_KEY_VECINO, { casa: state.casa, password: nueva, recordar: true });
@@ -2606,6 +2642,7 @@ async function guardarCompletarPassword() {
 
 async function finalizarCompletarPerfil() {
   state.perfilCompletadoEnSesion = true;
+  cacheClear("vecino_");
   mostrarPantalla("vecino");
   await cargarVistaVecino();
   Swal.fire({
@@ -2629,6 +2666,7 @@ function cancelarCompletarPerfil() {
   }).then(async (r) => {
     if (r.isConfirmed) {
       await borrarTodasLasSesiones();
+      cacheClear("");
       state.casa = null; state.password = null;
       state.datosVecino = null;
       state.perfilCompletadoEnSesion = false;
@@ -2638,15 +2676,45 @@ function cancelarCompletarPerfil() {
 }
 
 // =========================================================================
-// VISTA VECINO
+// VISTA VECINO (con carga rápida desde caché + revalidación)
 // =========================================================================
 async function cargarVistaVecino() {
-  try {
-    const res = await apiCall({ action: "obtenerMisDatos", casa: state.casa, password: state.password });
-    state.datosVecino = res;
+  // 1) Mostrar datos cacheados INMEDIATAMENTE si existen
+  const cacheKey = "vecino_init_" + state.casa;
+  const cacheado = cacheGet(cacheKey, 60 * 1000); // TTL 1 min
+  if (cacheado && cacheado.misDatos) {
+    state.datosVecino = cacheado.misDatos;
     renderVecino();
+    if (cacheado.dashboard) {
+      document.getElementById("vecinoTotalAportaciones").textContent = formatearLempiras(cacheado.dashboard.totalAportaciones);
+      document.getElementById("vecinoTotalIntereses").textContent = formatearLempiras(cacheado.dashboard.totalIntereses);
+      document.getElementById("vecinoTotalEgresos").textContent = formatearLempiras(cacheado.dashboard.totalEgresos);
+      document.getElementById("vecinoSaldoColonia").textContent = formatearLempiras(cacheado.dashboard.saldoActual);
+    }
+  }
+
+  // 2) En paralelo, revalidar con el servidor
+  try {
+    const res = await apiCall({
+      action: "vecinoInit",
+      casa: state.casa,
+      password: state.password
+    });
+    state.datosVecino = res.misDatos;
+    renderVecino();
+    if (res.dashboard) {
+      document.getElementById("vecinoTotalAportaciones").textContent = formatearLempiras(res.dashboard.totalAportaciones);
+      document.getElementById("vecinoTotalIntereses").textContent = formatearLempiras(res.dashboard.totalIntereses);
+      document.getElementById("vecinoTotalEgresos").textContent = formatearLempiras(res.dashboard.totalEgresos);
+      document.getElementById("vecinoSaldoColonia").textContent = formatearLempiras(res.dashboard.saldoActual);
+    }
+    // Guardar en caché cliente
+    cacheSet(cacheKey, res);
   } catch (err) {
-    Swal.fire("Error", err.message, "error");
+    // Si falla el fetch pero ya mostramos caché, no mostrar error
+    if (!cacheado) {
+      Swal.fire("Error", err.message, "error");
+    }
   }
 }
 
@@ -2675,7 +2743,6 @@ function renderVecino() {
   }
   actualizarNavAnio();
   renderHistorialCompleto();
-  cargarEstadoColoniaVecino();
 }
 
 function renderMesesVecino(meses) {
@@ -2802,7 +2869,16 @@ document.querySelectorAll("#pantallaVecino .nav-pill").forEach(btn => {
 
 async function cargarMovimientosVecino() {
   const container = document.getElementById("vecinoMovimientosLista");
-  container.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>`;
+  // Caché rápido
+  const cacheKey = "vecino_movs_" + state.casa + "_" + state.anioMovVecino + "_" + state.subtabMovVecino;
+  const cacheado = cacheGet(cacheKey, 60 * 1000);
+  if (cacheado) {
+    container.innerHTML = cacheado.length === 0
+      ? `<div class="empty-state"><i class="fas fa-inbox"></i><p>Sin movimientos.</p></div>`
+      : cacheado.map(movTemplate).join("");
+  } else {
+    container.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>`;
+  }
   actualizarNavAnioMovVecino();
   try {
     const res = await apiCall({
@@ -2816,13 +2892,17 @@ async function cargarMovimientosVecino() {
     else if (st === "egresos") movs = movs.filter(m => m.tipo === "Egreso");
     else if (st === "intereses") movs = movs.filter(m => m.tipo === "Interes");
 
+    cacheSet(cacheKey, movs);
+
     if (movs.length === 0) {
       container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>Sin movimientos.</p></div>`;
       return;
     }
     container.innerHTML = movs.map(movTemplate).join("");
   } catch (err) {
-    container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${err.message}</p></div>`;
+    if (!cacheado) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${err.message}</p></div>`;
+    }
   }
 }
 function actualizarNavAnioMovVecino() {
@@ -2847,13 +2927,22 @@ function cambiarSubtabVecino(sub, btn) {
 
 async function cargarMatrizVecino() {
   const container = document.getElementById("matrizVecinoContenedor");
-  container.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>`;
+  const cacheKey = "matriz_vecino_" + state.anioMatrizVecino;
+  const cacheado = cacheGet(cacheKey, CACHE_CLIENTE.TTL_MATRIZ_MS);
+  if (cacheado) {
+    renderMatrizGenerica("matrizVecinoContenedor", cacheado);
+  } else {
+    container.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>`;
+  }
   actualizarNavAnioMatrizVecino();
   try {
     const res = await apiCall({ action: "vecinoObtenerMatrizEstado", casa: state.casa, password: state.password, anio: state.anioMatrizVecino });
+    cacheSet(cacheKey, res);
     renderMatrizGenerica("matrizVecinoContenedor", res);
   } catch (err) {
-    container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${err.message}</p></div>`;
+    if (!cacheado) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${err.message}</p></div>`;
+    }
   }
 }
 function actualizarNavAnioMatrizVecino() {
@@ -2907,7 +2996,7 @@ function renderMatrizGenerica(containerId, data) {
     </div>`;
 }
 
-// ESTADO DE CUENTA VECINO
+// ESTADO DE CUENTA VECINO (con caché)
 function actualizarNavAnioEdoCuentaVecino() {
   document.getElementById("edoCuentaVecinoAnioDisplay").textContent = state.anioEdoCuentaVecino;
   const hoy = new Date().getFullYear();
@@ -2929,7 +3018,13 @@ function actualizarEstadoCuentaVecinoMes() {
 
 async function verEstadoCuentaVecino() {
   const cont = document.getElementById("edoCuentaVecinoPreview");
-  cont.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>`;
+  const cacheKey = "edo_" + state.anioEdoCuentaVecino + "_" + (state.edoCuentaVecinoMes || "all");
+  const cacheado = cacheGet(cacheKey, 2 * 60 * 1000);
+  if (cacheado) {
+    cont.innerHTML = renderEstadoCuentaPreview(cacheado);
+  } else {
+    cont.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>`;
+  }
   try {
     const data = await apiCall({
       action: "vecinoVerEstadoCuentaGlobal",
@@ -2937,9 +3032,12 @@ async function verEstadoCuentaVecino() {
       anio: state.anioEdoCuentaVecino,
       mes: state.edoCuentaVecinoMes || null
     });
+    cacheSet(cacheKey, data);
     cont.innerHTML = renderEstadoCuentaPreview(data);
   } catch (err) {
-    cont.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${err.message}</p></div>`;
+    if (!cacheado) {
+      cont.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${err.message}</p></div>`;
+    }
   }
 }
 
@@ -3077,18 +3175,7 @@ function descargarArchivoBase64(base64, nombreArchivo, mimeType) {
 }
 
 async function cargarEstadoColoniaVecino() {
-  try {
-    const res = await apiCall({ action: "dashboardPublico" });
-    document.getElementById("vecinoTotalAportaciones").textContent = formatearLempiras(res.totalAportaciones);
-    document.getElementById("vecinoTotalIntereses").textContent = formatearLempiras(res.totalIntereses);
-    document.getElementById("vecinoTotalEgresos").textContent = formatearLempiras(res.totalEgresos);
-    document.getElementById("vecinoSaldoColonia").textContent = formatearLempiras(res.saldoActual);
-  } catch (err) {
-    document.getElementById("vecinoTotalAportaciones").textContent = "0";
-    document.getElementById("vecinoTotalIntereses").textContent = "0";
-    document.getElementById("vecinoTotalEgresos").textContent = "0";
-    document.getElementById("vecinoSaldoColonia").textContent = "0";
-  }
+  // Ya no se usa por separado; el dashboard viene dentro de vecinoInit
 }
 
 // MODAL APORTACIÓN
@@ -3238,6 +3325,10 @@ async function guardarAportacion() {
     bootstrap.Modal.getInstance(document.getElementById("modalAportacion"))?.hide();
     comprobanteActual = null;
 
+    // Invalidar caché cliente
+    cacheClear("vecino_");
+    cacheClear("admin_");
+
     Swal.fire({
       icon: "success",
       title: "¡Registrada!",
@@ -3248,9 +3339,7 @@ async function guardarAportacion() {
     });
 
     if (esAdmin) {
-      await cargarPendientesAdmin();
-      await cargarMovimientosAdmin();
-      actualizarStatsAdmin();
+      await cargarVistaAdmin();
     } else {
       await cargarVistaVecino();
     }
@@ -3383,6 +3472,9 @@ async function guardarEdicionAportacion() {
     state.editandoAportacion = null;
     state.editandoComprobanteNuevo = null;
 
+    cacheClear("admin_");
+    cacheClear("vecino_");
+
     Swal.fire({
       icon: "success",
       title: "Aportación editada",
@@ -3390,10 +3482,7 @@ async function guardarEdicionAportacion() {
       confirmButtonText: "Entendido"
     });
 
-    await cargarPendientesAdmin();
-    await cargarMovimientosAdmin();
-    await cargarCasasAdmin();
-    actualizarStatsAdmin();
+    await cargarVistaAdmin();
   } catch (err) {
     hideLoading();
     state.procesando.edicion = false;
@@ -3456,6 +3545,7 @@ async function guardarMiPerfil() {
   try {
     await apiCall({ action: "actualizarMiPerfil", casa: state.casa, password: state.password, nombre, email, telefono });
     Swal.fire({ icon: "success", title: "Datos guardados", timer: 1800, showConfirmButton: false });
+    cacheClear("vecino_");
     await cargarVistaVecino();
   } catch (err) { Swal.fire("Error", err.message, "error"); }
   finally { btn.disabled = false; btn.innerHTML = htmlOrig; }
@@ -3487,7 +3577,6 @@ async function guardarCambioPassword() {
   try {
     await apiCall({ action: "cambiarPassword", casa: state.casa, passActual: actual, passNueva: nueva });
     state.password = nueva;
-    // Actualizar la sesión guardada con la nueva contraseña
     const sesion = await obtenerSesionDB(SESSION_KEY_VECINO);
     if (sesion && sesion.recordar) {
       await guardarSesionDB(SESSION_KEY_VECINO, { casa: state.casa, password: nueva, recordar: true });
@@ -3533,7 +3622,7 @@ function verComprobante(url) {
   new bootstrap.Modal(document.getElementById("modalVerComprobante")).show();
 }
 
-// ADMIN
+// ADMIN — CARGA UNIFICADA
 async function cargarVistaAdmin() {
   try {
     document.getElementById("pantallaLogin").classList.add("d-none-lc");
@@ -3544,15 +3633,37 @@ async function cargarVistaAdmin() {
     const hoy = new Date().getFullYear();
     state.anioMatrizAdmin = hoy; state.anioEdoCuentaAdmin = hoy;
 
-    const errores = [];
-    try { await cargarCasasAdmin(); } catch (e) { errores.push("Casas: " + e.message); }
-    try { await cargarPendientesAdmin(); } catch (e) { errores.push("Pendientes: " + e.message); }
-    try { await cargarMovimientosAdmin(); } catch (e) { errores.push("Movs: " + e.message); }
-    try { actualizarStatsAdmin(); } catch (e) {}
+    // Caché cliente: mostrar datos previos inmediatamente
+    const cacheKey = "admin_init";
+    const cacheado = cacheGet(cacheKey, 30 * 1000);
+    if (cacheado) {
+      state.datosAdmin.casas = cacheado.casas || [];
+      state.datosAdmin.pendientes = cacheado.pendientes || [];
+      state.datosAdmin.movimientos = cacheado.movimientos || [];
+      renderCasasAdmin();
+      renderPendientesAdmin();
+      renderMovimientosAdmin();
+      renderEgresosAdmin();
+      renderInteresesAdmin();
+      actualizarStatsAdmin();
+    }
+
+    // Fetch unificado
+    const res = await apiCall({ action: "adminInit", password: state.passwordAdmin });
+    state.datosAdmin.casas = res.casas || [];
+    state.datosAdmin.pendientes = res.pendientes || [];
+    state.datosAdmin.movimientos = res.movimientos || [];
+    cacheSet(cacheKey, res);
+
+    renderCasasAdmin();
+    renderPendientesAdmin();
+    renderMovimientosAdmin();
+    renderEgresosAdmin();
+    renderInteresesAdmin();
+    actualizarStatsAdmin();
 
     actualizarNavAnioEdoCuenta();
     actualizarNavAnioMatriz();
-    if (errores.length > 0) Swal.fire({ icon: "warning", title: "Algunas secciones no cargaron", html: errores.map(e => "• " + e).join("<br>") });
   } catch (err) {
     Swal.fire("Error", err.message || "Error desconocido", "error");
   }
@@ -3765,8 +3876,9 @@ async function aprobarGrupo(gid) {
   } else {
     Swal.fire({ icon: "warning", title: `Se aprobaron ${ok} de ${cant}`, html: errores.join("<br>") });
   }
-  await Promise.all([cargarPendientesAdmin(), cargarCasasAdmin(), cargarMovimientosAdmin()]);
-  actualizarStatsAdmin();
+  cacheClear("admin_");
+  cacheClear("vecino_");
+  await cargarVistaAdmin();
 }
 
 async function rechazarGrupo(gid) {
@@ -3803,8 +3915,9 @@ async function rechazarGrupo(gid) {
   } else {
     Swal.fire({ icon: "warning", title: `Se rechazaron ${ok} de ${cant}`, html: errores.join("<br>") });
   }
-  await Promise.all([cargarPendientesAdmin(), cargarMovimientosAdmin()]);
-  actualizarStatsAdmin();
+  cacheClear("admin_");
+  cacheClear("vecino_");
+  await cargarVistaAdmin();
 }
 
 async function aprobarMovimiento(movId) {
@@ -3817,8 +3930,9 @@ async function aprobarMovimiento(movId) {
   try {
     const res = await apiCall({ action: "adminAprobar", password: state.passwordAdmin, movimientoId: movId });
     Swal.fire({ icon: "success", title: "Aprobado", text: res.mensaje, timer: 2200, showConfirmButton: false });
-    await Promise.all([cargarPendientesAdmin(), cargarCasasAdmin(), cargarMovimientosAdmin()]);
-    actualizarStatsAdmin();
+    cacheClear("admin_");
+    cacheClear("vecino_");
+    await cargarVistaAdmin();
   } catch (err) { Swal.fire("Error", err.message, "error"); }
   finally { hideLoading(); }
 }
@@ -3835,8 +3949,9 @@ async function rechazarMovimiento(movId) {
   try {
     await apiCall({ action: "adminRechazar", password: state.passwordAdmin, movimientoId: movId, observacion: motivo });
     Swal.fire({ icon: "success", title: "Rechazado", timer: 2200, showConfirmButton: false });
-    await Promise.all([cargarPendientesAdmin(), cargarMovimientosAdmin()]);
-    actualizarStatsAdmin();
+    cacheClear("admin_");
+    cacheClear("vecino_");
+    await cargarVistaAdmin();
   } catch (err) { Swal.fire("Error", err.message, "error"); }
   finally { hideLoading(); }
 }
@@ -3933,8 +4048,8 @@ async function crearCasa() {
     document.getElementById("crearCasaInput").value = "";
     btn.innerHTML = '<i class="fas fa-plus"></i> Crear otra';
     btn.disabled = false;
-    await cargarCasasAdmin();
-    actualizarStatsAdmin();
+    cacheClear("admin_");
+    await cargarVistaAdmin();
   } catch (err) {
     Swal.fire("Error", err.message, "error");
     btn.disabled = false;
@@ -3970,7 +4085,8 @@ async function confirmarResetPassword() {
         <button class="btn-lc btn-lc-ghost btn-lc-sm" onclick="copiarAlPortapapeles('${escapeHtml(res.passwordTemporal)}')" style="width: auto;"><i class="fas fa-copy"></i> Copiar</button>
       </div>`;
     btn.innerHTML = '<i class="fas fa-check"></i> Listo';
-    await cargarCasasAdmin();
+    cacheClear("admin_");
+    await cargarVistaAdmin();
   } catch (err) {
     Swal.fire("Error", err.message, "error");
     btn.disabled = false;
@@ -3990,8 +4106,8 @@ async function toggleEstadoCasa(casa, estadoActual) {
   try {
     const res = await apiCall({ action: "adminEliminarCasa", password: state.passwordAdmin, casa });
     Swal.fire({ icon: "success", title: "Actualizado", text: res.mensaje, timer: 2000, showConfirmButton: false });
-    await cargarCasasAdmin();
-    actualizarStatsAdmin();
+    cacheClear("admin_");
+    await cargarVistaAdmin();
   } catch (err) { Swal.fire("Error", err.message, "error"); }
   finally { hideLoading(); }
 }
@@ -4110,8 +4226,9 @@ async function guardarEgreso() {
     bootstrap.Modal.getInstance(document.getElementById("modalEgreso"))?.hide();
     comprobanteEgresoActual = null;
     Swal.fire({ icon: "success", title: "Egreso registrado", text: `L. ${formatearLempiras(monto)}`, timer: 2400, showConfirmButton: false });
-    await cargarMovimientosAdmin();
-    actualizarStatsAdmin();
+    cacheClear("admin_");
+    cacheClear("vecino_");
+    await cargarVistaAdmin();
   } catch (err) { Swal.fire("Error", err.message, "error"); }
   finally {
     state.procesando.egreso = false;
@@ -4161,8 +4278,9 @@ async function guardarInteres() {
     bootstrap.Modal.getInstance(document.getElementById("modalInteres"))?.hide();
     comprobanteInteresActual = null;
     Swal.fire({ icon: "success", title: "Interés registrado", text: `L. ${formatearLempiras(monto)}`, timer: 2400, showConfirmButton: false });
-    await cargarMovimientosAdmin();
-    actualizarStatsAdmin();
+    cacheClear("admin_");
+    cacheClear("vecino_");
+    await cargarVistaAdmin();
   } catch (err) { Swal.fire("Error", err.message, "error"); }
   finally {
     state.procesando.interes = false;
@@ -4173,15 +4291,26 @@ async function guardarInteres() {
 
 async function cargarMatrizAdmin() {
   const container = document.getElementById("adminMatrizContenedor");
-  container.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>`;
+  const cacheKey = "matriz_admin_" + state.anioMatrizAdmin;
+  const cacheado = cacheGet(cacheKey, CACHE_CLIENTE.TTL_MATRIZ_MS);
+  if (cacheado) {
+    state.matrizAdminData = cacheado;
+    renderMatrizGenerica("adminMatrizContenedor", cacheado);
+    aplicarFiltroMatrizAdmin();
+  } else {
+    container.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>`;
+  }
   actualizarNavAnioMatriz();
   try {
     const res = await apiCall({ action: "adminMatrizEstado", password: state.passwordAdmin, anio: state.anioMatrizAdmin });
     state.matrizAdminData = res;
+    cacheSet(cacheKey, res);
     renderMatrizGenerica("adminMatrizContenedor", res);
     aplicarFiltroMatrizAdmin();
   } catch (err) {
-    container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${err.message}</p></div>`;
+    if (!cacheado) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${err.message}</p></div>`;
+    }
   }
 }
 function actualizarNavAnioMatriz() {
@@ -4237,7 +4366,13 @@ function actualizarEstadoCuentaAdminMes() {
 
 async function verEstadoCuentaAdmin() {
   const cont = document.getElementById("edoCuentaAdminPreview");
-  cont.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>`;
+  const cacheKey = "edo_" + state.anioEdoCuentaAdmin + "_" + (state.edoCuentaAdminMes || "all");
+  const cacheado = cacheGet(cacheKey, 2 * 60 * 1000);
+  if (cacheado) {
+    cont.innerHTML = renderEstadoCuentaPreview(cacheado);
+  } else {
+    cont.innerHTML = `<div class="text-center p-4"><div class="spinner-border text-primary" role="status"></div></div>`;
+  }
   try {
     const data = await apiCall({
       action: "adminVerEstadoCuentaGlobal",
@@ -4245,9 +4380,12 @@ async function verEstadoCuentaAdmin() {
       anio: state.anioEdoCuentaAdmin,
       mes: state.edoCuentaAdminMes || null
     });
+    cacheSet(cacheKey, data);
     cont.innerHTML = renderEstadoCuentaPreview(data);
   } catch (err) {
-    cont.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${err.message}</p></div>`;
+    if (!cacheado) {
+      cont.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${err.message}</p></div>`;
+    }
   }
 }
 
@@ -4271,16 +4409,12 @@ async function descargarEstadoCuentaAdmin() {
 
 // INICIALIZACIÓN
 document.addEventListener("DOMContentLoaded", async () => {
-  // Mostrar pantalla de espera mientras se verifica
   mostrarPantalla("espera");
-
   try {
     await abrirDBSesion();
   } catch (e) {
     console.warn("IndexedDB no disponible para sesión:", e);
   }
-
-  // Intentar auto-login silencioso
   const autoLoginOk = await intentarAutoLogin();
   if (!autoLoginOk) {
     mostrarPantalla("login");
@@ -4302,7 +4436,8 @@ setInterval(() => {
   }
 }, 60000);
 
-console.log("La Concordia - App v15 cargada");
+console.log("La Concordia - App v16 (con caché) cargada");
 </script>
+
 </body>
 </html>
