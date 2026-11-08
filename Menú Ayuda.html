@@ -1653,6 +1653,20 @@ document.addEventListener('keydown', (e) => {
     limpiarBusqueda();
   }
 });
+
+// Detectar si estamos dentro de un iframe (modal de ayuda en index.html)
+if (window.parent && window.parent !== window) {
+  // Reemplazar el comportamiento del botón "Volver a la app"
+  document.querySelectorAll('a[href="index.html"]').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Avisar al padre que cierre el modal
+      window.parent.postMessage({ tipo: "cerrarAyudaIframe" }, "*");
+    });
+  });
+}
+
+  
 </script>
 
 </body>
