@@ -3999,14 +3999,24 @@ function verComprobante(url) {
   const fileId = (matchD && matchD[1]) || (matchId && matchId[1]);
   if (fileId) imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600`;
 
-  comprobanteViewerReset();
   const img = document.getElementById("imgComprobanteViewer");
+  comprobanteViewerReset();
   img.src = imgUrl;
-  img.onload = () => {
-    comprobanteViewerReset(true);
-  };
 
-  new bootstrap.Modal(document.getElementById("modalVerComprobante")).show();
+  const modalEl = document.getElementById("modalVerComprobante");
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+  // Ajustar SOLO después de que el modal esté visible y con layout real
+  const onShown = () => {
+    modalEl.removeEventListener("shown.bs.modal", onShown);
+    // Pequeño delay para que la animación de Bootstrap termine del todo
+    setTimeout(() => {
+      comprobanteViewerReset(true);
+    }, 80);
+  };
+  modalEl.addEventListener("shown.bs.modal", onShown);
+
+  modal.show();
 }
 
 // ADMIN
@@ -4897,26 +4907,35 @@ function comprobanteViewerReset(ajustarAlContenedor = false) {
   _cz.ty = 0;
   _cz.minScale = 1;
   _cz.maxScale = 6;
-  _aplicarTransformComprobante();
+
+  // Limpiar tamaño inline que hayamos puesto antes
+  img.style.width = "";
+  img.style.height = "";
 
   if (ajustarAlContenedor) {
-    // Ajustar la imagen para que quepa dentro del contenedor al abrir
-    const cw = viewer.clientWidth;
-    const ch = viewer.clientHeight;
-    if (img.naturalWidth && img.naturalHeight && cw && ch) {
-      const ratioX = cw / img.naturalWidth;
-      const ratioY = ch / img.naturalHeight;
-      const fitScale = Math.min(ratioX, ratioY, 1);
-      // Guardamos el tamaño natural escalado por "fitScale" como base 1x
-      img.style.width = (img.naturalWidth * fitScale) + "px";
-      img.style.height = (img.naturalHeight * fitScale) + "px";
-    }
+    // Esperar a que el modal tenga layout real (doble rAF por la animación)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const cw = viewer.clientWidth;
+        const ch = viewer.clientHeight;
+        if (img.naturalWidth && img.naturalHeight && cw > 0 && ch > 0) {
+          const ratioX = cw / img.naturalWidth;
+          const ratioY = ch / img.naturalHeight;
+          const fitScale = Math.min(ratioX, ratioY);
+          img.style.width = (img.naturalWidth * fitScale) + "px";
+          img.style.height = (img.naturalHeight * fitScale) + "px";
+        }
+        _cz.scale = 1;
+        _cz.tx = 0;
+        _cz.ty = 0;
+        _aplicarTransformComprobante();
+        _actualizarZoomLevelUI();
+      });
+    });
+  } else {
+    _aplicarTransformComprobante();
+    _actualizarZoomLevelUI();
   }
-
-  _cz.minScale = 1;
-  _cz.scale = 1;
-  _aplicarTransformComprobante();
-  _actualizarZoomLevelUI();
 }
 
 function _aplicarTransformComprobante() {
@@ -5094,12 +5113,19 @@ function _setupComprobanteViewerEvents() {
   });
 
   // Al cerrar el modal, resetear
-  document.getElementById("modalVerComprobante").addEventListener("hidden.bs.modal", () => {
-    comprobanteViewerReset();
-    const hint = document.getElementById("comprobanteZoomHint");
-    if (hint) hint.classList.remove("hide");
-    document.getElementById("imgComprobanteViewer").src = "";
-  });
+document.getElementById("modalVerComprobante").addEventListener("hidden.bs.modal", () => {
+  const img = document.getElementById("imgComprobanteViewer");
+  img.src = "";
+  img.style.width = "";
+  img.style.height = "";
+  _cz.scale = 1;
+  _cz.tx = 0;
+  _cz.ty = 0;
+  _aplicarTransformComprobante();
+  _actualizarZoomLevelUI();
+  const hint = document.getElementById("comprobanteZoomHint");
+  if (hint) hint.classList.remove("hide");
+});
 }
 
 console.log("La Concordia - App v19 cargada");
