@@ -119,6 +119,7 @@ a.header-btn { text-decoration: none; }
   text-decoration: none;
   transition: var(--transition);
   backdrop-filter: blur(6px);
+  cursor: pointer;
 }
 .login-help-btn:hover {
   background: rgba(255,255,255,0.28);
@@ -127,7 +128,6 @@ a.header-btn { text-decoration: none; }
 }
 .login-help-btn i { font-size: 1rem; }
 
-/* Checkbox recordar sesión */
 .recordar-sesion-wrap {
   display: flex;
   align-items: center;
@@ -748,6 +748,125 @@ select.form-control-lc { cursor: pointer; }
 }
 #pantallaCompletarPerfil.show { display: flex; }
 
+/* ===== PANTALLA DE ESPERA (mientras auto-login) ===== */
+#pantallaEspera {
+  position: fixed; inset: 0; z-index: 240000;
+  background: linear-gradient(135deg, #1a5490, #0f3a66);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  color: #fff;
+}
+#pantallaEspera .espera-logo {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.4rem;
+  margin-bottom: 18px;
+  animation: pulseLogo 1.8s ease-in-out infinite;
+}
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.06); opacity: 0.85; }
+}
+#pantallaEspera .espera-titulo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 6px;
+  letter-spacing: 0.5px;
+}
+#pantallaEspera .espera-sub {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* ===== MODAL IFRAME AYUDA ===== */
+#modalIframeAyuda {
+  position: fixed; inset: 0; z-index: 260000;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+}
+#modalIframeAyuda.show { display: flex; }
+.iframe-ayuda-container {
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+  max-height: 95vh;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  animation: modalIframeIn 0.25s ease;
+}
+@keyframes modalIframeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.iframe-ayuda-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.iframe-ayuda-header .ifa-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.iframe-ayuda-header .ifa-close {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.iframe-ayuda-header .ifa-close:hover {
+  background: rgba(231,76,60,0.4);
+  transform: rotate(90deg);
+}
+.iframe-ayuda-body {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+.iframe-ayuda-body iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+@media (max-width: 576px) {
+  #modalIframeAyuda { padding: 0; }
+  .iframe-ayuda-container {
+    border-radius: 0;
+    max-height: 100vh;
+    height: 100vh;
+    max-width: 100%;
+  }
+  .iframe-ayuda-header .ifa-title { font-size: 0.85rem; }
+}
+
 @media (max-width: 768px) {
   .card-lc { padding: 18px 16px; }
   #toastLoader { top: auto; bottom: 20px; right: 20px; left: 20px; min-width: auto; }
@@ -759,6 +878,15 @@ select.form-control-lc { cursor: pointer; }
 </head>
 <body>
 
+<!-- PANTALLA DE ESPERA (auto-login) -->
+<div id="pantallaEspera">
+  <div class="espera-logo">
+    <i class="fas fa-handshake"></i>
+  </div>
+  <h1 class="espera-titulo">La Concordia</h1>
+  <p class="espera-sub">Cargando...</p>
+</div>
+
 <div id="toastLoader">
   <div class="toast-spinner"></div>
   <div class="toast-text">
@@ -769,7 +897,7 @@ select.form-control-lc { cursor: pointer; }
 <div id="clickBlocker"></div>
 
 <!-- LOGIN -->
-<div id="pantallaLogin" class="login-wrapper">
+<div id="pantallaLogin" class="login-wrapper d-none-lc">
   <div class="login-card">
     <div class="login-logo">
       <i class="fas fa-handshake"></i>
@@ -793,7 +921,7 @@ select.form-control-lc { cursor: pointer; }
         </div>
       </div>
       <label class="recordar-sesion-wrap">
-        <input type="checkbox" id="loginRecordarVecino">
+        <input type="checkbox" id="loginRecordarVecino" checked>
         <div class="recordar-info">
           <span class="recordar-label">Mantener sesión abierta</span>
           <span class="recordar-sub">No tendrás que volver a ingresar</span>
@@ -816,7 +944,7 @@ select.form-control-lc { cursor: pointer; }
         </div>
       </div>
       <label class="recordar-sesion-wrap">
-        <input type="checkbox" id="loginRecordarAdmin">
+        <input type="checkbox" id="loginRecordarAdmin" checked>
         <div class="recordar-info">
           <span class="recordar-label">Mantener sesión abierta</span>
           <span class="recordar-sub">No tendrás que volver a ingresar</span>
@@ -825,9 +953,26 @@ select.form-control-lc { cursor: pointer; }
       <button type="submit" class="btn-lc btn-lc-primary" id="btnLoginAdmin" style="background: var(--primary-dark);"><i class="fas fa-shield-alt"></i> Entrar</button>
     </form>
   </div>
-  <a href="Menú Ayuda.html" class="login-help-btn">
+  <button type="button" class="login-help-btn" onclick="abrirAyudaIframe()">
     <i class="fas fa-question-circle"></i> ¿Necesitas ayuda?
-  </a>
+  </button>
+</div>
+
+<!-- MODAL IFRAME AYUDA -->
+<div id="modalIframeAyuda">
+  <div class="iframe-ayuda-container">
+    <div class="iframe-ayuda-header">
+      <div class="ifa-title">
+        <i class="fas fa-question-circle"></i> Menú de Ayuda
+      </div>
+      <button class="ifa-close" onclick="cerrarAyudaIframe()" title="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="iframe-ayuda-body">
+      <iframe id="iframeAyuda" src="about:blank" title="Menú de Ayuda"></iframe>
+    </div>
+  </div>
 </div>
 
 <!-- PANTALLA OBLIGATORIA: COMPLETAR PERFIL -->
@@ -921,7 +1066,7 @@ select.form-control-lc { cursor: pointer; }
     </div>
     <div class="header-actions">
       <button class="header-btn" onclick="refrescarPanelVecino(this)" title="Refrescar"><i class="fas fa-sync-alt"></i></button>
-      <a href="Menú Ayuda.html" class="header-btn" title="Ayuda"><i class="fas fa-question-circle"></i></a>
+      <button class="header-btn" onclick="abrirAyudaIframe()" title="Ayuda"><i class="fas fa-question-circle"></i></button>
       <button class="header-btn" onclick="abrirMiPerfil()" title="Mi perfil"><i class="fas fa-user-circle"></i></button>
       <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
     </div>
@@ -1132,7 +1277,7 @@ select.form-control-lc { cursor: pointer; }
     </div>
     <div class="header-actions">
       <button class="header-btn" onclick="refrescarPanelAdmin(this)" title="Refrescar"><i class="fas fa-sync-alt"></i></button>
-      <a href="Menú Ayuda.html" class="header-btn" title="Ayuda"><i class="fas fa-question-circle"></i></a>
+      <button class="header-btn" onclick="abrirAyudaIframe()" title="Ayuda"><i class="fas fa-question-circle"></i></button>
       <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
     </div>
   </div>
@@ -1667,13 +1812,19 @@ select.form-control-lc { cursor: pointer; }
 
 <script>
 // =========================================================================
-// LA CONCORDIA - JS v14 (con recordar sesión)
+// LA CONCORDIA - JS v15 (IndexedDB session + iframe ayuda)
 // =========================================================================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzskS77FkyY8Mr7KsBAJ7q8qE-f3tqT9Ck1jk33B8SrnKI1GQVHn9_YyLHlNC8NsZAnQ/exec";
 const ANIO_MINIMO = 2025;
 const ANIO_MAXIMO_MATRIZ = 2100;
-const STORAGE_KEY_VECINO = "lc_sesion_vecino";
-const STORAGE_KEY_ADMIN = "lc_sesion_admin";
+
+// BD IndexedDB para sesión
+const DB_SESION_NAME = "LaConcordiaSesionDB";
+const DB_SESION_VERSION = 1;
+const STORE_SESION = "sesiones";
+const SESSION_KEY_VECINO = "vecino";
+const SESSION_KEY_ADMIN = "admin";
+let dbSesion = null;
 
 const state = {
   casa: null, password: null, esAdmin: false, passwordAdmin: null,
@@ -1706,83 +1857,68 @@ let comprobanteInteresActual = null;
 let casaParaReset = null;
 
 // =========================================================================
-// HELPERS SESIÓN PERSISTENTE
+// INDEXEDDB - SESIÓN
 // =========================================================================
-async function hashSimple(texto) {
-  // SHA-256 usando Web Crypto API
-  try {
-    const data = new TextEncoder().encode(String(texto));
-    const hash = await crypto.subtle.digest("SHA-256", data);
-    const arr = Array.from(new Uint8Array(hash));
-    return arr.map(b => b.toString(16).padStart(2, "0")).join("");
-  } catch (e) {
-    // Fallback simple (no seguro pero funcional)
-    let h = 0;
-    for (let i = 0; i < texto.length; i++) {
-      h = ((h << 5) - h) + texto.charCodeAt(i);
-      h |= 0;
-    }
-    return "fb_" + Math.abs(h).toString(16);
-  }
-}
-
-function guardarSesionVecino(casa, password, recordar) {
-  const sesion = { casa, passwordHash: null, ts: Date.now() };
-  hashSimple(password).then(pwHash => {
-    sesion.passwordHash = pwHash;
-    // Guardamos el password cifrado (no en claro)
-    // Para poder usarlo en autologin necesitamos el password real.
-    // Solución: guardamos el password real SOLO si "recordar" está marcado.
-    // Es lo mismo que hacen los navegadores con "recordar contraseña".
-    const payload = JSON.stringify({ casa, password: password, ts: Date.now() });
-    try {
-      if (recordar) {
-        localStorage.setItem(STORAGE_KEY_VECINO, payload);
-      } else {
-        sessionStorage.setItem(STORAGE_KEY_VECINO, payload);
+function abrirDBSesion() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_SESION_NAME, DB_SESION_VERSION);
+    req.onupgradeneeded = (e) => {
+      const database = e.target.result;
+      if (!database.objectStoreNames.contains(STORE_SESION)) {
+        database.createObjectStore(STORE_SESION, { keyPath: "key" });
       }
-    } catch (e) { console.warn("No se pudo guardar sesión:", e); }
+    };
+    req.onsuccess = (e) => {
+      dbSesion = e.target.result;
+      resolve(dbSesion);
+    };
+    req.onerror = (e) => reject(e.target.error);
   });
 }
 
-function guardarSesionAdmin(password, recordar) {
-  const payload = JSON.stringify({ password, ts: Date.now() });
-  try {
-    if (recordar) {
-      localStorage.setItem(STORAGE_KEY_ADMIN, payload);
-    } else {
-      sessionStorage.setItem(STORAGE_KEY_ADMIN, payload);
-    }
-  } catch (e) { console.warn("No se pudo guardar sesión:", e); }
+function guardarSesionDB(key, datos) {
+  return new Promise((resolve) => {
+    if (!dbSesion) return resolve(false);
+    try {
+      const tx = dbSesion.transaction([STORE_SESION], "readwrite");
+      const obj = { key: key, datos: datos, ts: Date.now() };
+      const req = tx.objectStore(STORE_SESION).put(obj);
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => resolve(false);
+    } catch (e) { resolve(false); }
+  });
 }
 
-function obtenerSesionVecino() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY_VECINO) || sessionStorage.getItem(STORAGE_KEY_VECINO);
-    if (!raw) return null;
-    const s = JSON.parse(raw);
-    if (!s.casa || !s.password) return null;
-    return s;
-  } catch (e) { return null; }
+function obtenerSesionDB(key) {
+  return new Promise((resolve) => {
+    if (!dbSesion) return resolve(null);
+    try {
+      const tx = dbSesion.transaction([STORE_SESION], "readonly");
+      const req = tx.objectStore(STORE_SESION).get(key);
+      req.onsuccess = () => {
+        if (req.result && req.result.datos) resolve(req.result.datos);
+        else resolve(null);
+      };
+      req.onerror = () => resolve(null);
+    } catch (e) { resolve(null); }
+  });
 }
 
-function obtenerSesionAdmin() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY_ADMIN) || sessionStorage.getItem(STORAGE_KEY_ADMIN);
-    if (!raw) return null;
-    const s = JSON.parse(raw);
-    if (!s.password) return null;
-    return s;
-  } catch (e) { return null; }
+function borrarSesionDB(key) {
+  return new Promise((resolve) => {
+    if (!dbSesion) return resolve();
+    try {
+      const tx = dbSesion.transaction([STORE_SESION], "readwrite");
+      const req = tx.objectStore(STORE_SESION).delete(key);
+      req.onsuccess = () => resolve();
+      req.onerror = () => resolve();
+    } catch (e) { resolve(); }
+  });
 }
 
-function borrarSesiones() {
-  try {
-    localStorage.removeItem(STORAGE_KEY_VECINO);
-    localStorage.removeItem(STORAGE_KEY_ADMIN);
-    sessionStorage.removeItem(STORAGE_KEY_VECINO);
-    sessionStorage.removeItem(STORAGE_KEY_ADMIN);
-  } catch (e) {}
+async function borrarTodasLasSesiones() {
+  await borrarSesionDB(SESSION_KEY_VECINO);
+  await borrarSesionDB(SESSION_KEY_ADMIN);
 }
 
 // =========================================================================
@@ -2106,16 +2242,58 @@ function _setComprobanteEdit(base64) {
 }
 
 function mostrarPantalla(cual) {
+  document.getElementById("pantallaEspera").classList.add("d-none-lc");
   document.getElementById("pantallaLogin").classList.add("d-none-lc");
   document.getElementById("pantallaVecino").classList.add("d-none-lc");
   document.getElementById("pantallaAdmin").classList.add("d-none-lc");
   document.getElementById("pantallaCompletarPerfil").classList.remove("show");
-  if (cual === "login") document.getElementById("pantallaLogin").classList.remove("d-none-lc");
+  if (cual === "espera") document.getElementById("pantallaEspera").classList.remove("d-none-lc");
+  else if (cual === "login") document.getElementById("pantallaLogin").classList.remove("d-none-lc");
   else if (cual === "vecino") document.getElementById("pantallaVecino").classList.remove("d-none-lc");
   else if (cual === "admin") document.getElementById("pantallaAdmin").classList.remove("d-none-lc");
   else if (cual === "completarPerfil") document.getElementById("pantallaCompletarPerfil").classList.add("show");
 }
 
+// =========================================================================
+// IFRAME AYUDA
+// =========================================================================
+function abrirAyudaIframe() {
+  const modal = document.getElementById("modalIframeAyuda");
+  const iframe = document.getElementById("iframeAyuda");
+  // Cargar el iframe solo si no se ha cargado antes
+  if (!iframe.src || iframe.src === "about:blank" || iframe.src === window.location.href) {
+    iframe.src = "Menú Ayuda.html";
+  }
+  modal.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function cerrarAyudaIframe() {
+  const modal = document.getElementById("modalIframeAyuda");
+  modal.classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+// Escuchar el postMessage del iframe cuando el usuario hace clic en "Volver"
+window.addEventListener("message", (event) => {
+  if (event && event.data && event.data.tipo === "cerrarAyudaIframe") {
+    cerrarAyudaIframe();
+  }
+});
+
+// Cerrar con Escape
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const modal = document.getElementById("modalIframeAyuda");
+    if (modal.classList.contains("show")) {
+      cerrarAyudaIframe();
+    }
+  }
+});
+
+// =========================================================================
+// LOGIN TABS
+// =========================================================================
 document.querySelectorAll(".login-tab").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".login-tab").forEach(b => b.classList.remove("active"));
@@ -2126,6 +2304,7 @@ document.querySelectorAll(".login-tab").forEach(btn => {
   });
 });
 
+// LOGIN VECINO
 document.getElementById("formLoginVecino").addEventListener("submit", async (e) => {
   e.preventDefault();
   const casa = document.getElementById("loginCasaInput").value.trim().toUpperCase();
@@ -2150,14 +2329,22 @@ document.getElementById("formLoginVecino").addEventListener("submit", async (e) 
 
     if (!perfilCompleto || debeCambiar) {
       state.perfilCompletadoEnSesion = false;
+      // Solo guardar si el usuario marcó "recordar" y el perfil está completo
+      // (si falta perfil, se guardará cuando termine)
+      if (recordar) {
+        await guardarSesionDB(SESSION_KEY_VECINO, { casa: res.casa, password: password, recordar: true });
+      }
       abrirPantallaCompletarPerfil(perfilCompleto, debeCambiar);
       mostrarPantalla("completarPerfil");
       return;
     }
 
     state.perfilCompletadoEnSesion = true;
-    // Guardar sesión si el usuario marcó "recordar"
-    guardarSesionVecino(res.casa, password, recordar);
+    if (recordar) {
+      await guardarSesionDB(SESSION_KEY_VECINO, { casa: res.casa, password: password, recordar: true });
+    } else {
+      await borrarSesionDB(SESSION_KEY_VECINO);
+    }
     await cargarVistaVecino();
     mostrarPantalla("vecino");
   } catch (err) {
@@ -2168,6 +2355,7 @@ document.getElementById("formLoginVecino").addEventListener("submit", async (e) 
   }
 });
 
+// LOGIN ADMIN
 document.getElementById("formLoginAdmin").addEventListener("submit", async (e) => {
   e.preventDefault();
   const password = document.getElementById("loginAdminPassInput").value;
@@ -2183,7 +2371,13 @@ document.getElementById("formLoginAdmin").addEventListener("submit", async (e) =
     state.passwordAdmin = password;
     state.casa = null; state.password = null;
     document.getElementById("loginAdminPassInput").value = "";
-    guardarSesionAdmin(password, recordar);
+
+    if (recordar) {
+      await guardarSesionDB(SESSION_KEY_ADMIN, { password: password, recordar: true });
+    } else {
+      await borrarSesionDB(SESSION_KEY_ADMIN);
+    }
+
     await cargarVistaAdmin();
     mostrarPantalla("admin");
   } catch (err) {
@@ -2199,15 +2393,13 @@ function cerrarSesion() {
     title: "¿Cerrar sesión?", icon: "question",
     showCancelButton: true, confirmButtonText: "Sí, salir", cancelButtonText: "Cancelar",
     confirmButtonColor: "#e74c3c"
-  }).then((r) => {
+  }).then(async (r) => {
     if (r.isConfirmed) {
-      borrarSesiones();
+      await borrarTodasLasSesiones();
       state.casa = null; state.password = null; state.esAdmin = false; state.passwordAdmin = null;
       state.datosVecino = null;
       state.datosAdmin = { casas: [], pendientes: [], movimientos: [] };
       state.perfilCompletadoEnSesion = false;
-      document.getElementById("loginRecordarVecino").checked = false;
-      document.getElementById("loginRecordarAdmin").checked = false;
       mostrarPantalla("login");
       document.querySelectorAll(".login-tab").forEach(b => b.classList.remove("active"));
       document.querySelector('.login-tab[data-tipo="vecino"]').classList.add("active");
@@ -2236,31 +2428,30 @@ async function refrescarPanelAdmin(btn) {
   finally { btn.classList.remove("spinning"); }
 }
 
-// AUTO-LOGIN
+// =========================================================================
+// AUTO-LOGIN SILENCIOSO
+// =========================================================================
 async function intentarAutoLogin() {
-  const sesionVecino = obtenerSesionVecino();
-  const sesionAdmin = obtenerSesionAdmin();
-
-  if (sesionAdmin) {
+  // Primero admin
+  const sesionAdmin = await obtenerSesionDB(SESSION_KEY_ADMIN);
+  if (sesionAdmin && sesionAdmin.password) {
     try {
-      showLoading("Restaurando sesión...", "Tesorero");
       await apiCall({ action: "validarAdmin", password: sesionAdmin.password });
       state.esAdmin = true;
       state.passwordAdmin = sesionAdmin.password;
       state.casa = null; state.password = null;
       await cargarVistaAdmin();
-      hideLoading();
       mostrarPantalla("admin");
       return true;
     } catch (e) {
-      hideLoading();
-      try { localStorage.removeItem(STORAGE_KEY_ADMIN); sessionStorage.removeItem(STORAGE_KEY_ADMIN); } catch (x) {}
+      await borrarSesionDB(SESSION_KEY_ADMIN);
     }
   }
 
-  if (sesionVecino) {
+  // Luego vecino
+  const sesionVecino = await obtenerSesionDB(SESSION_KEY_VECINO);
+  if (sesionVecino && sesionVecino.casa && sesionVecino.password) {
     try {
-      showLoading("Restaurando sesión...", "Casa " + sesionVecino.casa);
       const res = await apiCall({ action: "login", casa: sesionVecino.casa, password: sesionVecino.password });
       state.casa = res.casa;
       state.password = sesionVecino.password;
@@ -2269,7 +2460,6 @@ async function intentarAutoLogin() {
       state.anioVecino = hoy; state.anioMovVecino = hoy; state.anioMatrizVecino = hoy; state.anioEdoCuentaVecino = hoy;
 
       if (!res.perfilCompleto || res.debeCambiarPassword) {
-        hideLoading();
         state.perfilCompletadoEnSesion = false;
         abrirPantallaCompletarPerfil(res.perfilCompleto, res.debeCambiarPassword);
         mostrarPantalla("completarPerfil");
@@ -2278,12 +2468,10 @@ async function intentarAutoLogin() {
 
       state.perfilCompletadoEnSesion = true;
       await cargarVistaVecino();
-      hideLoading();
       mostrarPantalla("vecino");
       return true;
     } catch (e) {
-      hideLoading();
-      try { localStorage.removeItem(STORAGE_KEY_VECINO); sessionStorage.removeItem(STORAGE_KEY_VECINO); } catch (x) {}
+      await borrarSesionDB(SESSION_KEY_VECINO);
     }
   }
 
@@ -2404,10 +2592,9 @@ async function guardarCompletarPassword() {
     await apiCall({ action: "cambiarPassword", casa: state.casa, passActual: actual, passNueva: nueva });
     state.password = nueva;
     // Actualizar la sesión guardada con la nueva contraseña
-    const sesion = obtenerSesionVecino();
-    if (sesion) {
-      const enLocal = !!localStorage.getItem(STORAGE_KEY_VECINO);
-      guardarSesionVecino(state.casa, nueva, enLocal);
+    const sesion = await obtenerSesionDB(SESSION_KEY_VECINO);
+    if (sesion && sesion.recordar) {
+      await guardarSesionDB(SESSION_KEY_VECINO, { casa: state.casa, password: nueva, recordar: true });
     }
     await finalizarCompletarPerfil();
   } catch (err) {
@@ -2439,9 +2626,9 @@ function cancelarCompletarPerfil() {
     confirmButtonText: "Sí, salir",
     cancelButtonText: "Continuar aquí",
     confirmButtonColor: "#e74c3c"
-  }).then((r) => {
+  }).then(async (r) => {
     if (r.isConfirmed) {
-      borrarSesiones();
+      await borrarTodasLasSesiones();
       state.casa = null; state.password = null;
       state.datosVecino = null;
       state.perfilCompletadoEnSesion = false;
@@ -3300,11 +3487,10 @@ async function guardarCambioPassword() {
   try {
     await apiCall({ action: "cambiarPassword", casa: state.casa, passActual: actual, passNueva: nueva });
     state.password = nueva;
-    // Actualizar sesión guardada con la nueva contraseña
-    const sesion = obtenerSesionVecino();
-    if (sesion) {
-      const enLocal = !!localStorage.getItem(STORAGE_KEY_VECINO);
-      guardarSesionVecino(state.casa, nueva, enLocal);
+    // Actualizar la sesión guardada con la nueva contraseña
+    const sesion = await obtenerSesionDB(SESSION_KEY_VECINO);
+    if (sesion && sesion.recordar) {
+      await guardarSesionDB(SESSION_KEY_VECINO, { casa: state.casa, password: nueva, recordar: true });
     }
     document.getElementById("passActualInput").value = "";
     document.getElementById("passNuevaInput").value = "";
@@ -3353,6 +3539,7 @@ async function cargarVistaAdmin() {
     document.getElementById("pantallaLogin").classList.add("d-none-lc");
     document.getElementById("pantallaVecino").classList.add("d-none-lc");
     document.getElementById("pantallaAdmin").classList.remove("d-none-lc");
+    document.getElementById("pantallaEspera").classList.add("d-none-lc");
     document.getElementById("pantallaCompletarPerfil").classList.remove("show");
     const hoy = new Date().getFullYear();
     state.anioMatrizAdmin = hoy; state.anioEdoCuentaAdmin = hoy;
@@ -4084,7 +4271,16 @@ async function descargarEstadoCuentaAdmin() {
 
 // INICIALIZACIÓN
 document.addEventListener("DOMContentLoaded", async () => {
-  // Intentar auto-login primero
+  // Mostrar pantalla de espera mientras se verifica
+  mostrarPantalla("espera");
+
+  try {
+    await abrirDBSesion();
+  } catch (e) {
+    console.warn("IndexedDB no disponible para sesión:", e);
+  }
+
+  // Intentar auto-login silencioso
   const autoLoginOk = await intentarAutoLogin();
   if (!autoLoginOk) {
     mostrarPantalla("login");
@@ -4106,7 +4302,7 @@ setInterval(() => {
   }
 }, 60000);
 
-console.log("La Concordia - App v14 cargada");
+console.log("La Concordia - App v15 cargada");
 </script>
 </body>
 </html>
