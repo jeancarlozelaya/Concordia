@@ -28,6 +28,28 @@ html, body {
 }
 .d-none-lc { display: none !important; }
 
+/* ============ PANTALLA ESPERA (auto-login) ============ */
+#pantallaEspera {
+  position: fixed; inset: 0; z-index: 240000;
+  background: linear-gradient(135deg, #1a5490, #0f3a66);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; color: #fff;
+}
+#pantallaEspera .espera-logo {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.4rem; margin-bottom: 18px;
+  animation: pulseLogo 1.8s ease-in-out infinite;
+}
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.06); opacity: 0.85; }
+}
+#pantallaEspera .espera-titulo { font-size: 1.4rem; font-weight: 800; margin: 0 0 6px; letter-spacing: 0.5px; }
+#pantallaEspera .espera-sub { font-size: 0.85rem; opacity: 0.8; margin: 0; }
+
+/* ============ LOGIN ============ */
 .login-wrapper {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
   padding: 20px; background: linear-gradient(135deg, #1a5490, #0f3a66);
@@ -47,16 +69,10 @@ html, body {
 .login-subtitle { color: var(--text-muted); font-size: 0.9rem; margin: 4px 0 0; }
 
 .recordar-sesion-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-  padding: 10px 12px;
-  background: var(--bg);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.25s ease;
-  user-select: none;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px; padding: 10px 12px;
+  background: var(--bg); border-radius: var(--radius-sm);
+  cursor: pointer; transition: all 0.25s ease; user-select: none;
 }
 .recordar-sesion-wrap:hover { background: #e8eef5; }
 .recordar-sesion-wrap input[type="checkbox"] {
@@ -103,6 +119,7 @@ html, body {
 .btn-lc-sm { padding: 7px 14px; font-size: 0.83rem; }
 .btn-lc:disabled { opacity: 0.6; cursor: not-allowed; }
 
+/* ============ HEADER ============ */
 .header {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: #fff; padding: 14px 20px;
@@ -170,21 +187,31 @@ html, body {
 }
 .manual-box input:focus { outline: none; border-color: var(--info); }
 
+/* ============ NAV TABS (Escáner / Directorio) ============ */
+.nav-tabs-lc {
+  display: flex; gap: 6px; background: #fff; padding: 6px;
+  border-radius: var(--radius-sm); box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+.nav-tab-lc {
+  flex: 1; background: transparent; border: none;
+  padding: 12px 14px; border-radius: 6px; font-weight: 700;
+  font-size: 0.9rem; color: var(--text-muted); cursor: pointer;
+  transition: all 0.25s ease; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.nav-tab-lc.active { background: var(--primary); color: #fff; box-shadow: 0 3px 10px rgba(26,84,144,0.25); }
+
+/* ============ ESCÁNER ============ */
 #qrReaderWrapper {
   position: fixed; inset: 0; z-index: 9999;
-  background: #000;
-  display: none;
-  flex-direction: column;
+  background: #000; display: none; flex-direction: column;
 }
 #qrReaderWrapper.show { display: flex; }
 #qrReaderWrapper .qr-header {
-  background: rgba(0,0,0,0.85);
-  color: #fff; padding: 14px 18px;
+  background: rgba(0,0,0,0.85); color: #fff; padding: 14px 18px;
   display: flex; align-items: center; justify-content: space-between;
 }
-#qrReaderWrapper .qr-header .qr-title {
-  font-weight: 700; font-size: 1rem;
-}
+#qrReaderWrapper .qr-header .qr-title { font-weight: 700; font-size: 1rem; }
 #qrReaderWrapper .qr-close {
   width: 40px; height: 40px; border-radius: 50%;
   background: rgba(255,255,255,0.15); border: none; color: #fff;
@@ -198,93 +225,62 @@ html, body {
   padding: 12px 18px; font-size: 0.85rem; text-align: center;
 }
 
+/* ============ RESULTADO ============ */
 .resultado-fullscreen {
   position: fixed; inset: 0; z-index: 9998;
-  display: none;
-  flex-direction: column;
-  padding: 22px;
-  color: #fff;
-  overflow-y: auto;
+  display: none; flex-direction: column;
+  padding: 22px; color: #fff; overflow-y: auto;
 }
 .resultado-fullscreen.show { display: flex; }
 .resultado-fullscreen.verde { background: linear-gradient(160deg, #27ae60, #1e8449); }
 .resultado-fullscreen.rojo { background: linear-gradient(160deg, #c0392b, #922b21); }
 .resultado-fullscreen.naranja { background: linear-gradient(160deg, #d68910, #b9770e); }
 .resultado-fullscreen .res-icon {
-  font-size: 5rem;
-  text-align: center;
-  margin-top: 40px;
-  margin-bottom: 20px;
+  font-size: 5rem; text-align: center; margin-top: 40px; margin-bottom: 20px;
   text-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 .resultado-fullscreen .res-title {
-  font-size: 1.8rem;
-  font-weight: 900;
-  text-align: center;
-  letter-spacing: 1px;
-  margin-bottom: 14px;
+  font-size: 1.8rem; font-weight: 900; text-align: center;
+  letter-spacing: 1px; margin-bottom: 14px;
   text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 .resultado-fullscreen .res-message {
-  text-align: center;
-  font-size: 1rem;
-  opacity: 0.95;
-  margin-bottom: 24px;
+  text-align: center; font-size: 1rem; opacity: 0.95; margin-bottom: 24px;
 }
 .resultado-fullscreen .res-datos {
   background: rgba(255,255,255,0.15);
-  border-radius: var(--radius);
-  padding: 18px;
-  margin-bottom: 20px;
+  border-radius: var(--radius); padding: 18px; margin-bottom: 20px;
   backdrop-filter: blur(8px);
 }
 .resultado-fullscreen .res-datos .fila {
   display: flex; justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
+  padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.15);
   font-size: 0.92rem;
 }
 .resultado-fullscreen .res-datos .fila:last-child { border-bottom: none; }
 .resultado-fullscreen .res-datos .fila .lbl { opacity: 0.85; }
 .resultado-fullscreen .res-datos .fila .val { font-weight: 800; text-align: right; }
 .resultado-fullscreen .btn-cerrar {
-  margin-top: auto;
-  padding: 18px;
-  font-size: 1.1rem;
-  font-weight: 800;
-  background: #fff;
-  color: var(--primary);
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
+  margin-top: auto; padding: 18px; font-size: 1.1rem; font-weight: 800;
+  background: #fff; color: var(--primary); border: none;
+  border-radius: var(--radius); cursor: pointer;
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
 
+/* ============ HISTORIAL ============ */
 .historial-lista { margin-top: 8px; }
 .historial-item {
-  display: flex;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  margin-bottom: 8px;
-  align-items: center;
-  font-size: 0.85rem;
+  display: flex; gap: 10px; padding: 10px 12px;
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+  margin-bottom: 8px; align-items: center; font-size: 0.85rem;
 }
-.historial-item .hora {
-  font-weight: 800;
-  color: var(--primary);
-  min-width: 55px;
-}
+.historial-item .hora { font-weight: 800; color: var(--primary); min-width: 55px; }
 .historial-item .info { flex: 1; }
 .historial-item .info .casa { font-weight: 700; }
 .historial-item .info .detalle { color: var(--text-muted); font-size: 0.78rem; }
 .historial-item .badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: #fff;
+  padding: 4px 10px; border-radius: 12px;
+  font-size: 0.7rem; font-weight: 800; color: #fff;
 }
 .historial-item .badge.ok { background: var(--accent); }
 .historial-item .badge.fail { background: var(--danger); }
@@ -292,12 +288,85 @@ html, body {
 
 .empty-state { text-align: center; padding: 30px 20px; color: var(--text-muted); }
 .empty-state i { font-size: 2.5rem; opacity: 0.3; margin-bottom: 10px; display: block; }
+
+/* ============ DIRECTORIO ============ */
+.directorio-search {
+  position: relative;
+  margin-bottom: 14px;
+}
+.directorio-search input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+}
+.directorio-search input:focus { outline: none; border-color: var(--info); }
+.directorio-search .search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.directorio-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); margin-bottom: 8px;
+  background: #fff;
+}
+.directorio-item .avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(26,84,144,0.1); color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.95rem; flex-shrink: 0;
+}
+.directorio-item .dir-info { flex: 1; min-width: 0; }
+.directorio-item .dir-casa {
+  font-weight: 800; font-size: 0.95rem; color: var(--primary);
+}
+.directorio-item .dir-nombre {
+  font-size: 0.82rem; color: var(--text); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.directorio-item .dir-tel {
+  font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;
+  font-family: monospace;
+}
+.directorio-item .dir-actions {
+  display: flex; gap: 6px; flex-shrink: 0;
+}
+.dir-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.dir-btn.call { background: rgba(52,152,219,0.15); color: var(--info); }
+.dir-btn.call:hover { background: var(--info); color: #fff; transform: translateY(-2px); }
+.dir-btn.wsp { background: rgba(37,211,102,0.15); color: #25d366; }
+.dir-btn.wsp:hover { background: #25d366; color: #fff; transform: translateY(-2px); }
+.dir-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+.dir-sin-datos {
+  font-size: 0.7rem; color: var(--danger); font-weight: 600;
+  padding: 2px 8px; background: rgba(231,76,60,0.1);
+  border-radius: 10px; display: inline-block; margin-top: 2px;
+}
 </style>
 </head>
 <body>
 
+<!-- ================ PANTALLA ESPERA ================ -->
+<div id="pantallaEspera">
+  <div class="espera-logo">
+    <i class="fas fa-handshake"></i>
+  </div>
+  <h1 class="espera-titulo">La Concordia</h1>
+  <p class="espera-sub">Cargando...</p>
+</div>
+
 <!-- ================ LOGIN ================ -->
-<div id="pantallaLogin" class="login-wrapper">
+<div id="pantallaLogin" class="login-wrapper d-none-lc">
   <div class="login-card">
     <div class="login-logo">
       <i class="fas fa-shield-alt"></i>
@@ -337,33 +406,66 @@ html, body {
       </div>
     </div>
     <div class="header-actions">
-      <button class="header-btn" onclick="refrescarHistorial(this)" title="Refrescar"><i class="fas fa-sync-alt"></i></button>
+      <button class="header-btn" onclick="refrescarPanel(this)" title="Refrescar"><i class="fas fa-sync-alt"></i></button>
       <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
     </div>
   </div>
 
   <div class="container-main">
-    <div class="card-lc">
-      <button class="scan-btn" onclick="abrirEscaner()">
-        <i class="fas fa-qrcode"></i>
-        <span>Escanear QR</span>
+    <div class="nav-tabs-lc">
+      <button class="nav-tab-lc active" data-tab="escaner" onclick="cambiarTab('escaner', this)">
+        <i class="fas fa-qrcode"></i> Escáner
       </button>
+      <button class="nav-tab-lc" data-tab="directorio" onclick="cambiarTab('directorio', this)">
+        <i class="fas fa-address-book"></i> Directorio
+      </button>
+    </div>
 
-      <div class="manual-box">
-        <label class="form-label-lc" style="margin-top: 4px;">O ingresa el token manualmente</label>
-        <input type="text" id="manualTokenInput" placeholder="LCR-XXXXXXXXXXXX / LCV-XXXXXXXXXXXX" autocapitalize="characters" onkeydown="if(event.key==='Enter'){event.preventDefault();validarManual();}">
-        <button class="btn-lc btn-lc-info" style="width: 100%; margin-top: 10px;" onclick="validarManual()">
-          <i class="fas fa-check"></i> Validar token
+    <!-- TAB ESCÁNER -->
+    <div id="tabEscaner" class="tab-panel">
+      <div class="card-lc">
+        <button class="scan-btn" onclick="abrirEscaner()">
+          <i class="fas fa-qrcode"></i>
+          <span>Escanear QR</span>
         </button>
+
+        <div class="manual-box">
+          <label class="form-label-lc" style="margin-top: 4px;">O ingresa el token manualmente</label>
+          <input type="text" id="manualTokenInput" placeholder="LCR-XXXXXXXXXXXX / LCV-XXXXXXXXXXXX"
+                 maxlength="16" autocapitalize="characters" autocomplete="off"
+                 oninput="formatearTokenInput(this)"
+                 onkeydown="if(event.key==='Enter'){event.preventDefault();validarManual();}">
+          <button class="btn-lc btn-lc-info" style="width: 100%; margin-top: 10px;" onclick="validarManual()">
+            <i class="fas fa-check"></i> Validar token
+          </button>
+        </div>
+      </div>
+
+      <div class="card-lc">
+        <h3 style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 10px;">
+          <i class="fas fa-list"></i> Accesos de hoy
+        </h3>
+        <div id="historialLista" class="historial-lista">
+          <div class="empty-state"><i class="fas fa-inbox"></i><p>Sin accesos registrados hoy.</p></div>
+        </div>
       </div>
     </div>
 
-    <div class="card-lc">
-      <h3 style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 10px;">
-        <i class="fas fa-list"></i> Accesos de hoy
-      </h3>
-      <div id="historialLista" class="historial-lista">
-        <div class="empty-state"><i class="fas fa-inbox"></i><p>Sin accesos registrados hoy.</p></div>
+    <!-- TAB DIRECTORIO -->
+    <div id="tabDirectorio" class="tab-panel d-none-lc">
+      <div class="card-lc">
+        <h3 style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 14px;">
+          <i class="fas fa-address-book"></i> Directorio Telefónico
+        </h3>
+
+        <div class="directorio-search">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="directorioBusqueda" placeholder="Buscar por casa o nombre..." oninput="filtrarDirectorio()">
+        </div>
+
+        <div id="directorioLista">
+          <div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Cargando directorio...</p></div>
+        </div>
       </div>
     </div>
   </div>
@@ -401,6 +503,7 @@ let dbGuardia = null;
 let currentPassword = "";
 let html5QrCode = null;
 let scannerActivo = false;
+let directorioCache = [];
 
 // ============ IndexedDB sesión ============
 function abrirDB() {
@@ -470,6 +573,13 @@ async function apiQR(payload, timeoutMs = 20000) {
   } finally { clearTimeout(timer); }
 }
 
+// ============ PANTALLAS ============
+function mostrarPantalla(cual) {
+  document.getElementById("pantallaEspera").classList.toggle("d-none-lc", cual !== "espera");
+  document.getElementById("pantallaLogin").classList.toggle("d-none-lc", cual !== "login");
+  document.getElementById("pantallaGuardia").classList.toggle("d-none-lc", cual !== "guardia");
+}
+
 // ============ LOGIN ============
 function togglePass(inputId, btn) {
   const el = document.getElementById(inputId);
@@ -491,15 +601,11 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
   try {
     await apiQR({ action: "validarPasswordSeguridad", password });
     currentPassword = password;
-
-    if (recordar) {
-      await guardarSesion({ password, recordar: true });
-    } else {
-      await borrarSesion();
-    }
-
+    if (recordar) await guardarSesion({ password, recordar: true });
+    else await borrarSesion();
     mostrarPantalla("guardia");
     await cargarHistorial();
+    cargarDirectorio(true); // pre-cargar en background
   } catch (err) {
     Swal.fire("Error", err.message, "error");
   } finally {
@@ -517,6 +623,7 @@ function cerrarSesion() {
     if (r.isConfirmed) {
       await borrarSesion();
       currentPassword = "";
+      directorioCache = [];
       mostrarPantalla("login");
       document.getElementById("loginPassInput").value = "";
       document.getElementById("loginRecordar").checked = true;
@@ -524,53 +631,53 @@ function cerrarSesion() {
   });
 }
 
-function mostrarPantalla(cual) {
-  document.getElementById("pantallaLogin").classList.toggle("d-none-lc", cual !== "login");
-  document.getElementById("pantallaGuardia").classList.toggle("d-none-lc", cual !== "guardia");
+// ============ TABS ============
+function cambiarTab(tab, btn) {
+  document.querySelectorAll(".nav-tab-lc").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.add("d-none-lc"));
+  if (tab === "escaner") {
+    document.getElementById("tabEscaner").classList.remove("d-none-lc");
+  } else if (tab === "directorio") {
+    document.getElementById("tabDirectorio").classList.remove("d-none-lc");
+    if (directorioCache.length === 0) cargarDirectorio(false);
+  }
 }
 
 // ============ ESCÁNER ============
 async function abrirEscaner() {
   const wrapper = document.getElementById("qrReaderWrapper");
   wrapper.classList.add("show");
-
   if (!html5QrCode) {
     html5QrCode = new Html5Qrcode("qrReader", {
       formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
       verbose: false
     });
   }
-
   try {
     await html5QrCode.start(
       { facingMode: "environment" },
       { fps: 10, qrbox: { width: 250, height: 250 } },
       (decodedText) => { onQRLeido(decodedText); },
-      (err) => { /* ignorar */ }
+      () => {}
     );
     scannerActivo = true;
   } catch (err) {
     console.error("Error cámara:", err);
-    Swal.fire("Cámara no disponible", "No se pudo abrir la cámara. Puedes ingresar el token manualmente. (" + err.message + ")", "warning");
+    Swal.fire("Cámara no disponible", "No se pudo abrir la cámara. Puedes ingresar el token manualmente.", "warning");
     cerrarEscaner();
   }
 }
-
 async function cerrarEscaner() {
-  const wrapper = document.getElementById("qrReaderWrapper");
-  wrapper.classList.remove("show");
+  document.getElementById("qrReaderWrapper").classList.remove("show");
   if (html5QrCode && scannerActivo) {
-    try {
-      await html5QrCode.stop();
-      await html5QrCode.clear();
-    } catch (e) {}
+    try { await html5QrCode.stop(); await html5QrCode.clear(); } catch (e) {}
     scannerActivo = false;
   }
 }
 
 let ultimoTokenEscaneado = "";
 let ultimoTimestampEscaneo = 0;
-
 function onQRLeido(token) {
   const ahora = Date.now();
   if (token === ultimoTokenEscaneado && (ahora - ultimoTimestampEscaneo) < 2500) return;
@@ -580,10 +687,22 @@ function onQRLeido(token) {
   validarToken(token);
 }
 
+// Formato automático del input manual: agrega "-" después de los primeros 3 caracteres (LCR/LCV)
+function formatearTokenInput(input) {
+  let v = input.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  // Forzar prefijo LCR o LCV
+  // Si el usuario escribe solo 3 letras, ya ponemos el guión
+  if (v.length >= 3) {
+    v = v.substring(0, 3) + "-" + v.substring(3, 15);
+  }
+  input.value = v;
+}
+
 function validarManual() {
   const input = document.getElementById("manualTokenInput");
   const token = input.value.trim().toUpperCase();
   if (!token) return Swal.fire("Token vacío", "Escribe un token.", "warning");
+  if (token.length < 8) return Swal.fire("Token incompleto", "Verifica el código.", "warning");
   input.value = "";
   validarToken(token);
 }
@@ -595,13 +714,8 @@ async function validarToken(token) {
     allowOutsideClick: false,
     didOpen: () => Swal.showLoading()
   });
-
   try {
-    const res = await apiQR({
-      action: "qrValidar",
-      token,
-      guardia: "Guardia"
-    });
+    const res = await apiQR({ action: "qrValidar", token, guardia: "Guardia" });
     Swal.close();
     mostrarResultado(res);
     await cargarHistorial();
@@ -626,9 +740,7 @@ function mostrarResultado(res) {
     titleEl.textContent = "ACCESO PERMITIDO";
   } else if (res.estado === "vencido" || res.estado === "usado") {
     full.classList.add("naranja");
-    iconEl.innerHTML = res.estado === "vencido"
-      ? '<i class="fas fa-hourglass-end"></i>'
-      : '<i class="fas fa-redo-alt"></i>';
+    iconEl.innerHTML = res.estado === "vencido" ? '<i class="fas fa-hourglass-end"></i>' : '<i class="fas fa-redo-alt"></i>';
     titleEl.textContent = res.estado === "vencido" ? "CÓDIGO VENCIDO" : "CÓDIGO YA USADO";
   } else {
     full.classList.add("rojo");
@@ -648,16 +760,12 @@ function mostrarResultado(res) {
     if (d.expira) filas.push(["Expira", d.expira]);
     if (d.usosMax > 0) filas.push(["Usos", `${d.usosActuales} / ${d.usosMax}`]);
     if (d.notas) filas.push(["Notas", d.notas]);
-
-    datosEl.innerHTML = filas.map(f =>
-      `<div class="fila"><span class="lbl">${f[0]}</span><span class="val">${escapeHtml(f[1])}</span></div>`
-    ).join("");
+    datosEl.innerHTML = filas.map(f => `<div class="fila"><span class="lbl">${f[0]}</span><span class="val">${escapeHtml(f[1])}</span></div>`).join("");
     datosEl.style.display = filas.length ? "block" : "none";
   } else {
     datosEl.innerHTML = "";
     datosEl.style.display = "none";
   }
-
   full.classList.add("show");
 }
 
@@ -676,11 +784,7 @@ async function cargarHistorial() {
   const cont = document.getElementById("historialLista");
   cont.innerHTML = '<div class="empty-state"><p>Cargando...</p></div>';
   try {
-    const res = await apiQR({
-      action: "qrListarRegistrosDelDia",
-      password: currentPassword,
-      guardia: "Guardia"
-    });
+    const res = await apiQR({ action: "qrListarRegistrosDelDia", password: currentPassword, guardia: "Guardia" });
     const regs = res.registros || [];
     if (regs.length === 0) {
       cont.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>Sin accesos registrados hoy.</p></div>';
@@ -706,13 +810,110 @@ async function cargarHistorial() {
   }
 }
 
-async function refrescarHistorial(btn) {
-  btn.classList.add("spinning");
-  try { await cargarHistorial(); } finally { btn.classList.remove("spinning"); }
+// ============ DIRECTORIO ============
+async function cargarDirectorio(background) {
+  const cont = document.getElementById("directorioLista");
+  if (!background) {
+    cont.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Cargando directorio...</p></div>';
+  }
+  try {
+    const res = await apiQR({ action: "qrListarDirectorio", password: currentPassword });
+    directorioCache = res.directorio || [];
+    renderDirectorio();
+  } catch (err) {
+    if (!background) {
+      cont.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i><p>${escapeHtml(err.message)}</p></div>`;
+    }
+  }
 }
 
-// ============ AUTO-LOGIN (solo si el usuario marcó "Mantener sesión abierta") ============
+function filtrarDirectorio() {
+  renderDirectorio();
+}
+
+function renderDirectorio() {
+  const cont = document.getElementById("directorioLista");
+  const filtro = (document.getElementById("directorioBusqueda")?.value || "").trim().toLowerCase();
+
+  let lista = directorioCache;
+  if (filtro) {
+    lista = lista.filter(d =>
+      (d.casa || "").toLowerCase().includes(filtro) ||
+      (d.nombre || "").toLowerCase().includes(filtro) ||
+      (d.telefono || "").replace(/\D/g, "").includes(filtro.replace(/\D/g, ""))
+    );
+  }
+
+  if (lista.length === 0) {
+    cont.innerHTML = `<div class="empty-state"><i class="fas fa-address-book"></i><p>${filtro ? "Sin resultados." : "No hay casas en el directorio."}</p></div>`;
+    return;
+  }
+
+  cont.innerHTML = lista.map(d => {
+    const inicial = (d.casa || "?").substring(0, 2).toUpperCase();
+    const telLimpio = (d.telefono || "").replace(/\D/g, "");
+    const telValido = telLimpio.length >= 8;
+    // Para llamar: 8 dígitos → si empieza por 3/9 (celular) queda igual; si no, es fijo.
+    // Como Honduras es +504, agregamos prefijo si solo hay 8 dígitos.
+    const telParaLlamar = telValido ? ("+504" + telLimpio) : "";
+    const telParaWsp = telValido ? ("504" + telLimpio) : "";
+
+    const sinDatos = !telValido;
+
+    return `<div class="directorio-item">
+      <div class="avatar">${escapeHtml(inicial)}</div>
+      <div class="dir-info">
+        <div class="dir-casa">Casa ${escapeHtml(d.casa)}</div>
+        ${d.nombre ? `<div class="dir-nombre">${escapeHtml(d.nombre)}</div>` : ""}
+        ${telValido
+          ? `<div class="dir-tel">${escapeHtml(d.telefono)}</div>`
+          : `<span class="dir-sin-datos">Sin teléfono registrado</span>`}
+      </div>
+      <div class="dir-actions">
+        <button class="dir-btn call" title="Llamar"
+                ${sinDatos ? "disabled" : ""}
+                onclick="llamarCasa('${escapeHtml(telParaLlamar)}')">
+          <i class="fas fa-phone"></i>
+        </button>
+        <button class="dir-btn wsp" title="WhatsApp"
+                ${sinDatos ? "disabled" : ""}
+                onclick="whatsappCasa('${escapeHtml(telParaWsp)}', '${escapeHtml(d.casa)}')">
+          <i class="fab fa-whatsapp"></i>
+        </button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function llamarCasa(numero) {
+  if (!numero) return;
+  window.location.href = "tel:" + numero;
+}
+
+function whatsappCasa(numero, casa) {
+  if (!numero) return;
+  const mensaje = encodeURIComponent("Hola, le saludamos desde la caseta de seguridad de La Concordia (Casa " + casa + ").");
+  window.open("https://wa.me/" + numero + "?text=" + mensaje, "_blank");
+}
+
+// ============ REFRESCAR ============
+async function refrescarPanel(btn) {
+  btn.classList.add("spinning");
+  try {
+    await cargarHistorial();
+    await cargarDirectorio(true);
+    Swal.fire({ icon: "success", title: "Actualizado", timer: 1200, showConfirmButton: false, toast: true, position: "top-end" });
+  } catch (e) {
+    Swal.fire("Error", e.message, "error");
+  } finally {
+    btn.classList.remove("spinning");
+  }
+}
+
+// ============ AUTO-LOGIN ============
 document.addEventListener("DOMContentLoaded", async () => {
+  mostrarPantalla("espera");
+
   try {
     await abrirDB();
     const ses = await obtenerSesion();
@@ -722,6 +923,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         currentPassword = ses.password;
         mostrarPantalla("guardia");
         await cargarHistorial();
+        cargarDirectorio(true);
         return;
       } catch (e) {
         await borrarSesion();
