@@ -872,6 +872,65 @@ select.form-control-lc { cursor: pointer; }
   .dato-item { flex-direction: column; align-items: flex-start; }
   .dato-item .btn-copiar { width: 100%; justify-content: center; }
 }
+
+/* ===== Badge "Actualizado hace X" ===== */
+.cache-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.25s ease, border-color 0.25s ease;
+  backdrop-filter: blur(4px);
+  user-select: none;
+  margin-left: 6px;
+}
+.cache-badge .cache-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #95a5a6;
+  box-shadow: 0 0 0 0 rgba(46,204,113,0.6);
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+.cache-badge.reciente .cache-dot {
+  background: #2ecc71;
+  animation: pulseDot 2s infinite;
+}
+.cache-badge.medio .cache-dot { background: #f39c12; }
+.cache-badge.viejo .cache-dot {
+  background: #e74c3c;
+  animation: pulseDotRojo 1.4s infinite;
+}
+.cache-badge.viejo {
+  background: rgba(231,76,60,0.18);
+  border-color: rgba(231,76,60,0.4);
+}
+@keyframes pulseDot {
+  0% { box-shadow: 0 0 0 0 rgba(46,204,113,0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(46,204,113,0); }
+  100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); }
+}
+@keyframes pulseDotRojo {
+  0% { box-shadow: 0 0 0 0 rgba(231,76,60,0.8); }
+  70% { box-shadow: 0 0 0 7px rgba(231,76,60,0); }
+  100% { box-shadow: 0 0 0 0 rgba(231,76,60,0); }
+}
+
+/* En pantallas muy pequeñas, ocultamos el texto y dejamos solo el punto */
+@media (max-width: 480px) {
+  .cache-badge #cacheTextVecino,
+  .cache-badge #cacheTextAdmin { display: none; }
+  .cache-badge { padding: 6px; }
+}
 </style>
 </head>
 <body>
@@ -1055,6 +1114,10 @@ select.form-control-lc { cursor: pointer; }
       <div class="header-brand-text">
         <div class="header-brand-title">La Concordia</div>
         <div class="header-brand-subtitle" id="vecinoHeaderCasa">Casa -</div>
+      </div>
+      <div class="cache-badge" id="cacheBadgeVecino" title="Última actualización">
+        <span class="cache-dot" id="cacheDotVecino"></span>
+        <span id="cacheTextVecino">—</span>
       </div>
     </div>
     <div class="header-actions">
@@ -1265,6 +1328,10 @@ select.form-control-lc { cursor: pointer; }
       <div class="header-brand-text">
         <div class="header-brand-title">La Concordia · Admin</div>
         <div class="header-brand-subtitle">Panel del Tesorero</div>
+      </div>
+      <div class="cache-badge" id="cacheBadgeAdmin" title="Última actualización">
+        <span class="cache-dot" id="cacheDotAdmin"></span>
+        <span id="cacheTextAdmin">—</span>
       </div>
     </div>
     <div class="header-actions">
@@ -1795,25 +1862,19 @@ select.form-control-lc { cursor: pointer; }
 
 <script>
 // =========================================================================
-// LA CONCORDIA - JS v16
-// Cambios v16 (caché persistente + versión + batch):
-//   · DB subida a versión 2 con store "cache"
-//   · cacheGet/cacheSet/cacheClearAll + invalidación por versión
-//   · apiCallCached() para lecturas
-//   · Dashboard admin: deriva pendientes de adminListarMovimientos
-//   · Batch adminAprobarGrupo / adminRechazarGrupo
-//   · Se elimina el polling de 60s
-//   · Refresco por visibilidad (5+ min)
+// LA CONCORDIA - JS v17
+// Cambios v17 (badge "actualizado hace X"):
+//   · Badge en header vecino y admin con estado por color
+//   · Verde <2 min, amarillo 2-5 min, rojo >5 min (con pulso)
+//   · Tooltip con hora exacta
+//   · Actualización cada 30s sin llamadas al servidor
 // =========================================================================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzskS77FkyY8Mr7KsBAJ7q8qE-f3tqT9Ck1jk33B8SrnKI1GQVHn9_YyLHlNC8NsZAnQ/exec";
 const ANIO_MINIMO = 2025;
 const ANIO_MAXIMO_MATRIZ = 2100;
-const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 días
-const VISIBILITY_REFRESH_MS = 5 * 60 * 1000;  // 5 minutos
+const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const VISIBILITY_REFRESH_MS = 5 * 60 * 1000;
 
-// =========================================================================
-// BASE DE DATOS LOCAL (sesión + caché)
-// =========================================================================
 const DB_SESION_NAME = "LaConcordiaSesionDB";
 const DB_SESION_VERSION = 2;
 const STORE_SESION = "sesiones";
@@ -1822,9 +1883,9 @@ const SESSION_KEY_VECINO = "vecino";
 const SESSION_KEY_ADMIN = "admin";
 let dbSesion = null;
 
-// Estado de la sesión (para saber si necesitamos versionar)
-let _versionLocal = "0"; // versión del servidor que refleja el caché actual
-let _ultimaCargaTs = 0;  // ms de la última carga global
+let _versionLocal = "0";
+let _ultimaCargaTs = 0;
+let _cacheBadgeInterval = null;
 
 const state = {
   casa: null, password: null, esAdmin: false, passwordAdmin: null,
@@ -1921,7 +1982,6 @@ async function borrarTodasLasSesiones() {
   await borrarSesionDB(SESSION_KEY_ADMIN);
 }
 
-// -------- CACHÉ --------
 function cacheGet(key) {
   return new Promise((resolve) => {
     if (!dbSesion) return resolve(null);
@@ -1976,7 +2036,6 @@ function cacheClearAll() {
   });
 }
 
-// Guarda la versión remota y limpia el caché si cambió
 async function actualizarVersionYLimpiar(versionRemota) {
   const nueva = String(versionRemota || "0");
   if (nueva !== _versionLocal) {
@@ -2202,7 +2261,6 @@ async function apiCall(payload, timeoutMs = 30000) {
   } finally { clearTimeout(timer); }
 }
 
-// Envuelve apiCall con caché persistente. Si la key existe y la versión es la misma, devuelve caché.
 async function apiCallCached({ payload, cacheKey, forzarRecarga = false, timeoutMs }) {
   if (!forzarRecarga) {
     const reg = await cacheGet(cacheKey);
@@ -2334,6 +2392,61 @@ function mostrarPantalla(cual) {
   else if (cual === "vecino") document.getElementById("pantallaVecino").classList.remove("d-none-lc");
   else if (cual === "admin") document.getElementById("pantallaAdmin").classList.remove("d-none-lc");
   else if (cual === "completarPerfil") document.getElementById("pantallaCompletarPerfil").classList.add("show");
+
+  if (cual === "vecino" || cual === "admin") {
+    _actualizarTextoBadge();
+  }
+}
+
+// =========================================================================
+// BADGE "ACTUALIZADO HACE X"
+// =========================================================================
+function _marcarCargaHecha() {
+  _ultimaCargaTs = Date.now();
+  _actualizarTextoBadge();
+}
+
+function _actualizarTextoBadge() {
+  const esAdmin = state.esAdmin;
+  const badgeId = esAdmin ? "cacheBadgeAdmin" : "cacheBadgeVecino";
+  const textId = esAdmin ? "cacheTextAdmin" : "cacheTextVecino";
+
+  const badge = document.getElementById(badgeId);
+  const text = document.getElementById(textId);
+  if (!badge || !text) return;
+
+  if (!_ultimaCargaTs) {
+    text.textContent = "—";
+    badge.classList.remove("reciente", "medio", "viejo");
+    return;
+  }
+
+  const seg = Math.floor((Date.now() - _ultimaCargaTs) / 1000);
+  let txt = "";
+  if (seg < 5)          txt = "ahora";
+  else if (seg < 60)    txt = `hace ${seg}s`;
+  else if (seg < 3600)  txt = `hace ${Math.floor(seg / 60)} min`;
+  else                  txt = `hace ${Math.floor(seg / 3600)} h`;
+
+  text.textContent = txt;
+
+  // Umbrales: verde <2 min, amarillo 2-5 min, rojo >5 min
+  badge.classList.remove("reciente", "medio", "viejo");
+  if (seg < 120)        badge.classList.add("reciente");
+  else if (seg < 300)   badge.classList.add("medio");
+  else                  badge.classList.add("viejo");
+
+  const h = new Date(_ultimaCargaTs);
+  badge.title = "Última actualización: " +
+    String(h.getHours()).padStart(2,"0") + ":" +
+    String(h.getMinutes()).padStart(2,"0") + ":" +
+    String(h.getSeconds()).padStart(2,"0");
+}
+
+function _iniciarCacheBadge() {
+  if (_cacheBadgeInterval) clearInterval(_cacheBadgeInterval);
+  _cacheBadgeInterval = setInterval(_actualizarTextoBadge, 30000);
+  _actualizarTextoBadge();
 }
 
 // =========================================================================
@@ -2383,7 +2496,6 @@ document.querySelectorAll(".login-tab").forEach(btn => {
   });
 });
 
-// LOGIN VECINO
 document.getElementById("formLoginVecino").addEventListener("submit", async (e) => {
   e.preventDefault();
   const casa = document.getElementById("loginCasaInput").value.trim().toUpperCase();
@@ -2403,11 +2515,10 @@ document.getElementById("formLoginVecino").addEventListener("submit", async (e) 
     state.anioVecino = hoy; state.anioMovVecino = hoy; state.anioMatrizVecino = hoy; state.anioEdoCuentaVecino = hoy;
     document.getElementById("loginPassInput").value = "";
 
-    // Sincroniza versión con el servidor
     try {
       const v = await obtenerVersionRemota();
       await actualizarVersionYLimpiar(v);
-    } catch (e) { /* seguir aunque falle */ }
+    } catch (e) {}
 
     const perfilCompleto = !!res.perfilCompleto;
     const debeCambiar = !!res.debeCambiarPassword;
@@ -2438,7 +2549,6 @@ document.getElementById("formLoginVecino").addEventListener("submit", async (e) 
   }
 });
 
-// LOGIN ADMIN
 document.getElementById("formLoginAdmin").addEventListener("submit", async (e) => {
   e.preventDefault();
   const password = document.getElementById("loginAdminPassInput").value;
@@ -2461,7 +2571,6 @@ document.getElementById("formLoginAdmin").addEventListener("submit", async (e) =
       await borrarSesionDB(SESSION_KEY_ADMIN);
     }
 
-    // Sincroniza versión
     try {
       const v = await obtenerVersionRemota();
       await actualizarVersionYLimpiar(v);
@@ -2489,6 +2598,7 @@ function cerrarSesion() {
       state.datosVecino = null;
       state.datosAdmin = { casas: [], pendientes: [], movimientos: [] };
       state.perfilCompletadoEnSesion = false;
+      _ultimaCargaTs = 0;
       mostrarPantalla("login");
       document.querySelectorAll(".login-tab").forEach(b => b.classList.remove("active"));
       document.querySelector('.login-tab[data-tipo="vecino"]').classList.add("active");
@@ -2498,22 +2608,37 @@ function cerrarSesion() {
   });
 }
 
-// Refrescar manual: verifica versión remota y si cambió limpia caché y recarga.
 async function _refrescarGenerico(btn, cargar) {
   btn.classList.add("spinning");
   try {
     const v = await obtenerVersionRemota();
     const cambio = String(v) !== _versionLocal;
-    await actualizarVersionYLimpiar(v);
-    await cargar();
-    _ultimaCargaTs = Date.now();
-    Swal.fire({
-      icon: "success",
-      title: cambio ? "Datos actualizados" : "Sin cambios nuevos",
-      timer: 1300, showConfirmButton: false, toast: true, position: "top-end"
-    });
-  } catch (e) { Swal.fire("Error", e.message, "error"); }
-  finally { btn.classList.remove("spinning"); }
+
+    if (cambio) {
+      await actualizarVersionYLimpiar(v);
+      await cargar();
+      _marcarCargaHecha();
+      Swal.fire({
+        icon: "success",
+        title: "Datos actualizados",
+        html: `<span style="color:#7f8c8d; font-size:0.85rem;">Se descargaron los últimos cambios del servidor.</span>`,
+        timer: 1800, showConfirmButton: false, toast: true, position: "top-end"
+      });
+    } else {
+      await cargar();
+      _marcarCargaHecha();
+      Swal.fire({
+        icon: "info",
+        title: "Sin cambios nuevos",
+        html: `<span style="color:#7f8c8d; font-size:0.85rem;">Ya tienes la versión más reciente.</span>`,
+        timer: 1500, showConfirmButton: false, toast: true, position: "top-end"
+      });
+    }
+  } catch (e) {
+    Swal.fire("Error", e.message, "error");
+  } finally {
+    btn.classList.remove("spinning");
+  }
 }
 async function refrescarPanelVecino(btn) { if (!state.casa) return; await _refrescarGenerico(btn, cargarVistaVecino); }
 async function refrescarPanelAdmin(btn) { if (!state.esAdmin) return; await _refrescarGenerico(btn, cargarVistaAdmin); }
@@ -2522,7 +2647,6 @@ async function refrescarPanelAdmin(btn) { if (!state.esAdmin) return; await _ref
 // AUTO-LOGIN SILENCIOSO
 // =========================================================================
 async function intentarAutoLogin() {
-  // 1) Admin
   const sesionAdmin = await obtenerSesionDB(SESSION_KEY_ADMIN);
   if (sesionAdmin && sesionAdmin.password) {
     try {
@@ -2542,7 +2666,6 @@ async function intentarAutoLogin() {
     }
   }
 
-  // 2) Vecino
   const sesionVecino = await obtenerSesionDB(SESSION_KEY_VECINO);
   if (sesionVecino && sesionVecino.casa && sesionVecino.password) {
     try {
@@ -2739,7 +2862,7 @@ async function cargarVistaVecino() {
     });
     state.datosVecino = res;
     renderVecino();
-    _ultimaCargaTs = Date.now();
+    _marcarCargaHecha();
   } catch (err) {
     Swal.fire("Error", err.message, "error");
   }
@@ -3358,7 +3481,6 @@ async function guardarAportacion() {
       confirmButtonText: "Entendido"
     });
 
-    // Mutación → la versión subió en el servidor. Recargamos versión y limpiamos caché.
     try {
       const v = await obtenerVersionRemota();
       await actualizarVersionYLimpiar(v);
@@ -3570,7 +3692,6 @@ async function guardarMiPerfil() {
   try {
     await apiCall({ action: "actualizarMiPerfil", casa: state.casa, password: state.password, nombre, email, telefono });
     Swal.fire({ icon: "success", title: "Datos guardados", timer: 1800, showConfirmButton: false });
-    // Perfil no cambia versión global → no invalidamos todo, pero sí limpiamos el caché de "mis datos".
     await cacheDelete("vecino_datos_" + state.casa);
     await cargarVistaVecino();
   } catch (err) { Swal.fire("Error", err.message, "error"); }
@@ -3656,7 +3777,6 @@ async function cargarVistaAdmin() {
     const hoy = new Date().getFullYear();
     state.anioMatrizAdmin = hoy; state.anioEdoCuentaAdmin = hoy;
 
-    // Ahora: casas + movimientos en PARALELO. Los "pendientes" se derivan de movimientos.
     const tareas = [
       cargarCasasAdmin().catch(e => { throw new Error("Casas: " + e.message); }),
       cargarMovimientosAdmin().catch(e => { throw new Error("Movs: " + e.message); })
@@ -3667,14 +3787,13 @@ async function cargarVistaAdmin() {
     try { actualizarStatsAdmin(); } catch (e) {}
     actualizarNavAnioEdoCuenta();
     actualizarNavAnioMatriz();
-    _ultimaCargaTs = Date.now();
+    _marcarCargaHecha();
     if (errores.length > 0) Swal.fire({ icon: "warning", title: "Algunas secciones no cargaron", html: errores.map(e => "• " + e).join("<br>") });
   } catch (err) {
     Swal.fire("Error", err.message || "Error desconocido", "error");
   }
 }
 
-// Deriva pendientes de los movimientos ya cargados (evita 1 llamada al servidor)
 function _derivarPendientesDesdeMovimientos() {
   const movs = state.datosAdmin.movimientos || [];
   return movs.filter(m => m.tipo === "Aportacion" && m.estado === "Pendiente");
@@ -3705,7 +3824,6 @@ function actualizarStatsAdmin() {
   if (pendientesUnicos.length > 0) { badge.textContent = pendientesUnicos.length; badge.classList.remove("d-none-lc"); }
   else badge.classList.add("d-none-lc");
 
-  // Re-render de la lista de pendientes con los datos derivados
   renderPendientesAdmin();
 }
 
@@ -3760,7 +3878,6 @@ function _agruparPendientes(pendientes) {
 }
 
 async function cargarPendientesAdmin() {
-  // Reemplazado por derivación desde movimientos; mantenido por compatibilidad
   state.datosAdmin.pendientes = _derivarPendientesDesdeMovimientos();
   renderPendientesAdmin();
 }
@@ -4486,7 +4603,7 @@ document.addEventListener("visibilitychange", async () => {
       if (state.esAdmin) await cargarVistaAdmin();
       else await cargarVistaVecino();
     }
-    _ultimaCargaTs = Date.now();
+    _marcarCargaHecha();
   } catch (e) {
     // silencioso
   }
@@ -4507,6 +4624,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     mostrarPantalla("login");
   }
   setTimeout(limpiarBackdropsHuerfanos, 500);
+  _iniciarCacheBadge();
 });
 
 const swalObserver = new MutationObserver(() => {
@@ -4517,7 +4635,7 @@ const swalObserver = new MutationObserver(() => {
 });
 swalObserver.observe(document.body, { childList: true, subtree: true });
 
-console.log("La Concordia - App v16 cargada");
+console.log("La Concordia - App v17 cargada");
 </script>
 </body>
 </html>
