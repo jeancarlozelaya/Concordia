@@ -52,10 +52,12 @@ html, body {
   display: flex; align-items: center; justify-content: center;
   font-size: 1.05rem; cursor: pointer; transition: var(--transition);
   position: relative; flex-shrink: 0;
+  text-decoration: none;
 }
-.header-btn:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+.header-btn:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); color: #fff; }
 .header-btn:active { transform: scale(0.95); }
 .header-btn.spinning i { animation: spin 0.9s linear infinite; }
+a.header-btn { text-decoration: none; }
 @media (max-width: 576px) {
   .header { padding: 12px 14px; }
   .header-btn { width: 38px; height: 38px; font-size: 0.95rem; }
@@ -80,6 +82,7 @@ html, body {
 .login-wrapper {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
   padding: 20px; background: linear-gradient(135deg, #1a5490 0%, #0f3a66 100%);
+  flex-direction: column;
 }
 .login-card {
   background: #fff; border-radius: var(--radius);
@@ -101,6 +104,30 @@ html, body {
 }
 .login-tab.active { background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
+/* Botón de ayuda en el login */
+.login-help-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 10px 22px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  border-radius: 24px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  backdrop-filter: blur(6px);
+}
+.login-help-btn:hover {
+  background: rgba(255,255,255,0.28);
+  color: #fff;
+  transform: translateY(-2px);
+}
+.login-help-btn i { font-size: 1rem; }
+
 .form-label-lc { font-weight: 600; color: var(--text); font-size: 0.9rem; margin-bottom: 6px; display: block; }
 .form-control-lc {
   width: 100%; padding: 11px 14px;
@@ -110,7 +137,7 @@ html, body {
 .form-control-lc:focus { outline: none; border-color: var(--info); box-shadow: 0 0 0 3px rgba(52,152,219,0.15); }
 select.form-control-lc { cursor: pointer; }
 
-/* ===== NUEVO: estados de error / ok en inputs ===== */
+/* Errores inline */
 .form-control-lc.is-error {
   border-color: var(--danger) !important;
   box-shadow: 0 0 0 3px rgba(231,76,60,0.15) !important;
@@ -136,7 +163,6 @@ select.form-control-lc { cursor: pointer; }
 }
 .input-ok.show { display: flex; align-items: center; gap: 4px; }
 
-/* Fortaleza de contraseña */
 .pass-strength {
   display: none;
   font-size: 0.78rem;
@@ -745,6 +771,10 @@ select.form-control-lc { cursor: pointer; }
       <button type="submit" class="btn-lc btn-lc-primary" id="btnLoginAdmin" style="background: var(--primary-dark);"><i class="fas fa-shield-alt"></i> Entrar</button>
     </form>
   </div>
+  <!-- Botón de Ayuda en el login -->
+  <a href="Menú Ayuda.html" target="_blank" rel="noopener" class="login-help-btn">
+    <i class="fas fa-question-circle"></i> ¿Necesitas ayuda?
+  </a>
 </div>
 
 <!-- PANTALLA OBLIGATORIA: COMPLETAR PERFIL -->
@@ -838,6 +868,7 @@ select.form-control-lc { cursor: pointer; }
     </div>
     <div class="header-actions">
       <button class="header-btn" onclick="refrescarPanelVecino(this)" title="Refrescar"><i class="fas fa-sync-alt"></i></button>
+      <a href="Menú Ayuda.html" target="_blank" rel="noopener" class="header-btn" title="Ayuda"><i class="fas fa-question-circle"></i></a>
       <button class="header-btn" onclick="abrirMiPerfil()" title="Mi perfil"><i class="fas fa-user-circle"></i></button>
       <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
     </div>
@@ -1048,6 +1079,7 @@ select.form-control-lc { cursor: pointer; }
     </div>
     <div class="header-actions">
       <button class="header-btn" onclick="refrescarPanelAdmin(this)" title="Refrescar"><i class="fas fa-sync-alt"></i></button>
+      <a href="Menú Ayuda.html" target="_blank" rel="noopener" class="header-btn" title="Ayuda"><i class="fas fa-question-circle"></i></a>
       <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
     </div>
   </div>
@@ -1582,7 +1614,7 @@ select.form-control-lc { cursor: pointer; }
 
 <script>
 // =========================================================================
-// LA CONCORDIA - JS v12
+// LA CONCORDIA - JS v13 (sin offline)
 // =========================================================================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzskS77FkyY8Mr7KsBAJ7q8qE-f3tqT9Ck1jk33B8SrnKI1GQVHn9_YyLHlNC8NsZAnQ/exec";
 const ANIO_MINIMO = 2025;
@@ -1610,13 +1642,8 @@ const state = {
   editandoComprobanteActual: null,
   editandoComprobanteNuevo: null,
   perfilCompletadoEnSesion: false,
-  completarPerfilPaso: "datos" // "datos" | "pass"
+  completarPerfilPaso: "datos"
 };
-
-const DB_NAME = "LaConcordiaDB";
-const DB_VERSION = 1;
-const STORE_PENDIENTES = "aportaciones_pendientes";
-let db = null;
 
 let comprobanteActual = null;
 let comprobanteEgresoActual = null;
@@ -1647,20 +1674,6 @@ function limpiarBackdropsHuerfanos() {
   document.body.classList.remove("modal-open");
   document.body.style.overflow = "";
   document.body.style.paddingRight = "";
-}
-
-function abrirDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
-    req.onupgradeneeded = (e) => {
-      const database = e.target.result;
-      if (!database.objectStoreNames.contains(STORE_PENDIENTES)) {
-        database.createObjectStore(STORE_PENDIENTES, { keyPath: "movimientoId" });
-      }
-    };
-    req.onsuccess = (e) => { db = e.target.result; resolve(db); };
-    req.onerror = (e) => reject(e.target.error);
-  });
 }
 
 function formatearLempiras(num) { return (Number(num) || 0).toLocaleString("es-HN"); }
@@ -1717,7 +1730,6 @@ function formatearTelefono(input) {
   input.value = v;
 }
 
-// ===== NUEVAS funciones de validación inline =====
 function emailValido(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
 }
@@ -1755,9 +1767,7 @@ function validarEmailEnVivo(inputId) {
   const val = document.getElementById(inputId).value.trim();
   if (!val) { limpiarErrorInput(inputId); return; }
   if (emailValido(val)) { marcarOkInput(inputId); }
-  else {
-    mostrarErrorInput(inputId, "Correo electrónico inválido");
-  }
+  else { mostrarErrorInput(inputId, "Correo electrónico inválido"); }
 }
 
 function actualizarFortaleza(passId, strengthId) {
@@ -1795,7 +1805,7 @@ function verificarCoincidencia(pass1Id, pass2Id, errId, okId) {
   const okEl = document.getElementById(okId);
 
   if (!p2) {
-    if (input2) { input2.classList.remove("is-error", "is-ok"); }
+    if (input2) input2.classList.remove("is-error", "is-ok");
     if (errEl) errEl.classList.remove("show");
     if (okEl) okEl.classList.remove("show");
     return;
@@ -1849,7 +1859,7 @@ async function apiCall(payload, timeoutMs = 30000) {
     return data.data;
   } catch (err) {
     if (err.name === "AbortError") throw new Error("Timeout.");
-    if (err.message && err.message.includes("Failed to fetch")) throw new Error("No se pudo conectar.");
+    if (err.message && err.message.includes("Failed to fetch")) throw new Error("No se pudo conectar al servidor. Verifica tu conexión a internet.");
     throw err;
   } finally { clearTimeout(timer); }
 }
@@ -2081,10 +2091,9 @@ async function refrescarPanelAdmin(btn) {
 }
 
 // =========================================================================
-// PANTALLA OBLIGATORIA: COMPLETAR PERFIL (v2 con validación inline)
+// COMPLETAR PERFIL
 // =========================================================================
 function abrirPantallaCompletarPerfil(perfilCompleto, debeCambiarPass) {
-  // Resetear campos y errores
   ["cpNombre","cpEmail","cpTelefono","cpPassActual","cpPassNueva","cpPassNueva2"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = "";
@@ -2120,30 +2129,16 @@ async function guardarCompletarPerfil() {
 
   let hayError = false;
 
-  if (!nombre) {
-    mostrarErrorInput("cpNombre", "El nombre es obligatorio");
-    hayError = true;
-  } else {
-    limpiarErrorInput("cpNombre");
-  }
+  if (!nombre) { mostrarErrorInput("cpNombre", "El nombre es obligatorio"); hayError = true; }
+  else { limpiarErrorInput("cpNombre"); }
 
-  if (!email) {
-    mostrarErrorInput("cpEmail", "El correo es obligatorio");
-    hayError = true;
-  } else if (!emailValido(email)) {
-    mostrarErrorInput("cpEmail", "Correo electrónico inválido");
-    hayError = true;
-  } else {
-    limpiarErrorInput("cpEmail");
-  }
+  if (!email) { mostrarErrorInput("cpEmail", "El correo es obligatorio"); hayError = true; }
+  else if (!emailValido(email)) { mostrarErrorInput("cpEmail", "Correo electrónico inválido"); hayError = true; }
+  else { limpiarErrorInput("cpEmail"); }
 
   const telLimpio = telefono.replace(/\D/g, "");
-  if (telLimpio.length !== 8) {
-    mostrarErrorInput("cpTelefono", "El teléfono debe tener 8 dígitos (XXXX-XXXX)");
-    hayError = true;
-  } else {
-    limpiarErrorInput("cpTelefono");
-  }
+  if (telLimpio.length !== 8) { mostrarErrorInput("cpTelefono", "El teléfono debe tener 8 dígitos (XXXX-XXXX)"); hayError = true; }
+  else { limpiarErrorInput("cpTelefono"); }
 
   if (hayError) return;
 
@@ -2159,12 +2154,10 @@ async function guardarCompletarPerfil() {
       nombre, email, telefono
     });
 
-    // Verificar si debe cambiar contraseña
     const datos = await apiCall({ action: "login", casa: state.casa, password: state.password });
     state.datosVecino = { nombre, email, telefono };
 
     if (datos.debeCambiarPassword) {
-      // Ir a paso 2
       state.completarPerfilPaso = "pass";
       document.getElementById("completarPerfilContenido").classList.add("d-none-lc");
       document.getElementById("completarPerfilCambiarPass").classList.remove("d-none-lc");
@@ -2172,7 +2165,6 @@ async function guardarCompletarPerfil() {
         <i class="fas fa-key"></i>
         <div>Estás usando una <strong>contraseña temporal</strong>. Debes cambiarla antes de continuar.</div>`;
     } else {
-      // Todo listo
       await finalizarCompletarPerfil();
     }
   } catch (err) {
@@ -2197,15 +2189,9 @@ async function guardarCompletarPassword() {
   else if (nueva.length < 6) { mostrarErrorInput("cpPassNueva", "Mínimo 6 caracteres"); hayError = true; }
   else { limpiarErrorInput("cpPassNueva"); }
 
-  if (!nueva2) {
-    mostrarErrorInput("cpPassNueva2", "Confirma tu nueva contraseña");
-    hayError = true;
-  } else if (nueva !== nueva2) {
-    mostrarErrorInput("cpPassNueva2", "Las contraseñas no coinciden");
-    hayError = true;
-  } else {
-    limpiarErrorInput("cpPassNueva2");
-  }
+  if (!nueva2) { mostrarErrorInput("cpPassNueva2", "Confirma tu nueva contraseña"); hayError = true; }
+  else if (nueva !== nueva2) { mostrarErrorInput("cpPassNueva2", "Las contraseñas no coinciden"); hayError = true; }
+  else { limpiarErrorInput("cpPassNueva2"); }
 
   if (hayError) return;
 
@@ -2217,7 +2203,6 @@ async function guardarCompletarPassword() {
   try {
     await apiCall({ action: "cambiarPassword", casa: state.casa, passActual: actual, passNueva: nueva });
     state.password = nueva;
-    // Éxito: ir directo a finalizar SIN volver a mostrar mensajes
     await finalizarCompletarPerfil();
   } catch (err) {
     Swal.fire("Error", err.message, "error");
@@ -2812,6 +2797,7 @@ async function guardarAportacion() {
   if (!fecha) return Swal.fire("Falta la fecha", "Indica la fecha.", "warning");
   if (!monto || monto <= 0) return Swal.fire("Monto inválido", "Debe ser mayor a 0.", "warning");
   if (!comprobanteActual) return Swal.fire("Falta comprobante", "Adjunta el comprobante.", "warning");
+  if (!navigator.onLine) return Swal.fire("Sin conexión", "No hay conexión a internet. Intenta de nuevo cuando tengas señal.", "warning");
 
   let casaDestino = state.casa;
   if (esAdmin) {
@@ -2883,7 +2869,7 @@ async function guardarAportacion() {
   }
 }
 
-// EDITAR APORTACIÓN (ADMIN)
+// EDITAR APORTACIÓN
 async function abrirModalEditarAportacion(movId) {
   showLoading("Cargando aportación...");
   try {
@@ -3023,7 +3009,7 @@ async function guardarEdicionAportacion() {
   }
 }
 
-// PERFIL (para vecinos que ya están dentro)
+// PERFIL
 function cambiarPerfilTab(tab, btn) {
   document.querySelectorAll(".modal-subtab").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
@@ -3884,8 +3870,7 @@ async function descargarEstadoCuentaAdmin() {
 }
 
 // INICIALIZACIÓN
-document.addEventListener("DOMContentLoaded", async () => {
-  try { await abrirDB(); } catch (e) {}
+document.addEventListener("DOMContentLoaded", () => {
   mostrarPantalla("login");
   setTimeout(limpiarBackdropsHuerfanos, 500);
 });
@@ -3904,7 +3889,7 @@ setInterval(() => {
   }
 }, 60000);
 
-console.log("La Concordia - App v12 cargada");
+console.log("La Concordia - App v13 cargada");
 </script>
 </body>
 </html>
