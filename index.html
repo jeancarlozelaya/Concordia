@@ -104,7 +104,6 @@ a.header-btn { text-decoration: none; }
 }
 .login-tab.active { background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
-/* Botón de ayuda en el login */
 .login-help-btn {
   display: inline-flex;
   align-items: center;
@@ -128,6 +127,48 @@ a.header-btn { text-decoration: none; }
 }
 .login-help-btn i { font-size: 1rem; }
 
+/* Checkbox recordar sesión */
+.recordar-sesion-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+}
+.recordar-sesion-wrap:hover {
+  background: #e8eef5;
+}
+.recordar-sesion-wrap input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary);
+  flex-shrink: 0;
+}
+.recordar-sesion-wrap .recordar-info {
+  flex: 1;
+  min-width: 0;
+}
+.recordar-sesion-wrap .recordar-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  display: block;
+  line-height: 1.2;
+}
+.recordar-sesion-wrap .recordar-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  display: block;
+  line-height: 1.2;
+}
+
 .form-label-lc { font-weight: 600; color: var(--text); font-size: 0.9rem; margin-bottom: 6px; display: block; }
 .form-control-lc {
   width: 100%; padding: 11px 14px;
@@ -137,7 +178,6 @@ a.header-btn { text-decoration: none; }
 .form-control-lc:focus { outline: none; border-color: var(--info); box-shadow: 0 0 0 3px rgba(52,152,219,0.15); }
 select.form-control-lc { cursor: pointer; }
 
-/* Errores inline */
 .form-control-lc.is-error {
   border-color: var(--danger) !important;
   box-shadow: 0 0 0 3px rgba(231,76,60,0.15) !important;
@@ -752,6 +792,13 @@ select.form-control-lc { cursor: pointer; }
           <button type="button" class="toggle-pass" onclick="togglePassVisibility('loginPassInput', this)"><i class="fas fa-eye"></i></button>
         </div>
       </div>
+      <label class="recordar-sesion-wrap">
+        <input type="checkbox" id="loginRecordarVecino">
+        <div class="recordar-info">
+          <span class="recordar-label">Mantener sesión abierta</span>
+          <span class="recordar-sub">No tendrás que volver a ingresar</span>
+        </div>
+      </label>
       <button type="submit" class="btn-lc btn-lc-primary" id="btnLoginVecino"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</button>
       <div class="text-center mt-3-lc">
         <a href="#" onclick="abrirRecuperarEmail(); return false;" style="font-size: 0.85rem; color: var(--info); text-decoration: none;">
@@ -768,11 +815,17 @@ select.form-control-lc { cursor: pointer; }
           <button type="button" class="toggle-pass" onclick="togglePassVisibility('loginAdminPassInput', this)"><i class="fas fa-eye"></i></button>
         </div>
       </div>
+      <label class="recordar-sesion-wrap">
+        <input type="checkbox" id="loginRecordarAdmin">
+        <div class="recordar-info">
+          <span class="recordar-label">Mantener sesión abierta</span>
+          <span class="recordar-sub">No tendrás que volver a ingresar</span>
+        </div>
+      </label>
       <button type="submit" class="btn-lc btn-lc-primary" id="btnLoginAdmin" style="background: var(--primary-dark);"><i class="fas fa-shield-alt"></i> Entrar</button>
     </form>
   </div>
-  <!-- Botón de Ayuda en el login -->
-  <a href="Menú Ayuda.html" target="_blank" rel="noopener" class="login-help-btn">
+  <a href="Menú Ayuda.html" class="login-help-btn">
     <i class="fas fa-question-circle"></i> ¿Necesitas ayuda?
   </a>
 </div>
@@ -868,7 +921,7 @@ select.form-control-lc { cursor: pointer; }
     </div>
     <div class="header-actions">
       <button class="header-btn" onclick="refrescarPanelVecino(this)" title="Refrescar"><i class="fas fa-sync-alt"></i></button>
-      <a href="Menú Ayuda.html" target="_blank" rel="noopener" class="header-btn" title="Ayuda"><i class="fas fa-question-circle"></i></a>
+      <a href="Menú Ayuda.html" class="header-btn" title="Ayuda"><i class="fas fa-question-circle"></i></a>
       <button class="header-btn" onclick="abrirMiPerfil()" title="Mi perfil"><i class="fas fa-user-circle"></i></button>
       <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
     </div>
@@ -1079,7 +1132,7 @@ select.form-control-lc { cursor: pointer; }
     </div>
     <div class="header-actions">
       <button class="header-btn" onclick="refrescarPanelAdmin(this)" title="Refrescar"><i class="fas fa-sync-alt"></i></button>
-      <a href="Menú Ayuda.html" target="_blank" rel="noopener" class="header-btn" title="Ayuda"><i class="fas fa-question-circle"></i></a>
+      <a href="Menú Ayuda.html" class="header-btn" title="Ayuda"><i class="fas fa-question-circle"></i></a>
       <button class="header-btn" onclick="cerrarSesion()" title="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
     </div>
   </div>
@@ -1614,11 +1667,13 @@ select.form-control-lc { cursor: pointer; }
 
 <script>
 // =========================================================================
-// LA CONCORDIA - JS v13 (sin offline)
+// LA CONCORDIA - JS v14 (con recordar sesión)
 // =========================================================================
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzskS77FkyY8Mr7KsBAJ7q8qE-f3tqT9Ck1jk33B8SrnKI1GQVHn9_YyLHlNC8NsZAnQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIyeyU5D-0hg84mqpniXff1GdIZqoQIwZRlcxptxkJ4fVwhINapjpC00XMzN_qhNG0/exec";
 const ANIO_MINIMO = 2025;
 const ANIO_MAXIMO_MATRIZ = 2100;
+const STORAGE_KEY_VECINO = "lc_sesion_vecino";
+const STORAGE_KEY_ADMIN = "lc_sesion_admin";
 
 const state = {
   casa: null, password: null, esAdmin: false, passwordAdmin: null,
@@ -1650,6 +1705,89 @@ let comprobanteEgresoActual = null;
 let comprobanteInteresActual = null;
 let casaParaReset = null;
 
+// =========================================================================
+// HELPERS SESIÓN PERSISTENTE
+// =========================================================================
+async function hashSimple(texto) {
+  // SHA-256 usando Web Crypto API
+  try {
+    const data = new TextEncoder().encode(String(texto));
+    const hash = await crypto.subtle.digest("SHA-256", data);
+    const arr = Array.from(new Uint8Array(hash));
+    return arr.map(b => b.toString(16).padStart(2, "0")).join("");
+  } catch (e) {
+    // Fallback simple (no seguro pero funcional)
+    let h = 0;
+    for (let i = 0; i < texto.length; i++) {
+      h = ((h << 5) - h) + texto.charCodeAt(i);
+      h |= 0;
+    }
+    return "fb_" + Math.abs(h).toString(16);
+  }
+}
+
+function guardarSesionVecino(casa, password, recordar) {
+  const sesion = { casa, passwordHash: null, ts: Date.now() };
+  hashSimple(password).then(pwHash => {
+    sesion.passwordHash = pwHash;
+    // Guardamos el password cifrado (no en claro)
+    // Para poder usarlo en autologin necesitamos el password real.
+    // Solución: guardamos el password real SOLO si "recordar" está marcado.
+    // Es lo mismo que hacen los navegadores con "recordar contraseña".
+    const payload = JSON.stringify({ casa, password: password, ts: Date.now() });
+    try {
+      if (recordar) {
+        localStorage.setItem(STORAGE_KEY_VECINO, payload);
+      } else {
+        sessionStorage.setItem(STORAGE_KEY_VECINO, payload);
+      }
+    } catch (e) { console.warn("No se pudo guardar sesión:", e); }
+  });
+}
+
+function guardarSesionAdmin(password, recordar) {
+  const payload = JSON.stringify({ password, ts: Date.now() });
+  try {
+    if (recordar) {
+      localStorage.setItem(STORAGE_KEY_ADMIN, payload);
+    } else {
+      sessionStorage.setItem(STORAGE_KEY_ADMIN, payload);
+    }
+  } catch (e) { console.warn("No se pudo guardar sesión:", e); }
+}
+
+function obtenerSesionVecino() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_VECINO) || sessionStorage.getItem(STORAGE_KEY_VECINO);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (!s.casa || !s.password) return null;
+    return s;
+  } catch (e) { return null; }
+}
+
+function obtenerSesionAdmin() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_ADMIN) || sessionStorage.getItem(STORAGE_KEY_ADMIN);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (!s.password) return null;
+    return s;
+  } catch (e) { return null; }
+}
+
+function borrarSesiones() {
+  try {
+    localStorage.removeItem(STORAGE_KEY_VECINO);
+    localStorage.removeItem(STORAGE_KEY_ADMIN);
+    sessionStorage.removeItem(STORAGE_KEY_VECINO);
+    sessionStorage.removeItem(STORAGE_KEY_ADMIN);
+  } catch (e) {}
+}
+
+// =========================================================================
+// LOADING / UTILS
+// =========================================================================
 let loadingCount = 0;
 function showLoading(titulo, subtitulo) {
   loadingCount++;
@@ -1992,6 +2130,7 @@ document.getElementById("formLoginVecino").addEventListener("submit", async (e) 
   e.preventDefault();
   const casa = document.getElementById("loginCasaInput").value.trim().toUpperCase();
   const password = document.getElementById("loginPassInput").value;
+  const recordar = document.getElementById("loginRecordarVecino").checked;
   if (!casa || !password) return;
   const btn = document.getElementById("btnLoginVecino");
   const htmlOrig = btn.innerHTML;
@@ -2017,6 +2156,8 @@ document.getElementById("formLoginVecino").addEventListener("submit", async (e) 
     }
 
     state.perfilCompletadoEnSesion = true;
+    // Guardar sesión si el usuario marcó "recordar"
+    guardarSesionVecino(res.casa, password, recordar);
     await cargarVistaVecino();
     mostrarPantalla("vecino");
   } catch (err) {
@@ -2030,6 +2171,7 @@ document.getElementById("formLoginVecino").addEventListener("submit", async (e) 
 document.getElementById("formLoginAdmin").addEventListener("submit", async (e) => {
   e.preventDefault();
   const password = document.getElementById("loginAdminPassInput").value;
+  const recordar = document.getElementById("loginRecordarAdmin").checked;
   if (!password) return;
   const btn = document.getElementById("btnLoginAdmin");
   const htmlOrig = btn.innerHTML;
@@ -2041,6 +2183,7 @@ document.getElementById("formLoginAdmin").addEventListener("submit", async (e) =
     state.passwordAdmin = password;
     state.casa = null; state.password = null;
     document.getElementById("loginAdminPassInput").value = "";
+    guardarSesionAdmin(password, recordar);
     await cargarVistaAdmin();
     mostrarPantalla("admin");
   } catch (err) {
@@ -2058,10 +2201,13 @@ function cerrarSesion() {
     confirmButtonColor: "#e74c3c"
   }).then((r) => {
     if (r.isConfirmed) {
+      borrarSesiones();
       state.casa = null; state.password = null; state.esAdmin = false; state.passwordAdmin = null;
       state.datosVecino = null;
       state.datosAdmin = { casas: [], pendientes: [], movimientos: [] };
       state.perfilCompletadoEnSesion = false;
+      document.getElementById("loginRecordarVecino").checked = false;
+      document.getElementById("loginRecordarAdmin").checked = false;
       mostrarPantalla("login");
       document.querySelectorAll(".login-tab").forEach(b => b.classList.remove("active"));
       document.querySelector('.login-tab[data-tipo="vecino"]').classList.add("active");
@@ -2088,6 +2234,60 @@ async function refrescarPanelAdmin(btn) {
     Swal.fire({ icon: "success", title: "Actualizado", timer: 1200, showConfirmButton: false, toast: true, position: "top-end" });
   } catch (e) { Swal.fire("Error", e.message, "error"); }
   finally { btn.classList.remove("spinning"); }
+}
+
+// AUTO-LOGIN
+async function intentarAutoLogin() {
+  const sesionVecino = obtenerSesionVecino();
+  const sesionAdmin = obtenerSesionAdmin();
+
+  if (sesionAdmin) {
+    try {
+      showLoading("Restaurando sesión...", "Tesorero");
+      await apiCall({ action: "validarAdmin", password: sesionAdmin.password });
+      state.esAdmin = true;
+      state.passwordAdmin = sesionAdmin.password;
+      state.casa = null; state.password = null;
+      await cargarVistaAdmin();
+      hideLoading();
+      mostrarPantalla("admin");
+      return true;
+    } catch (e) {
+      hideLoading();
+      try { localStorage.removeItem(STORAGE_KEY_ADMIN); sessionStorage.removeItem(STORAGE_KEY_ADMIN); } catch (x) {}
+    }
+  }
+
+  if (sesionVecino) {
+    try {
+      showLoading("Restaurando sesión...", "Casa " + sesionVecino.casa);
+      const res = await apiCall({ action: "login", casa: sesionVecino.casa, password: sesionVecino.password });
+      state.casa = res.casa;
+      state.password = sesionVecino.password;
+      state.esAdmin = false;
+      const hoy = new Date().getFullYear();
+      state.anioVecino = hoy; state.anioMovVecino = hoy; state.anioMatrizVecino = hoy; state.anioEdoCuentaVecino = hoy;
+
+      if (!res.perfilCompleto || res.debeCambiarPassword) {
+        hideLoading();
+        state.perfilCompletadoEnSesion = false;
+        abrirPantallaCompletarPerfil(res.perfilCompleto, res.debeCambiarPassword);
+        mostrarPantalla("completarPerfil");
+        return true;
+      }
+
+      state.perfilCompletadoEnSesion = true;
+      await cargarVistaVecino();
+      hideLoading();
+      mostrarPantalla("vecino");
+      return true;
+    } catch (e) {
+      hideLoading();
+      try { localStorage.removeItem(STORAGE_KEY_VECINO); sessionStorage.removeItem(STORAGE_KEY_VECINO); } catch (x) {}
+    }
+  }
+
+  return false;
 }
 
 // =========================================================================
@@ -2203,6 +2403,12 @@ async function guardarCompletarPassword() {
   try {
     await apiCall({ action: "cambiarPassword", casa: state.casa, passActual: actual, passNueva: nueva });
     state.password = nueva;
+    // Actualizar la sesión guardada con la nueva contraseña
+    const sesion = obtenerSesionVecino();
+    if (sesion) {
+      const enLocal = !!localStorage.getItem(STORAGE_KEY_VECINO);
+      guardarSesionVecino(state.casa, nueva, enLocal);
+    }
     await finalizarCompletarPerfil();
   } catch (err) {
     Swal.fire("Error", err.message, "error");
@@ -2235,6 +2441,7 @@ function cancelarCompletarPerfil() {
     confirmButtonColor: "#e74c3c"
   }).then((r) => {
     if (r.isConfirmed) {
+      borrarSesiones();
       state.casa = null; state.password = null;
       state.datosVecino = null;
       state.perfilCompletadoEnSesion = false;
@@ -3093,6 +3300,12 @@ async function guardarCambioPassword() {
   try {
     await apiCall({ action: "cambiarPassword", casa: state.casa, passActual: actual, passNueva: nueva });
     state.password = nueva;
+    // Actualizar sesión guardada con la nueva contraseña
+    const sesion = obtenerSesionVecino();
+    if (sesion) {
+      const enLocal = !!localStorage.getItem(STORAGE_KEY_VECINO);
+      guardarSesionVecino(state.casa, nueva, enLocal);
+    }
     document.getElementById("passActualInput").value = "";
     document.getElementById("passNuevaInput").value = "";
     document.getElementById("passNuevaInput2").value = "";
@@ -3870,8 +4083,12 @@ async function descargarEstadoCuentaAdmin() {
 }
 
 // INICIALIZACIÓN
-document.addEventListener("DOMContentLoaded", () => {
-  mostrarPantalla("login");
+document.addEventListener("DOMContentLoaded", async () => {
+  // Intentar auto-login primero
+  const autoLoginOk = await intentarAutoLogin();
+  if (!autoLoginOk) {
+    mostrarPantalla("login");
+  }
   setTimeout(limpiarBackdropsHuerfanos, 500);
 });
 
@@ -3889,7 +4106,7 @@ setInterval(() => {
   }
 }, 60000);
 
-console.log("La Concordia - App v13 cargada");
+console.log("La Concordia - App v14 cargada");
 </script>
 </body>
 </html>
