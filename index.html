@@ -428,6 +428,111 @@ select.form-control-lc { cursor: pointer; }
 .perfil-tab-content.active { display: block; animation: fadeIn 0.25s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
+/* ============ NUEVO: COMPROBANTE DROPZONE ============ */
+.comprobante-bloque {
+  border: 2px dashed #cbd5e0;
+  border-radius: 12px;
+  background-color: #fafbfc;
+  overflow: hidden;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+  margin-top: 6px;
+}
+.comprobante-bloque.drag-over {
+  border-color: var(--info);
+  background-color: rgba(52, 152, 219, 0.06);
+}
+.comprobante-bloque.has-image {
+  border-style: solid;
+  border-color: #d6e4f0;
+  background-color: #ffffff;
+}
+.comprobante-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 26px 16px;
+  color: #718096;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+.comprobante-bloque.has-image .comprobante-dropzone { display: none; }
+.comprobante-dropzone:hover { background-color: rgba(52, 152, 219, 0.05); }
+.comprobante-dropzone i {
+  font-size: 2rem;
+  color: #a0aec0;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+.comprobante-dropzone:hover i { color: var(--info); }
+.comprobante-dropzone .dz-titulo {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin-bottom: 2px;
+}
+.comprobante-dropzone .dz-subtitulo {
+  font-size: 0.78rem;
+  color: #a0aec0;
+}
+.comprobante-bloque.drag-over .comprobante-dropzone i,
+.comprobante-bloque.drag-over .comprobante-dropzone .dz-titulo {
+  color: var(--info);
+}
+.comprobante-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px;
+}
+.comprobante-grid:empty { display: none; }
+.comprobante-bloque:not(.has-image) .comprobante-grid { display: none; }
+
+.comprobante-preview-item {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+.comprobante-preview-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block;
+}
+.comprobante-preview-item .comprobante-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(231, 76, 60, 0.95);
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+}
+.comprobante-preview-item .comprobante-remove:hover {
+  transform: scale(1.12);
+  background: #c0392b;
+}
+
+@media (max-width: 576px) {
+  .comprobante-preview-item { width: 90px; height: 90px; }
+}
+/* ============ FIN COMPROBANTE DROPZONE ============ */
+
+/* Compat: mantenemos estilos .upload-zone por si algo lo usa */
 .upload-zone {
   border: 2px dashed var(--info); border-radius: var(--radius-sm);
   padding: 30px 20px; text-align: center; cursor: pointer;
@@ -436,9 +541,6 @@ select.form-control-lc { cursor: pointer; }
 .upload-zone:hover { border-color: var(--primary); background: rgba(52,152,219,0.08); }
 .upload-zone i { font-size: 2.2rem; color: var(--info); margin-bottom: 8px; display: block; }
 .upload-zone p { margin: 0; font-size: 0.88rem; color: var(--text-muted); }
-.upload-zone.has-image { border-style: solid; border-color: var(--accent); background: rgba(46,204,113,0.05); padding: 8px; }
-.upload-preview-img { max-width: 100%; max-height: 220px; border-radius: 6px; display: block; margin: 0 auto; }
-.upload-remove { margin-top: 8px; color: var(--danger); font-size: 0.82rem; font-weight: 600; cursor: pointer; }
 
 #toastLoader {
   position: fixed; top: 20px; right: 20px; z-index: 300000;
@@ -872,6 +974,140 @@ select.form-control-lc { cursor: pointer; }
   .dato-item { flex-direction: column; align-items: flex-start; }
   .dato-item .btn-copiar { width: 100%; justify-content: center; }
 }
+
+/* ============ VISOR DE COMPROBANTE CON ZOOM ============ */
+#modalVerComprobante .modal-dialog {
+  max-width: 95vw;
+  max-height: 95vh;
+  height: 95vh;
+  margin: 2.5vh auto;
+}
+#modalVerComprobante .modal-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#modalVerComprobante .modal-body {
+  flex: 1;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+}
+
+.comprobante-viewer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  cursor: grab;
+}
+.comprobante-viewer.dragging { cursor: grabbing; }
+
+.comprobante-viewer img {
+  max-width: none;
+  max-height: none;
+  width: auto;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  transform-origin: center center;
+  transition: transform 0.08s ease-out;
+  will-change: transform;
+}
+
+.comprobante-zoom-toolbar {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 8px 10px;
+  border-radius: 30px;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.comprobante-zoom-toolbar button {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.comprobante-zoom-toolbar button:hover {
+  background: rgba(255,255,255,0.28);
+  transform: translateY(-1px);
+}
+.comprobante-zoom-toolbar button:active {
+  transform: scale(0.92);
+}
+.comprobante-zoom-toolbar .zoom-level {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  min-width: 56px;
+  padding: 0 4px;
+}
+
+.comprobante-zoom-hint {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 0.72rem;
+  padding: 6px 14px;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+  z-index: 10;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: opacity 0.4s ease;
+}
+.comprobante-zoom-hint.hide { opacity: 0; }
+
+@media (max-width: 576px) {
+  #modalVerComprobante .modal-dialog {
+    max-width: 100vw;
+    max-height: 100vh;
+    height: 100vh;
+    margin: 0;
+  }
+  #modalVerComprobante .modal-content {
+    border-radius: 0;
+  }
+  .comprobante-zoom-toolbar button {
+    width: 38px;
+    height: 38px;
+    font-size: 0.9rem;
+  }
+  .comprobante-zoom-toolbar .zoom-level {
+    font-size: 0.78rem;
+    min-width: 48px;
+  }
+}
+/* ============ FIN VISOR DE COMPROBANTE CON ZOOM ============ */
+
 </style>
 </head>
 <body>
@@ -1438,6 +1674,7 @@ select.form-control-lc { cursor: pointer; }
   </div>
 </div>
 
+<!-- ============ MODAL APORTACIÓN ============ -->
 <div class="modal fade modal-lc" id="modalAportacion" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -1479,13 +1716,17 @@ select.form-control-lc { cursor: pointer; }
           </div>
           <div class="mb-3-lc">
             <label class="form-label-lc">Comprobante</label>
-            <div class="upload-zone" id="uploadZone" onclick="abrirSelectorImagen('aportacion')">
-              <i class="fas fa-cloud-upload-alt"></i>
-              <p><strong>Toca aquí</strong> para subir el comprobante</p>
-              <p style="font-size: 0.78rem; margin-top: 4px;">JPG, PNG o WebP (máx. 5 MB)</p>
+            <div class="comprobante-bloque" id="comprobanteBloqueAportacion"
+                 data-preview="comprobantePreviewAportacion"
+                 data-input="inputComprobanteAportacion">
+              <div class="comprobante-dropzone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <div class="dz-titulo">Arrastra tu imagen o haz clic para seleccionarla</div>
+                <div class="dz-subtitulo">JPG, PNG o WebP (máx. 5 MB)</div>
+              </div>
+              <input type="file" id="inputComprobanteAportacion" accept="image/*" style="display: none;">
+              <div id="comprobantePreviewAportacion" class="comprobante-grid"></div>
             </div>
-            <input type="file" id="inputComprobanteCamara" accept="image/*" capture="environment" style="display:none">
-            <input type="file" id="inputComprobanteGaleria" accept="image/*" style="display:none">
           </div>
           <div class="mb-3-lc">
             <label class="form-label-lc">Nota (opcional)</label>
@@ -1501,6 +1742,7 @@ select.form-control-lc { cursor: pointer; }
   </div>
 </div>
 
+<!-- ============ MODAL EDITAR APORTACIÓN ============ -->
 <div class="modal fade modal-lc" id="modalEditarAportacion" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
@@ -1551,12 +1793,18 @@ select.form-control-lc { cursor: pointer; }
         <div class="mb-3-lc">
           <label class="form-label-lc">Comprobante</label>
           <div id="editComprobanteActual"></div>
-          <div class="upload-zone" id="uploadZoneEdit" onclick="abrirSelectorImagen('edit')" style="margin-top: 8px;">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p><strong>Reemplazar comprobante</strong> (opcional)</p>
+          <div class="comprobante-bloque" id="comprobanteBloqueEdit"
+               data-preview="comprobantePreviewEdit"
+               data-input="inputComprobanteEdit"
+               style="margin-top: 8px;">
+            <div class="comprobante-dropzone">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <div class="dz-titulo">Arrastra tu imagen o haz clic para reemplazar</div>
+              <div class="dz-subtitulo">Opcional · JPG, PNG o WebP</div>
+            </div>
+            <input type="file" id="inputComprobanteEdit" accept="image/*" style="display: none;">
+            <div id="comprobantePreviewEdit" class="comprobante-grid"></div>
           </div>
-          <input type="file" id="inputComprobanteEditCamara" accept="image/*" capture="environment" style="display:none">
-          <input type="file" id="inputComprobanteEditGaleria" accept="image/*" style="display:none">
         </div>
       </div>
       <div class="modal-footer">
@@ -1684,6 +1932,7 @@ select.form-control-lc { cursor: pointer; }
   </div>
 </div>
 
+<!-- ============ MODAL EGRESO ============ -->
 <div class="modal fade modal-lc" id="modalEgreso" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -1706,12 +1955,17 @@ select.form-control-lc { cursor: pointer; }
         </div>
         <div class="mb-3-lc">
           <label class="form-label-lc">Comprobante (opcional)</label>
-          <div class="upload-zone" id="uploadZoneEgreso" onclick="abrirSelectorImagen('egreso')">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p><strong>Toca aquí</strong> para subir</p>
+          <div class="comprobante-bloque" id="comprobanteBloqueEgreso"
+               data-preview="comprobantePreviewEgreso"
+               data-input="inputComprobanteEgreso">
+            <div class="comprobante-dropzone">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <div class="dz-titulo">Arrastra tu imagen o haz clic para seleccionarla</div>
+              <div class="dz-subtitulo">JPG, PNG o WebP (máx. 5 MB)</div>
+            </div>
+            <input type="file" id="inputComprobanteEgreso" accept="image/*" style="display: none;">
+            <div id="comprobantePreviewEgreso" class="comprobante-grid"></div>
           </div>
-          <input type="file" id="inputComprobanteEgresoCamara" accept="image/*" capture="environment" style="display:none">
-          <input type="file" id="inputComprobanteEgresoGaleria" accept="image/*" style="display:none">
         </div>
       </div>
       <div class="modal-footer">
@@ -1722,6 +1976,7 @@ select.form-control-lc { cursor: pointer; }
   </div>
 </div>
 
+<!-- ============ MODAL INTERÉS ============ -->
 <div class="modal fade modal-lc" id="modalInteres" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -1744,12 +1999,17 @@ select.form-control-lc { cursor: pointer; }
         </div>
         <div class="mb-3-lc">
           <label class="form-label-lc">Comprobante (opcional)</label>
-          <div class="upload-zone" id="uploadZoneInteres" onclick="abrirSelectorImagen('interes')">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p><strong>Toca aquí</strong> para subir</p>
+          <div class="comprobante-bloque" id="comprobanteBloqueInteres"
+               data-preview="comprobantePreviewInteres"
+               data-input="inputComprobanteInteres">
+            <div class="comprobante-dropzone">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <div class="dz-titulo">Arrastra tu imagen o haz clic para seleccionarla</div>
+              <div class="dz-subtitulo">JPG, PNG o WebP (máx. 5 MB)</div>
+            </div>
+            <input type="file" id="inputComprobanteInteres" accept="image/*" style="display: none;">
+            <div id="comprobantePreviewInteres" class="comprobante-grid"></div>
           </div>
-          <input type="file" id="inputComprobanteInteresCamara" accept="image/*" capture="environment" style="display:none">
-          <input type="file" id="inputComprobanteInteresGaleria" accept="image/*" style="display:none">
         </div>
       </div>
       <div class="modal-footer">
@@ -1786,8 +2046,19 @@ select.form-control-lc { cursor: pointer; }
         <h5 class="modal-title"><i class="fas fa-receipt me-2"></i>Comprobante</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body" style="text-align: center; background: #000; padding: 0;">
-        <img id="imgComprobanteViewer" src="" alt="Comprobante" style="max-width: 100%; max-height: 80vh; display: block; margin: 0 auto;">
+      <div class="modal-body" id="comprobanteViewerBody">
+        <div class="comprobante-zoom-hint" id="comprobanteZoomHint">
+          <i class="fas fa-search-plus me-1"></i> Pellizca o usa la rueda para hacer zoom · Doble toque para 2x
+        </div>
+        <div class="comprobante-viewer" id="comprobanteViewer">
+          <img id="imgComprobanteViewer" src="" alt="Comprobante">
+        </div>
+        <div class="comprobante-zoom-toolbar">
+          <button type="button" id="btnZoomOut" title="Reducir"><i class="fas fa-search-minus"></i></button>
+          <button type="button" id="btnZoomReset" title="Restablecer"><i class="fas fa-compress-arrows-alt"></i></button>
+          <button type="button" id="btnZoomIn" title="Ampliar"><i class="fas fa-search-plus"></i></button>
+          <div class="zoom-level" id="comprobanteZoomLevel">100%</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1795,10 +2066,12 @@ select.form-control-lc { cursor: pointer; }
 
 <script>
 // =========================================================================
-// LA CONCORDIA - JS v18
-// Cambios v18:
-//   · Se removió el badge "actualizado hace X" (por preferencia del usuario)
-//   · Se mantiene: caché persistente, versión, batch, refresco por botón
+// LA CONCORDIA - JS v19
+// Cambios v19:
+//   · Campo "Comprobante" rediseñado con estilo dropzone (Reporte de Actividades)
+//   · Soporte drag & drop de imágenes
+//   · Miniaturas con "X" para eliminar (sin vista previa al hacer clic)
+//   · Sin detección de duplicados
 // =========================================================================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzskS77FkyY8Mr7KsBAJ7q8qE-f3tqT9Ck1jk33B8SrnKI1GQVHn9_YyLHlNC8NsZAnQ/exec";
 const ANIO_MINIMO = 2025;
@@ -1841,9 +2114,10 @@ const state = {
   completarPerfilPaso: "datos"
 };
 
-let comprobanteActual = null;
-let comprobanteEgresoActual = null;
-let comprobanteInteresActual = null;
+// Comprobantes (un solo objeto por contexto)
+let comprobanteActual = null;         // modal aportación
+let comprobanteEgresoActual = null;   // modal egreso
+let comprobanteInteresActual = null;  // modal interés
 let casaParaReset = null;
 
 // =========================================================================
@@ -2230,86 +2504,163 @@ function comprimirImagen(file, maxWidth = 1200, quality = 0.70) {
   });
 }
 
-function abrirSelectorImagen(contexto) {
-  Swal.fire({
-    title: "Subir comprobante",
-    html: `<p style="color:#7f8c8d; font-size:0.9rem; margin-bottom:16px;">¿Cómo quieres obtener la imagen?</p>`,
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonText: '<i class="fas fa-camera"></i> Cámara',
-    denyButtonText: '<i class="fas fa-image"></i> Galería',
-    cancelButtonText: "Cancelar",
-    confirmButtonColor: "#1a5490",
-    denyButtonColor: "#3498db",
-    cancelButtonColor: "#95a5a6"
-  }).then((r) => {
-    if (r.isConfirmed) {
-      document.getElementById(_getInputId(contexto, "camara")).click();
-    } else if (r.isDenied) {
-      document.getElementById(_getInputId(contexto, "galeria")).click();
+// =========================================================================
+// COMPROBANTE DROPZONE (nuevo sistema)
+// =========================================================================
+function _aplicarArchivoComprobante(contexto, base64) {
+  if (contexto === "aportacion") {
+    comprobanteActual = { base64 };
+    _renderComprobantePreview("comprobantePreviewAportacion", "comprobanteBloqueAportacion", base64, () => {
+      comprobanteActual = null;
+      _renderComprobantePreview("comprobantePreviewAportacion", "comprobanteBloqueAportacion", null, null);
+    });
+  } else if (contexto === "egreso") {
+    comprobanteEgresoActual = { base64 };
+    _renderComprobantePreview("comprobantePreviewEgreso", "comprobanteBloqueEgreso", base64, () => {
+      comprobanteEgresoActual = null;
+      _renderComprobantePreview("comprobantePreviewEgreso", "comprobanteBloqueEgreso", null, null);
+    });
+  } else if (contexto === "interes") {
+    comprobanteInteresActual = { base64 };
+    _renderComprobantePreview("comprobantePreviewInteres", "comprobanteBloqueInteres", base64, () => {
+      comprobanteInteresActual = null;
+      _renderComprobantePreview("comprobantePreviewInteres", "comprobanteBloqueInteres", null, null);
+    });
+  } else if (contexto === "edit") {
+    state.editandoComprobanteNuevo = { base64 };
+    _renderComprobantePreview("comprobantePreviewEdit", "comprobanteBloqueEdit", base64, () => {
+      state.editandoComprobanteNuevo = null;
+      _renderComprobantePreview("comprobantePreviewEdit", "comprobanteBloqueEdit", null, null);
+    });
+  }
+}
+
+function _renderComprobantePreview(previewId, bloqueId, base64, onRemove) {
+  const preview = document.getElementById(previewId);
+  const bloque = document.getElementById(bloqueId);
+  if (!preview || !bloque) return;
+
+  preview.innerHTML = "";
+  if (!base64) {
+    bloque.classList.remove("has-image");
+    return;
+  }
+
+  bloque.classList.add("has-image");
+
+  const item = document.createElement("div");
+  item.className = "comprobante-preview-item";
+
+  const img = document.createElement("img");
+  img.src = base64;
+  img.alt = "Comprobante";
+  item.appendChild(img);
+
+  const btnRemove = document.createElement("button");
+  btnRemove.type = "button";
+  btnRemove.className = "comprobante-remove";
+  btnRemove.title = "Eliminar imagen";
+  btnRemove.innerHTML = '<i class="fas fa-times"></i>';
+  btnRemove.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (typeof onRemove === "function") onRemove();
+    else {
+      preview.innerHTML = "";
+      bloque.classList.remove("has-image");
     }
   });
+  item.appendChild(btnRemove);
+
+  preview.appendChild(item);
 }
-function _getInputId(contexto, tipo) {
-  const mapa = {
-    aportacion: { camara: "inputComprobanteCamara", galeria: "inputComprobanteGaleria" },
-    egreso: { camara: "inputComprobanteEgresoCamara", galeria: "inputComprobanteEgresoGaleria" },
-    interes: { camara: "inputComprobanteInteresCamara", galeria: "inputComprobanteInteresGaleria" },
-    edit: { camara: "inputComprobanteEditCamara", galeria: "inputComprobanteEditGaleria" }
-  };
-  return mapa[contexto][tipo];
-}
-function _setupInputImagen(inputId, onSuccess) {
-  document.getElementById(inputId).addEventListener("change", async (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { Swal.fire("Imagen muy grande", "Máximo 5 MB.", "warning"); e.target.value = ""; return; }
-    if (!file.type.startsWith("image/")) { Swal.fire("Formato inválido", "Solo imágenes.", "warning"); e.target.value = ""; return; }
-    showLoading("Procesando...");
-    try {
-      const base64 = await comprimirImagen(file, 1200, 0.70);
-      onSuccess(base64, file.name);
-    } catch (err) { Swal.fire("Error", "No se pudo procesar.", "error"); }
-    finally { hideLoading(); e.target.value = ""; }
+
+function setupComprobanteBloque(bloqueId) {
+  const bloque = document.getElementById(bloqueId);
+  if (!bloque) return;
+  const previewId = bloque.dataset.preview;
+  const inputId = bloque.dataset.input;
+  const input = document.getElementById(inputId);
+  const dropzone = bloque.querySelector(".comprobante-dropzone");
+
+  // Determinar contexto según el bloque
+  let contexto = "aportacion";
+  if (bloqueId === "comprobanteBloqueEgreso") contexto = "egreso";
+  else if (bloqueId === "comprobanteBloqueInteres") contexto = "interes";
+  else if (bloqueId === "comprobanteBloqueEdit") contexto = "edit";
+
+  const abrirInput = () => input && input.click();
+  if (dropzone) dropzone.addEventListener("click", abrirInput);
+
+  if (input) {
+    input.addEventListener("change", async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      await _procesarArchivoComprobante(file, contexto);
+      e.target.value = "";
+    });
+  }
+
+  // Drag & drop
+  ["dragenter", "dragover", "dragleave", "drop"].forEach(evt => {
+    bloque.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
   });
+  ["dragenter", "dragover"].forEach(evt => {
+    bloque.addEventListener(evt, () => bloque.classList.add("drag-over"), false);
+  });
+  ["dragleave", "drop"].forEach(evt => {
+    bloque.addEventListener(evt, () => bloque.classList.remove("drag-over"), false);
+  });
+  bloque.addEventListener("drop", async (e) => {
+    const dt = e.dataTransfer;
+    const file = dt && dt.files && dt.files[0];
+    if (file) await _procesarArchivoComprobante(file, contexto);
+  }, false);
 }
 
-_setupInputImagen("inputComprobanteCamara", (b) => _setComprobanteAportacion(b));
-_setupInputImagen("inputComprobanteGaleria", (b) => _setComprobanteAportacion(b));
-function _setComprobanteAportacion(base64) {
-  comprobanteActual = { base64 };
-  const zone = document.getElementById("uploadZone");
-  zone.classList.add("has-image");
-  zone.innerHTML = `<img src="${base64}" class="upload-preview-img"><div class="upload-remove" onclick="event.stopPropagation(); resetUploadZone(); comprobanteActual = null;"><i class="fas fa-trash"></i> Quitar</div>`;
+async function _procesarArchivoComprobante(file, contexto) {
+  if (!file.type.startsWith("image/")) {
+    Swal.fire("Formato inválido", "Solo se aceptan imágenes.", "warning");
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    Swal.fire("Imagen muy grande", "Máximo 5 MB.", "warning");
+    return;
+  }
+  showLoading("Procesando...");
+  try {
+    const base64 = await comprimirImagen(file, 1200, 0.70);
+    _aplicarArchivoComprobante(contexto, base64);
+  } catch (err) {
+    Swal.fire("Error", "No se pudo procesar la imagen.", "error");
+  } finally {
+    hideLoading();
+  }
 }
 
-_setupInputImagen("inputComprobanteEgresoCamara", (b) => _setComprobanteEgreso(b));
-_setupInputImagen("inputComprobanteEgresoGaleria", (b) => _setComprobanteEgreso(b));
-function _setComprobanteEgreso(base64) {
-  comprobanteEgresoActual = { base64 };
-  const zone = document.getElementById("uploadZoneEgreso");
-  zone.classList.add("has-image");
-  zone.innerHTML = `<img src="${base64}" class="upload-preview-img"><div class="upload-remove" onclick="event.stopPropagation(); resetUploadZoneEgreso(); comprobanteEgresoActual = null;"><i class="fas fa-trash"></i> Quitar</div>`;
+// Helpers para resetear desde los modales
+function resetComprobanteAportacion() {
+  comprobanteActual = null;
+  _renderComprobantePreview("comprobantePreviewAportacion", "comprobanteBloqueAportacion", null, null);
+}
+function resetComprobanteEgreso() {
+  comprobanteEgresoActual = null;
+  _renderComprobantePreview("comprobantePreviewEgreso", "comprobanteBloqueEgreso", null, null);
+}
+function resetComprobanteInteres() {
+  comprobanteInteresActual = null;
+  _renderComprobantePreview("comprobantePreviewInteres", "comprobanteBloqueInteres", null, null);
+}
+function resetComprobanteEdit() {
+  state.editandoComprobanteNuevo = null;
+  _renderComprobantePreview("comprobantePreviewEdit", "comprobanteBloqueEdit", null, null);
 }
 
-_setupInputImagen("inputComprobanteInteresCamara", (b) => _setComprobanteInteres(b));
-_setupInputImagen("inputComprobanteInteresGaleria", (b) => _setComprobanteInteres(b));
-function _setComprobanteInteres(base64) {
-  comprobanteInteresActual = { base64 };
-  const zone = document.getElementById("uploadZoneInteres");
-  zone.classList.add("has-image");
-  zone.innerHTML = `<img src="${base64}" class="upload-preview-img"><div class="upload-remove" onclick="event.stopPropagation(); resetUploadZoneInteres(); comprobanteInteresActual = null;"><i class="fas fa-trash"></i> Quitar</div>`;
-}
-
-_setupInputImagen("inputComprobanteEditCamara", (b) => _setComprobanteEdit(b));
-_setupInputImagen("inputComprobanteEditGaleria", (b) => _setComprobanteEdit(b));
-function _setComprobanteEdit(base64) {
-  state.editandoComprobanteNuevo = { base64 };
-  const zone = document.getElementById("uploadZoneEdit");
-  zone.classList.add("has-image");
-  zone.innerHTML = `<img src="${base64}" class="upload-preview-img"><div class="upload-remove" onclick="event.stopPropagation(); resetUploadZoneEdit(); state.editandoComprobanteNuevo = null;"><i class="fas fa-trash"></i> Quitar</div>`;
-}
-
+// =========================================================================
+// PANTALLAS
+// =========================================================================
 function mostrarPantalla(cual) {
   document.getElementById("pantallaEspera").classList.add("d-none-lc");
   document.getElementById("pantallaLogin").classList.add("d-none-lc");
@@ -3249,8 +3600,7 @@ function abrirModalAportacionVecino() {
   document.getElementById("aportacionMonto").value = state.datosVecino.config.aportacionMensual;
   document.getElementById("aportacionObservacion").value = "";
   document.getElementById("rangoPreview").style.display = "none";
-  comprobanteActual = null;
-  resetUploadZone();
+  resetComprobanteAportacion();
   new bootstrap.Modal(document.getElementById("modalAportacion")).show();
 }
 
@@ -3269,15 +3619,8 @@ function abrirModalAportacionAdmin() {
   document.getElementById("aportacionMonto").value = 300;
   document.getElementById("aportacionObservacion").value = "";
   document.getElementById("rangoPreview").style.display = "none";
-  comprobanteActual = null;
-  resetUploadZone();
+  resetComprobanteAportacion();
   new bootstrap.Modal(document.getElementById("modalAportacion")).show();
-}
-
-function resetUploadZone() {
-  const zone = document.getElementById("uploadZone");
-  zone.classList.remove("has-image");
-  zone.innerHTML = `<i class="fas fa-cloud-upload-alt"></i><p><strong>Toca aquí</strong> para subir el comprobante</p><p style="font-size: 0.78rem; margin-top: 4px;">JPG, PNG o WebP (máx. 5 MB)</p>`;
 }
 
 async function guardarAportacion() {
@@ -3339,7 +3682,7 @@ async function guardarAportacion() {
     btn.disabled = false;
     btn.innerHTML = htmlOrig;
     bootstrap.Modal.getInstance(document.getElementById("modalAportacion"))?.hide();
-    comprobanteActual = null;
+    resetComprobanteAportacion();
 
     Swal.fire({
       icon: "success",
@@ -3408,7 +3751,7 @@ async function abrirModalEditarAportacion(movId) {
     } else {
       document.getElementById("editComprobanteActual").innerHTML = `<p style="font-size:0.82rem; color:var(--text-muted);">Sin comprobante</p>`;
     }
-    resetUploadZoneEdit();
+    resetComprobanteEdit();
     actualizarPreviewEdicion();
 
     new bootstrap.Modal(document.getElementById("modalEditarAportacion")).show();
@@ -3416,12 +3759,6 @@ async function abrirModalEditarAportacion(movId) {
     hideLoading();
     Swal.fire("Error", err.message, "error");
   }
-}
-
-function resetUploadZoneEdit() {
-  const zone = document.getElementById("uploadZoneEdit");
-  zone.classList.remove("has-image");
-  zone.innerHTML = `<i class="fas fa-cloud-upload-alt"></i><p><strong>Reemplazar comprobante</strong> (opcional)</p>`;
 }
 
 function actualizarPreviewEdicion() {
@@ -3631,7 +3968,14 @@ function verComprobante(url) {
   const matchId = url.match(/id=([a-zA-Z0-9-_]+)/);
   const fileId = (matchD && matchD[1]) || (matchId && matchId[1]);
   if (fileId) imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600`;
-  document.getElementById("imgComprobanteViewer").src = imgUrl;
+
+  comprobanteViewerReset();
+  const img = document.getElementById("imgComprobanteViewer");
+  img.src = imgUrl;
+  img.onload = () => {
+    comprobanteViewerReset(true);
+  };
+
   new bootstrap.Modal(document.getElementById("modalVerComprobante")).show();
 }
 
@@ -4246,17 +4590,10 @@ function abrirModalEgreso() {
   document.getElementById("egresoFecha").value = fechaHoyInput();
   document.getElementById("egresoMonto").value = "";
   document.getElementById("egresoObservacion").value = "";
-  comprobanteEgresoActual = null;
-  resetUploadZoneEgreso();
+  resetComprobanteEgreso();
   new bootstrap.Modal(document.getElementById("modalEgreso")).show();
 }
 document.getElementById("modalEgreso").addEventListener("hidden.bs.modal", () => setTimeout(limpiarBackdropsHuerfanos, 200));
-
-function resetUploadZoneEgreso() {
-  const zone = document.getElementById("uploadZoneEgreso");
-  zone.classList.remove("has-image");
-  zone.innerHTML = `<i class="fas fa-cloud-upload-alt"></i><p><strong>Toca aquí</strong> para subir</p>`;
-}
 
 async function guardarEgreso() {
   if (state.procesando.egreso) return;
@@ -4280,7 +4617,7 @@ async function guardarEgreso() {
       movimientoId
     });
     bootstrap.Modal.getInstance(document.getElementById("modalEgreso"))?.hide();
-    comprobanteEgresoActual = null;
+    resetComprobanteEgreso();
     Swal.fire({ icon: "success", title: "Egreso registrado", text: `L. ${formatearLempiras(monto)}`, timer: 2400, showConfirmButton: false });
 
     try {
@@ -4301,17 +4638,10 @@ function abrirModalInteres() {
   document.getElementById("interesFecha").value = fechaHoyInput();
   document.getElementById("interesMonto").value = "";
   document.getElementById("interesObservacion").value = "";
-  comprobanteInteresActual = null;
-  resetUploadZoneInteres();
+  resetComprobanteInteres();
   new bootstrap.Modal(document.getElementById("modalInteres")).show();
 }
 document.getElementById("modalInteres").addEventListener("hidden.bs.modal", () => setTimeout(limpiarBackdropsHuerfanos, 200));
-
-function resetUploadZoneInteres() {
-  const zone = document.getElementById("uploadZoneInteres");
-  zone.classList.remove("has-image");
-  zone.innerHTML = `<i class="fas fa-cloud-upload-alt"></i><p><strong>Toca aquí</strong> para subir</p>`;
-}
 
 async function guardarInteres() {
   if (state.procesando.interes) return;
@@ -4335,7 +4665,7 @@ async function guardarInteres() {
       movimientoId
     });
     bootstrap.Modal.getInstance(document.getElementById("modalInteres"))?.hide();
-    comprobanteInteresActual = null;
+    resetComprobanteInteres();
     Swal.fire({ icon: "success", title: "Interés registrado", text: `L. ${formatearLempiras(monto)}`, timer: 2400, showConfirmButton: false });
 
     try {
@@ -4479,6 +4809,13 @@ document.addEventListener("visibilitychange", async () => {
 document.addEventListener("DOMContentLoaded", async () => {
   mostrarPantalla("espera");
 
+  // Inicializar los nuevos bloques de comprobante
+  setupComprobanteBloque("comprobanteBloqueAportacion");
+  setupComprobanteBloque("comprobanteBloqueEgreso");
+  setupComprobanteBloque("comprobanteBloqueInteres");
+  setupComprobanteBloque("comprobanteBloqueEdit");
+  _setupComprobanteViewerEvents();
+
   try {
     await abrirDBSesion();
   } catch (e) {
@@ -4500,7 +4837,242 @@ const swalObserver = new MutationObserver(() => {
 });
 swalObserver.observe(document.body, { childList: true, subtree: true });
 
-console.log("La Concordia - App v18 cargada");
+// =========================================================================
+// VISOR DE COMPROBANTE CON ZOOM
+// =========================================================================
+const _cz = {
+  scale: 1,
+  minScale: 1,
+  maxScale: 6,
+  tx: 0,
+  ty: 0,
+  startDist: 0,
+  startScale: 1,
+  startX: 0,
+  startY: 0,
+  startTx: 0,
+  startTy: 0,
+  dragging: false,
+  hintTimer: null,
+  initialized: false
+};
+
+function comprobanteViewerReset(ajustarAlContenedor = false) {
+  const img = document.getElementById("imgComprobanteViewer");
+  const viewer = document.getElementById("comprobanteViewer");
+  if (!img || !viewer) return;
+
+  _cz.scale = 1;
+  _cz.tx = 0;
+  _cz.ty = 0;
+  _cz.minScale = 1;
+  _cz.maxScale = 6;
+  _aplicarTransformComprobante();
+
+  if (ajustarAlContenedor) {
+    // Ajustar la imagen para que quepa dentro del contenedor al abrir
+    const cw = viewer.clientWidth;
+    const ch = viewer.clientHeight;
+    if (img.naturalWidth && img.naturalHeight && cw && ch) {
+      const ratioX = cw / img.naturalWidth;
+      const ratioY = ch / img.naturalHeight;
+      const fitScale = Math.min(ratioX, ratioY, 1);
+      // Guardamos el tamaño natural escalado por "fitScale" como base 1x
+      img.style.width = (img.naturalWidth * fitScale) + "px";
+      img.style.height = (img.naturalHeight * fitScale) + "px";
+    }
+  }
+
+  _cz.minScale = 1;
+  _cz.scale = 1;
+  _aplicarTransformComprobante();
+  _actualizarZoomLevelUI();
+}
+
+function _aplicarTransformComprobante() {
+  const img = document.getElementById("imgComprobanteViewer");
+  if (!img) return;
+  img.style.transform = `translate(${_cz.tx}px, ${_cz.ty}px) scale(${_cz.scale})`;
+}
+
+function _actualizarZoomLevelUI() {
+  const el = document.getElementById("comprobanteZoomLevel");
+  if (el) el.textContent = Math.round(_cz.scale * 100) + "%";
+}
+
+function _comprobanteZoom(delta, centerX, centerY) {
+  const viewer = document.getElementById("comprobanteViewer");
+  if (!viewer) return;
+  const rect = viewer.getBoundingClientRect();
+
+  const cx = (centerX !== undefined ? centerX : rect.left + rect.width / 2) - rect.left - rect.width / 2;
+  const cy = (centerY !== undefined ? centerY : rect.top + rect.height / 2) - rect.top - rect.height / 2;
+
+  const oldScale = _cz.scale;
+  let newScale = oldScale + delta;
+  newScale = Math.max(_cz.minScale, Math.min(_cz.maxScale, newScale));
+
+  if (newScale === oldScale) return;
+
+  // Ajustar traslación para que el punto bajo el cursor/pinch quede fijo
+  const factor = newScale / oldScale;
+  _cz.tx = (cx - (_cz.tx - cx) * factor) - cx + _cz.tx;
+  _cz.ty = (cy - (_cz.ty - cy) * factor) - cy + _cz.ty;
+  // Corrección más simple:
+  _cz.tx = cx - (cx - _cz.tx) * factor;
+  _cz.ty = cy - (cy - _cz.ty) * factor;
+
+  _cz.scale = newScale;
+
+  if (_cz.scale <= _cz.minScale) {
+    _cz.tx = 0; _cz.ty = 0;
+  }
+  _aplicarTransformComprobante();
+  _actualizarZoomLevelUI();
+  _ocultarHintZoom();
+}
+
+function _ocultarHintZoom() {
+  const hint = document.getElementById("comprobanteZoomHint");
+  if (!hint || hint.classList.contains("hide")) return;
+  hint.classList.add("hide");
+}
+
+function _setupComprobanteViewerEvents() {
+  if (_cz.initialized) return;
+  const viewer = document.getElementById("comprobanteViewer");
+  if (!viewer) return;
+  _cz.initialized = true;
+
+  // Botones de zoom
+  document.getElementById("btnZoomIn").addEventListener("click", () => _comprobanteZoom(0.4));
+  document.getElementById("btnZoomOut").addEventListener("click", () => _comprobanteZoom(-0.4));
+  document.getElementById("btnZoomReset").addEventListener("click", () => {
+    _cz.tx = 0; _cz.ty = 0; _cz.scale = _cz.minScale;
+    _aplicarTransformComprobante();
+    _actualizarZoomLevelUI();
+  });
+
+  // Rueda del mouse (desktop)
+  viewer.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const delta = e.deltaY < 0 ? 0.2 : -0.2;
+    _comprobanteZoom(delta, e.clientX, e.clientY);
+  }, { passive: false });
+
+  // Doble clic / doble tap
+  let lastTap = 0;
+  viewer.addEventListener("dblclick", (e) => {
+    if (_cz.scale > 1.05) {
+      _cz.scale = _cz.minScale;
+      _cz.tx = 0; _cz.ty = 0;
+    } else {
+      _comprobanteZoom(1, e.clientX, e.clientY);
+    }
+    _aplicarTransformComprobante();
+    _actualizarZoomLevelUI();
+  });
+
+  // Touch: pinch-to-zoom + arrastre
+  viewer.addEventListener("touchstart", (e) => {
+    if (e.touches.length === 2) {
+      _cz.startDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      _cz.startScale = _cz.scale;
+    } else if (e.touches.length === 1 && _cz.scale > 1.01) {
+      _cz.dragging = true;
+      _cz.startX = e.touches[0].clientX;
+      _cz.startY = e.touches[0].clientY;
+      _cz.startTx = _cz.tx;
+      _cz.startTy = _cz.ty;
+      viewer.classList.add("dragging");
+    }
+  }, { passive: true });
+
+  viewer.addEventListener("touchmove", (e) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const ratio = dist / _cz.startDist;
+      let newScale = _cz.startScale * ratio;
+      newScale = Math.max(_cz.minScale, Math.min(_cz.maxScale, newScale));
+      _cz.scale = newScale;
+      _aplicarTransformComprobante();
+      _actualizarZoomLevelUI();
+      _ocultarHintZoom();
+    } else if (e.touches.length === 1 && _cz.dragging) {
+      e.preventDefault();
+      const dx = e.touches[0].clientX - _cz.startX;
+      const dy = e.touches[0].clientY - _cz.startY;
+      _cz.tx = _cz.startTx + dx;
+      _cz.ty = _cz.startTy + dy;
+      _aplicarTransformComprobante();
+    }
+  }, { passive: false });
+
+  viewer.addEventListener("touchend", (e) => {
+    if (e.touches.length < 2) _cz.startDist = 0;
+    if (e.touches.length === 0) {
+      _cz.dragging = false;
+      viewer.classList.remove("dragging");
+
+      // Doble tap detection
+      const now = Date.now();
+      if (now - lastTap < 300 && _cz.startDist === 0) {
+        if (_cz.scale > 1.05) {
+          _cz.scale = _cz.minScale;
+          _cz.tx = 0; _cz.ty = 0;
+        } else {
+          _comprobanteZoom(1);
+        }
+        _aplicarTransformComprobante();
+        _actualizarZoomLevelUI();
+      }
+      lastTap = now;
+    }
+  }, { passive: true });
+
+  // Arrastre con mouse (desktop)
+  viewer.addEventListener("mousedown", (e) => {
+    if (_cz.scale <= 1.01) return;
+    _cz.dragging = true;
+    _cz.startX = e.clientX;
+    _cz.startY = e.clientY;
+    _cz.startTx = _cz.tx;
+    _cz.startTy = _cz.ty;
+    viewer.classList.add("dragging");
+    e.preventDefault();
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (!_cz.dragging) return;
+    _cz.tx = _cz.startTx + (e.clientX - _cz.startX);
+    _cz.ty = _cz.startTy + (e.clientY - _cz.startY);
+    _aplicarTransformComprobante();
+  });
+
+  window.addEventListener("mouseup", () => {
+    if (_cz.dragging) {
+      _cz.dragging = false;
+      viewer.classList.remove("dragging");
+    }
+  });
+
+  // Al cerrar el modal, resetear
+  document.getElementById("modalVerComprobante").addEventListener("hidden.bs.modal", () => {
+    comprobanteViewerReset();
+    const hint = document.getElementById("comprobanteZoomHint");
+    if (hint) hint.classList.remove("hide");
+    document.getElementById("imgComprobanteViewer").src = "";
+  });
+}
+
+console.log("La Concordia - App v19 cargada");
 </script>
 </body>
 </html>
