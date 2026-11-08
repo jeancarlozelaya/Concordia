@@ -975,21 +975,27 @@ select.form-control-lc { cursor: pointer; }
   .dato-item .btn-copiar { width: 100%; justify-content: center; }
 }
 
-/* ============ VISOR DE COMPROBANTE CON ZOOM ============ */
+/* ============ VISOR DE COMPROBANTE CON ZOOM (v2 - responsive móvil) ============ */
 #modalVerComprobante .modal-dialog {
   max-width: 95vw;
-  max-height: 95vh;
-  height: 95vh;
-  margin: 2.5vh auto;
+  width: 95vw;
+  height: 90vh;
+  max-height: 90vh;
+  margin: 5vh auto;
 }
 #modalVerComprobante .modal-content {
   height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
+#modalVerComprobante .modal-header {
+  flex-shrink: 0;
+}
 #modalVerComprobante .modal-body {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   padding: 0;
   background: #000;
   overflow: hidden;
@@ -1018,18 +1024,17 @@ select.form-control-lc { cursor: pointer; }
   -webkit-user-drag: none;
   pointer-events: none;
   transform-origin: center center;
-  transition: transform 0.08s ease-out;
   will-change: transform;
 }
 
 .comprobante-zoom-toolbar {
   position: absolute;
-  bottom: 16px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 8px;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   padding: 8px 10px;
   border-radius: 30px;
   backdrop-filter: blur(8px);
@@ -1083,18 +1088,38 @@ select.form-control-lc { cursor: pointer; }
   pointer-events: none;
   white-space: nowrap;
   transition: opacity 0.4s ease;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .comprobante-zoom-hint.hide { opacity: 0; }
 
-@media (max-width: 576px) {
+/* MÓVIL: usar dvh (dynamic viewport) para respetar barra del navegador */
+@media (max-width: 768px) {
   #modalVerComprobante .modal-dialog {
     max-width: 100vw;
-    max-height: 100vh;
+    width: 100vw;
     height: 100vh;
+    height: 100dvh;   /* <- clave */
+    max-height: 100vh;
+    max-height: 100dvh;
     margin: 0;
   }
   #modalVerComprobante .modal-content {
     border-radius: 0;
+    height: 100%;
+    max-height: 100%;
+  }
+  #modalVerComprobante .modal-header {
+    padding: 10px 14px;
+  }
+  #modalVerComprobante .modal-title {
+    font-size: 0.95rem;
+  }
+  .comprobante-zoom-toolbar {
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    gap: 6px;
+    padding: 6px 8px;
   }
   .comprobante-zoom-toolbar button {
     width: 38px;
@@ -1102,8 +1127,13 @@ select.form-control-lc { cursor: pointer; }
     font-size: 0.9rem;
   }
   .comprobante-zoom-toolbar .zoom-level {
-    font-size: 0.78rem;
-    min-width: 48px;
+    font-size: 0.75rem;
+    min-width: 44px;
+  }
+  .comprobante-zoom-hint {
+    font-size: 0.68rem;
+    padding: 5px 10px;
+    top: 8px;
   }
 }
 /* ============ FIN VISOR DE COMPROBANTE CON ZOOM ============ */
