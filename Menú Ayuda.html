@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Menú de Ayuda - La Concordia</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --primary: #1a5490; --primary-dark: #0f3a66;
+  --accent: #2ecc71; --danger: #e74c3c; --warning: #f39c12; --info: #3498db;
+  --purple: #8e44ad;
+  --bg: #f0f4f8; --card-bg: #ffffff;
+  --text: #2c3e50; --text-muted: #7f8c8d; --border: #e1e8ed;
+  --shadow: 0 4px 20px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+  --radius: 14px; --radius-sm: 8px;
+  --transition: all 0.25s ease;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body {
+  margin: 0; padding: 0; min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg); color: var(--text);
+  -webkit-text-size-adjust: 100%;
+}
+
+.header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff; padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  box-shadow: var(--shadow-lg); position: sticky; top: 0; z-index: 100;
+}
+.header-brand { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.header-brand i {
+  font-size: 1.6rem; background: rgba(255,255,255,0.15);
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.header-brand-text { min-width: 0; }
+.header-brand-title { font-weight: 700; font-size: 1.15rem; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header-brand-subtitle { font-size: 0.72rem; opacity: 0.8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header-btn {
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; height: 42px; padding: 0 16px; border-radius: 21px;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; transition: var(--transition);
+  text-decoration: none; flex-shrink: 0;
+}
+.header-btn:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-2px); }
+.header-btn:active { transform: scale(0.95); }
+@media (max-width: 576px) {
+  .header { padding: 12px 14px; }
+  .header-btn { height: 38px; padding: 0 12px; font-size: 0.82rem; }
+  .header-brand-title { font-size: 1rem; }
+  .header-brand i { width: 38px; height: 38px; font-size: 1.35rem; }
+  .header-btn .btn-txt { display: none; }
+}
+
+.hero-ayuda {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  padding: 40px 20px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-ayuda::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 250px; height: 250px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.hero-ayuda::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -50px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+.hero-ayuda h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+  position: relative;
+  z-index: 1;
+}
+.hero-ayuda p {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
+  line-height: 1.5;
+}
+@media (max-width: 576px) {
+  .hero-ayuda { padding: 30px 16px 50px; }
+  .hero-ayuda h1 { font-size: 1.4rem; }
+  .hero-ayuda p { font-size: 0.9rem; }
+}
+
+.container-ayuda {
+  max-width: 1200px;
+  margin: -30px auto 40px;
+  padding: 0 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.buscador-wrap {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 8px 8px 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.buscador-wrap i {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+.buscador-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 12px 0;
+  font-size: 1rem;
+  background: transparent;
+  color: var(--text);
+}
+.buscador-wrap .btn-limpiar {
+  background: var(--bg);
+  border: none;
+  color: var(--text-muted);
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.buscador-wrap .btn-limpiar:hover {
+  background: var(--danger);
+  color: #fff;
+}
+.buscador-wrap .btn-limpiar.visible { display: flex; }
+
+.sin-resultados {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  display: none;
+}
+.sin-resultados.show { display: block; }
+.sin-resultados i {
+  font-size: 3rem;
+  opacity: 0.3;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.layout-ayuda {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 992px) {
+  .layout-ayuda {
+    grid-template-columns: 1fr;
+  }
+}
+
+.indice-lateral {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  position: sticky;
+  top: 80px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+@media (max-width: 992px) {
+  .indice-lateral {
+    position: static;
+    max-height: none;
+  }
+}
+.indice-lateral::-webkit-scrollbar { width: 4px; }
+.indice-lateral::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
+.indice-titulo {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 800;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.indice-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+.indice-link:hover {
+  background: var(--bg);
+  color: var(--primary);
+}
+.indice-link.activo {
+  background: rgba(26,84,144,0.1);
+  color: var(--primary);
+}
+.indice-link i {
+  color: var(--info);
+  width: 18px;
+  text-align: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.contenido-ayuda {
+  min-width: 0;
+}
+
+.seccion-ayuda {
+  margin-bottom: 32px;
+  scroll-margin-top: 80px;
+}
+.seccion-titulo-grupo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--primary);
+}
+.seccion-titulo-grupo i {
+  font-size: 1.4rem;
+}
+
+.articulo-ayuda {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: var(--transition);
+}
+.articulo-ayuda:hover {
+  box-shadow: var(--shadow-lg);
+}
+.articulo-ayuda.oculto {
+  display: none;
+}
+
+.articulo-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.articulo-header:hover {
+  background: rgba(26,84,144,0.03);
+}
+
+.articulo-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(52,152,219,0.12);
+  color: var(--info);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.articulo-titulo {
+  flex: 1;
+  min-width: 0;
+}
+.articulo-titulo h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 3px;
+  line-height: 1.3;
+}
+.articulo-titulo p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.articulo-chevron {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+.articulo-ayuda.abierto .articulo-chevron {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+
+.articulo-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.articulo-ayuda.abierto .articulo-body {
+  max-height: 4000px;
+}
+.articulo-body-inner {
+  padding: 0 20px 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.paso {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+.paso-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+.paso-texto {
+  flex: 1;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  padding-top: 5px;
+  color: var(--text);
+}
+.paso-texto strong { color: var(--primary); }
+.paso-texto code {
+  background: var(--bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--primary);
+}
+
+.nota {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  display: flex;
+  gap: 10px;
+  margin: 14px 0;
+  border-left: 4px solid;
+}
+.nota i {
+  font-size: 1rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.nota.info {
+  background: rgba(52,152,219,0.08);
+  border-color: var(--info);
+  color: #1a5490;
+}
+.nota.warning {
+  background: rgba(243,156,18,0.08);
+  border-color: var(--warning);
+  color: #b9770e;
+}
+.nota.success {
+  background: rgba(46,204,113,0.08);
+  border-color: var(--accent);
+  color: #1e8449;
+}
+.nota.danger {
+  background: rgba(231,76,60,0.08);
+  border-color: var(--danger);
+  color: #a93226;
+}
+.nota.tip {
+  background: rgba(142,68,173,0.08);
+  border-color: var(--purple);
+  color: var(--purple);
+}
+
+.lista-simple {
+  margin: 12px 0;
+  padding-left: 0;
+  list-style: none;
+}
+.lista-simple li {
+  padding: 6px 0 6px 28px;
+  position: relative;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.lista-simple li::before {
+  content: '\f00c';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0;
+  top: 6px;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+.lista-simple.cross li::before {
+  content: '\f00d';
+  color: var(--danger);
+}
+
+.mockup-preview {
+  background: linear-gradient(135deg, #f0f4f8, #e8eef5);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  margin: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  position: relative;
+  overflow: hidden;
+}
+.mockup-box {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-size: 0.82rem;
+  max-width: 320px;
+  width: 100%;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.mockup-box .mockup-title {
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mockup-box .mockup-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 0.78rem;
+  border-bottom: 1px dashed var(--border);
+}
+.mockup-box .mockup-row:last-child { border-bottom: none; }
+.mockup-box .mockup-row .label { color: var(--text-muted); }
+.mockup-box .mockup-row .value { font-weight: 700; color: var(--text); }
+.mockup-box .mockup-row .value.green { color: var(--accent); }
+.mockup-box .mockup-row .value.red { color: var(--danger); }
+.mockup-box .mockup-row .value.blue { color: var(--info); }
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+}
+.faq-item:last-child { border-bottom: none; }
+.faq-pregunta {
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+  font-size: 0.92rem;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.faq-pregunta i {
+  color: var(--info);
+  font-size: 0.9rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.faq-respuesta {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.55;
+  padding-left: 24px;
+}
+
+.contacto-card {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: center;
+  margin-top: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.contacto-card::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 150px; height: 150px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.contacto-card i.ico {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  display: block;
+  opacity: 0.9;
+}
+.contacto-card h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+  position: relative;
+  z-index: 1;
+}
+.contacto-card p {
+  opacity: 0.9;
+  margin: 0 0 18px;
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 1;
+}
+.btn-whatsapp {
+  background: #25D366;
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 28px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(37,211,102,0.4);
+  position: relative;
+  z-index: 1;
+}
+.btn-whatsapp:hover {
+  background: #1ebe5b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37,211,102,0.5);
+  color: #fff;
+}
+.btn-whatsapp:active {
+  transform: scale(0.98);
+}
+
+.btn-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.92rem;
+  transition: var(--transition);
+  margin-top: 20px;
+}
+.btn-volver:hover {
+  background: var(--primary-dark);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+#progressBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--info));
+  width: 0%;
+  z-index: 999;
+  transition: width 0.1s;
+}
+
+.btn-subir {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(26,84,144,0.4);
+  transition: var(--transition);
+  z-index: 90;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.btn-subir.show { display: flex; }
+.btn-subir:hover {
+  background: var(--primary-dark);
+  transform: translateY(-3px);
+}
+
+@media (max-width: 576px) {
+  .container-ayuda { padding: 0 12px; margin-bottom: 24px; }
+  .articulo-header { padding: 12px 14px; gap: 10px; }
+  .articulo-icon { width: 38px; height: 38px; font-size: 1rem; }
+  .articulo-titulo h3 { font-size: 0.92rem; }
+  .articulo-titulo p { font-size: 0.75rem; }
+  .articulo-body-inner { padding: 12px 14px 16px; padding-top: 12px; }
+  .paso-texto { font-size: 0.85rem; }
+  .nota { font-size: 0.82rem; padding: 10px 12px; }
+  .hero-ayuda h1 { font-size: 1.3rem; }
+  .contacto-card { padding: 24px 16px; }
+  .contacto-card h3 { font-size: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-brand">
+    <i class="fas fa-question-circle"></i>
+    <div class="header-brand-text">
+      <div class="header-brand-title">Menú de Ayuda</div>
+      <div class="header-brand-subtitle">La Concordia · Tesorería Vecinal</div>
+    </div>
+  </div>
+  <a href="index.html" class="header-btn">
+    <i class="fas fa-arrow-left"></i>
+    <span class="btn-txt">Volver a la app</span>
+  </a>
+</div>
+
+<!-- HERO -->
+<div class="hero-ayuda">
+  <h1><i class="fas fa-life-ring me-2"></i>¿En qué te podemos ayudar?</h1>
+  <p>Encuentra respuestas paso a paso sobre cómo usar La Concordia. Usa el buscador o navega por las categorías.</p>
+</div>
+
+<div class="container-ayuda">
+
+  <!-- BUSCADOR -->
+  <div class="buscador-wrap">
+    <i class="fas fa-search"></i>
+    <input type="text" id="buscador" placeholder="Buscar: 'subir aportación', 'recuperar contraseña', 'matriz'..." autocomplete="off">
+    <button class="btn-limpiar" id="btnLimpiar" onclick="limpiarBusqueda()" title="Limpiar">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="sin-resultados" id="sinResultados">
+    <i class="fas fa-search"></i>
+    <p><strong>No encontramos resultados</strong></p>
+    <p style="font-size: 0.85rem;">Intenta con otras palabras o revisa las categorías del índice.</p>
+  </div>
+
+  <div class="layout-ayuda">
+
+    <!-- ÍNDICE LATERAL -->
+    <aside class="indice-lateral">
+      <div class="indice-titulo">Para Vecinos</div>
+      <button class="indice-link" onclick="irA('art-primer-ingreso')"><i class="fas fa-sign-in-alt"></i> Primer ingreso</button>
+      <button class="indice-link" onclick="irA('art-recuperar')"><i class="fas fa-key"></i> Recuperar contraseña</button>
+      <button class="indice-link" onclick="irA('art-aportacion')"><i class="fas fa-plus-circle"></i> Subir aportación</button>
+      <button class="indice-link" onclick="irA('art-historial')"><i class="fas fa-history"></i> Mi Historial</button>
+      <button class="indice-link" onclick="irA('art-meses')"><i class="fas fa-calendar-alt"></i> Meses</button>
+      <button class="indice-link" onclick="irA('art-movimientos')"><i class="fas fa-exchange-alt"></i> Movimientos</button>
+      <button class="indice-link" onclick="irA('art-matriz')"><i class="fas fa-table"></i> Matriz de Pago</button>
+      <button class="indice-link" onclick="irA('art-estadocuenta')"><i class="fas fa-file-invoice"></i> Estado de Cuenta</button>
+      <button class="indice-link" onclick="irA('art-datosdeposito')"><i class="fas fa-university"></i> Datos de Depósito</button>
+      <button class="indice-link" onclick="irA('art-perfil')"><i class="fas fa-user-circle"></i> Mi Perfil</button>
+
+      <div class="indice-titulo" style="margin-top: 12px;">Para Tesorero</div>
+      <button class="indice-link" onclick="irA('art-crear-casa')"><i class="fas fa-home"></i> Crear casa</button>
+      <button class="indice-link" onclick="irA('art-aprobar')"><i class="fas fa-check-double"></i> Aprobar aportaciones</button>
+      <button class="indice-link" onclick="irA('art-editar-aportacion')"><i class="fas fa-edit"></i> Editar aportación</button>
+      <button class="indice-link" onclick="irA('art-egreso')"><i class="fas fa-money-bill-wave"></i> Registrar egreso</button>
+      <button class="indice-link" onclick="irA('art-interes')"><i class="fas fa-piggy-bank"></i> Registrar interés</button>
+      <button class="indice-link" onclick="irA('art-matriz-admin')"><i class="fas fa-table"></i> Matriz de Pago</button>
+      <button class="indice-link" onclick="irA('art-edo-cuenta-admin')"><i class="fas fa-file-invoice"></i> Estado de Cuenta</button>
+      <button class="indice-link" onclick="irA('art-reset-pass')"><i class="fas fa-redo"></i> Resetear contraseña</button>
+
+      <div class="indice-titulo" style="margin-top: 12px;">Otros</div>
+      <button class="indice-link" onclick="irA('art-faq')"><i class="fas fa-question-circle"></i> Preguntas frecuentes</button>
+      <button class="indice-link" onclick="irA('art-contacto')"><i class="fas fa-headset"></i> Contacto</button>
+    </aside>
+
+    <!-- CONTENIDO -->
+    <main class="contenido-ayuda" id="contenidoAyuda">
+
+      <!-- VECINOS -->
+      <div class="seccion-titulo-grupo">
+        <i class="fas fa-users"></i> Para Vecinos
+      </div>
+
+      <!-- Primer ingreso -->
+      <div class="articulo-ayuda" id="art-primer-ingreso" data-titulo="primer ingreso login iniciar sesion contraseña temporal completar perfil datos personales">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-sign-in-alt"></i></div>
+          <div class="articulo-titulo">
+            <h3>Primer ingreso a la app</h3>
+            <p>Cómo iniciar sesión por primera vez y completar tus datos</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">Cuando el tesorero crea tu casa, te entrega una <strong>contraseña temporal</strong>. Con ella haces tu primer ingreso.</p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">Abre la app y en la pestaña <strong>"Soy Vecino"</strong> escribe el número de tu casa (ej: <code>F10</code>) y la contraseña temporal.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Al entrar, la app te pedirá completar tu perfil: <strong>nombre completo, correo electrónico y teléfono</strong>. Estos datos son obligatorios y solo tú puedes modificarlos.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Después de guardar tus datos, si estás usando contraseña temporal, te pedirá <strong>cambiar la contraseña</strong>. Elige una de mínimo 6 caracteres.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">4</div>
+              <div class="paso-texto">¡Listo! Ya puedes usar la app con normalidad.</div>
+            </div>
+
+            <div class="nota warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>No puedes usar la app sin completar tu perfil y cambiar la contraseña temporal. Es obligatorio por seguridad.</div>
+            </div>
+
+            <div class="nota tip">
+              <i class="fas fa-lightbulb"></i>
+              <div><strong>Consejo:</strong> guarda tu contraseña en un lugar seguro. Si la olvidas, puedes recuperarla desde el login.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recuperar contraseña -->
+      <div class="articulo-ayuda" id="art-recuperar" data-titulo="recuperar contraseña olvidé mi contraseña correo electrónico resetear">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-key"></i></div>
+          <div class="articulo-titulo">
+            <h3>Recuperar contraseña olvidada</h3>
+            <p>Si no recuerdas tu contraseña, sigue estos pasos</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">En la pantalla de login, haz clic en el enlace <strong>"Olvidé mi contraseña"</strong> debajo del formulario.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Ingresa el <strong>correo electrónico</strong> que registraste y el <strong>número de tu casa</strong>. Ambos deben coincidir.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Revisa tu correo. Recibirás un mensaje con una <strong>nueva contraseña temporal</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">4</div>
+              <div class="paso-texto">Inicia sesión con la contraseña temporal. La app te pedirá que la cambies por una nueva.</div>
+            </div>
+
+            <div class="nota info">
+              <i class="fas fa-info-circle"></i>
+              <div>Por seguridad, si el correo no coincide con el registrado, no se envía nada (para evitar que otras personas descubran qué casas existen).</div>
+            </div>
+
+            <div class="nota warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>Si no recibes el correo, revisa tu carpeta de spam. Si sigue sin llegar, contacta al tesorero por WhatsApp.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subir aportación -->
+      <div class="articulo-ayuda" id="art-aportacion" data-titulo="subir aportación nueva aportación comprobante meses rango varios meses pago adelantado monto">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-plus-circle"></i></div>
+          <div class="articulo-titulo">
+            <h3>Subir una aportación (1 o varios meses)</h3>
+            <p>Cómo registrar el pago de tu cuota mensual o adelantar varios meses</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">Cada mes aportas <strong>L. 300</strong> (o el monto que el tesorero haya definido). Puedes pagar 1 mes o adelantar varios.</p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">Toca el botón verde <strong>+</strong> en la esquina inferior derecha.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Selecciona el <strong>mes y año</strong> que estás pagando (mes de inicio si vas a pagar varios).</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">En <strong>"Cantidad de meses a pagar"</strong> deja 1 si es solo un mes, o pon la cantidad si quieres adelantar varios.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">4</div>
+              <div class="paso-texto">Indica la <strong>fecha del depósito</strong> y el <strong>monto por mes</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">5</div>
+              <div class="paso-texto">Sube una <strong>foto del comprobante</strong>. Puedes elegir entre tomar la foto al momento o seleccionarla de tu galería.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">6</div>
+              <div class="paso-texto">Si quieres, agrega una <strong>nota</strong> (ej: "transferencia desde cuenta de mi esposa").</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">7</div>
+              <div class="paso-texto">Toca <strong>"Enviar"</strong>. Tu aportación queda <strong>pendiente de aprobación</strong> por el tesorero.</div>
+            </div>
+
+            <div class="nota info">
+              <i class="fas fa-info-circle"></i>
+              <div>Mientras esté pendiente, el tesorero la revisará y aprobará (o rechazará si hay algún error). Cuando la apruebe, se reflejará automáticamente en tu saldo.</div>
+            </div>
+
+            <div class="nota warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>Si ya tienes una aportación (aprobada o pendiente) para un mes, no podrás subir otra para el mismo mes. Debes esperar a que se resuelva.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mi Historial -->
+      <div class="articulo-ayuda" id="art-historial" data-titulo="mi historial aportaciones propias solo mis aportaciones historial personal">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-history"></i></div>
+          <div class="articulo-titulo">
+            <h3>Mi Historial</h3>
+            <p>Solo tus aportaciones personales, con su estado</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">En la pestaña <strong>"Mi Historial"</strong> ves únicamente tus aportaciones (no las de otras casas ni los egresos de la colonia).</p>
+
+            <p style="font-size: 0.9rem;">Cada aportación muestra:</p>
+            <ul class="lista-simple">
+              <li>El <strong>mes pagado</strong></li>
+              <li>La <strong>fecha del depósito</strong></li>
+              <li>El <strong>monto</strong></li>
+              <li>El <strong>estado</strong>: Pendiente, Aprobado o Rechazado</li>
+              <li>Un botón para <strong>ver el comprobante</strong></li>
+            </ul>
+
+            <div class="nota info">
+              <i class="fas fa-info-circle"></i>
+              <div>Si una aportación fue <strong>rechazada</strong>, verás el motivo que escribió el tesorero. Puedes volver a subirla corrigiendo el error.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meses -->
+      <div class="articulo-ayuda" id="art-meses" data-titulo="meses calendario pagos año calendario de pagos estado de cuenta meses del año">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-calendar-alt"></i></div>
+          <div class="articulo-titulo">
+            <h3>Calendario de Pagos (Meses)</h3>
+            <p>Ve qué meses has pagado en cada año</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">En la pestaña <strong>"Meses"</strong> ves el calendario de pagos del año seleccionado.</p>
+
+            <p style="font-size: 0.9rem;">Cada mes tiene un color según su estado:</p>
+            <ul class="lista-simple">
+              <li><strong>Verde (✓)</strong> = Pagado</li>
+              <li><strong>Amarillo (🕐)</strong> = Tienes una aportación pendiente de aprobar</li>
+              <li><strong>Gris</strong> = Mes futuro (aún no aplica)</li>
+              <li><strong>Rojo (✗)</strong> = Mes pasado sin pagar</li>
+            </ul>
+
+            <p style="font-size: 0.9rem;">Usa las flechas <strong>◀ ▶</strong> arriba para cambiar de año. Puedes ir hacia atrás (desde 2025) y hacia adelante para ver años futuros.</p>
+
+            <div class="nota tip">
+              <i class="fas fa-lightbulb"></i>
+              <div>Este calendario es solo informativo. Para registrar un pago, usa el botón verde <strong>+</strong>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Movimientos -->
+      <div class="articulo-ayuda" id="art-movimientos" data-titulo="movimientos colonia aportaciones egresos intereses todas las casas transparencia">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-exchange-alt"></i></div>
+          <div class="articulo-titulo">
+            <h3>Movimientos de la Colonia</h3>
+            <p>Todos los movimientos de la colonia, con transparencia</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">En la pestaña <strong>"Movimientos"</strong> puedes ver todos los movimientos de la colonia del año seleccionado.</p>
+
+            <p style="font-size: 0.9rem;">Hay 4 sub-pestañas:</p>
+            <ul class="lista-simple">
+              <li><strong>Todas:</strong> todas las aportaciones, egresos e intereses</li>
+              <li><strong>Aportaciones:</strong> solo las aportaciones de todas las casas</li>
+              <li><strong>Egresos:</strong> solo los gastos de la colonia</li>
+              <li><strong>Intereses:</strong> solo los ingresos por intereses bancarios</li>
+            </ul>
+
+            <div class="nota info">
+              <i class="fas fa-info-circle"></i>
+              <div>Aquí ves los movimientos de <strong>todas las casas</strong> (no solo los tuyos). Es parte de la transparencia de la colonia.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matriz -->
+      <div class="articulo-ayuda" id="art-matriz" data-titulo="matriz de pago casas meses pagado pendiente futuro quién pagó quién no">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-table"></i></div>
+          <div class="articulo-titulo">
+            <h3>Matriz de Pago</h3>
+            <p>Vista general de quién ha pagado y quién no</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">En la pestaña <strong>"Matriz de Pago"</strong> ves una tabla con todas las casas y los 12 meses del año.</p>
+
+            <p style="font-size: 0.9rem;">Cada celda tiene un símbolo y color:</p>
+            <ul class="lista-simple">
+              <li><strong>Verde (✓)</strong> = Pagado</li>
+              <li><strong>Amarillo (🕐)</strong> = Pendiente de aprobar</li>
+              <li><strong>Rojo (✗)</strong> = Pendiente / debe</li>
+              <li><strong>Gris (—)</strong> = Mes futuro</li>
+            </ul>
+
+            <p style="font-size: 0.9rem;">Usa las flechas <strong>◀ ▶</strong> para cambiar el año. Puedes avanzar a años futuros.</p>
+
+            <div class="nota tip">
+              <i class="fas fa-lightbulb"></i>
+              <div>La matriz es útil para conversar con tus vecinos sobre el estado de pagos de la colonia.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado de Cuenta -->
+      <div class="articulo-ayuda" id="art-estadocuenta" data-titulo="estado de cuenta global descargar pdf ver en pantalla aportaciones egresos intereses mes año resumen">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-file-invoice"></i></div>
+          <div class="articulo-titulo">
+            <h3>Estado de Cuenta (ver y descargar)</h3>
+            <p>Consulta el detalle de la colonia o descárgalo en PDF</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">En la pestaña <strong>"Estado de Cuenta"</strong> puedes ver y descargar el resumen completo de la colonia.</p>
+
+            <p style="font-size: 0.9rem;">Tienes 2 opciones:</p>
+            <ul class="lista-simple">
+              <li><strong>Ver en Pantalla:</strong> muestra en la página el resumen con aportaciones, egresos e intereses</li>
+              <li><strong>Descargar PDF:</strong> genera un archivo PDF que puedes guardar o enviar por WhatsApp</li>
+            </ul>
+
+            <p style="font-size: 0.9rem;">Puedes filtrar por:</p>
+            <ul class="lista-simple">
+              <li><strong>Año completo:</strong> todos los movimientos del año</li>
+              <li><strong>Mes específico:</strong> solo los movimientos de ese mes</li>
+            </ul>
+
+            <div class="nota info">
+              <i class="fas fa-info-circle"></i>
+              <div>El estado de cuenta incluye un <strong>comparativo automático</strong> con el mes anterior, igual que un estado de cuenta bancario.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Datos de Depósito (CORREGIDO) -->
+      <div class="articulo-ayuda" id="art-datosdeposito" data-titulo="datos de depósito cuenta bac banco número de cuenta titular transferencia depósito">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-university"></i></div>
+          <div class="articulo-titulo">
+            <h3>Datos de Depósito</h3>
+            <p>Número de cuenta del banco para hacer tus depósitos</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">En la pestaña <strong>"Datos de Depósito"</strong> encuentras los datos de la cuenta bancaria de la colonia.</p>
+
+            <div class="mockup-preview">
+              <div class="mockup-box">
+                <div class="mockup-title"><i class="fas fa-university"></i> Cuenta BAC Credomatic</div>
+                <div class="mockup-row"><span class="label">Banco</span><span class="value">BAC Credomatic</span></div>
+                <div class="mockup-row"><span class="label">Cuenta</span><span class="value">792815300</span></div>
+                <div class="mockup-row"><span class="label">Titular</span><span class="value" style="font-size: 0.7rem;">Jorge Jeancarlo Xavier Romero Zelaya</span></div>
+              </div>
+            </div>
+
+            <p style="font-size: 0.9rem;">Cuando hagas la transferencia o depósito, toma una foto del comprobante y súbela desde el botón verde <strong>+</strong>.</p>
+
+            <div class="nota success">
+              <i class="fas fa-copy"></i>
+              <div>Puedes tocar el botón <strong>"Copiar"</strong> al lado del número de cuenta para copiarlo fácilmente en tu app bancaria.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mi Perfil -->
+      <div class="articulo-ayuda" id="art-perfil" data-titulo="mi perfil cambiar contraseña nombre correo teléfono datos personales actualizar datos">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-user-circle"></i></div>
+          <div class="articulo-titulo">
+            <h3>Mi Perfil (datos y contraseña)</h3>
+            <p>Actualiza tus datos personales o cambia tu contraseña</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">Toca el ícono de <strong>usuario</strong> en el header superior para abrir "Mi Perfil". Tiene 2 pestañas:</p>
+
+            <p style="font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-top: 16px;">
+              <i class="fas fa-id-card me-1"></i> Pestaña "Mis Datos"
+            </p>
+            <ul class="lista-simple">
+              <li><strong>Nombre completo</strong> (obligatorio)</li>
+              <li><strong>Correo electrónico</strong> (obligatorio, se usa para recuperar contraseña)</li>
+              <li><strong>Teléfono</strong> en formato <code>XXXX-XXXX</code> (obligatorio)</li>
+            </ul>
+
+            <p style="font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-top: 16px;">
+              <i class="fas fa-key me-1"></i> Pestaña "Contraseña"
+            </p>
+            <ul class="lista-simple">
+              <li><strong>Contraseña actual</strong> (la que usas ahora)</li>
+              <li><strong>Contraseña nueva</strong> (mínimo 6 caracteres)</li>
+              <li><strong>Confirmar contraseña nueva</strong> (debe coincidir)</li>
+            </ul>
+
+            <div class="nota info">
+              <i class="fas fa-info-circle"></i>
+              <div>Solo tú puedes modificar tus datos. El tesorero no los puede editar.</div>
+            </div>
+
+            <div class="nota tip">
+              <i class="fas fa-lightbulb"></i>
+              <div>Mantén tus datos actualizados, especialmente el correo, para poder recuperar tu contraseña si la olvidas.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESORERO -->
+      <div class="seccion-titulo-grupo" style="margin-top: 40px;">
+        <i class="fas fa-user-shield"></i> Para Tesorero
+      </div>
+
+      <!-- Crear casa -->
+      <div class="articulo-ayuda" id="art-crear-casa" data-titulo="crear casa nueva casa agregar vecino registrar vivienda contraseña temporal">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-home"></i></div>
+          <div class="articulo-titulo">
+            <h3>Crear una casa nueva</h3>
+            <p>Cómo registrar a un nuevo vecino en el sistema</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">En el panel del tesorero, ve a la pestaña <strong>"Casas"</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Toca el botón verde <strong>"Nueva Casa"</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Escribe el <strong>número o nombre de la casa</strong> (ej: F10, A-5, F11). Solo se permiten letras, números y guiones.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">4</div>
+              <div class="paso-texto">Toca <strong>"Crear"</strong>. El sistema genera una <strong>contraseña temporal</strong> automáticamente.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">5</div>
+              <div class="paso-texto">Copia esa contraseña y entrégasela al vecino. Él deberá cambiarla en su primer ingreso.</div>
+            </div>
+
+            <div class="nota warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>Guarda la contraseña temporal en un lugar seguro hasta entregarla. Una vez que el vecino la cambie, ya no podrás verla.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aprobar aportaciones -->
+      <div class="articulo-ayuda" id="art-aprobar" data-titulo="aprobar aportaciones pendientes rechazar aprobar grupo rango meses expandir">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-check-double"></i></div>
+          <div class="articulo-titulo">
+            <h3>Aprobar aportaciones pendientes</h3>
+            <p>Revisa y aprueba los pagos que envían los vecinos</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">Cuando un vecino sube una aportación, aparece como <strong>pendiente</strong> en tu panel.</p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">En la pestaña <strong>"Pendientes"</strong>, verás las aportaciones por aprobar.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Toca el botón <strong>"Ver comprobante"</strong> para revisar la foto que subió el vecino.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Verifica en tu banca en línea que el depósito <strong>realmente llegó</strong> a la cuenta.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">4</div>
+              <div class="paso-texto">Toca <strong>"Aprobar"</strong> si todo está bien, o <strong>"Rechazar"</strong> si hay algún problema (con un motivo).</div>
+            </div>
+
+            <div class="nota info">
+              <i class="fas fa-layer-group"></i>
+              <div><strong>Pagos de varios meses:</strong> si el vecino adelantó varios meses, verás una tarjeta colapsable. Toca el <strong>+</strong> para expandir y ver cada mes. Puedes usar <strong>"Aprobar todos"</strong> para aprobar el grupo completo de una vez.</div>
+            </div>
+
+            <div class="nota tip">
+              <i class="fas fa-lightbulb"></i>
+              <div>El badge rojo en la pestaña "Pendientes" muestra cuántas aportaciones (o grupos) hay por revisar.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Editar aportación -->
+      <div class="articulo-ayuda" id="art-editar-aportacion" data-titulo="editar aportación pendiente modificar mes monto corregir error cambiar datos antes aprobar">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-edit"></i></div>
+          <div class="articulo-titulo">
+            <h3>Editar una aportación pendiente</h3>
+            <p>Corrige datos antes de aprobar (monto, mes, casa...)</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">Si el vecino se equivocó en algo (monto, mes, casa), puedes <strong>editar</strong> la aportación antes de aprobarla.</p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">En la tarjeta de la aportación pendiente, toca <strong>"Editar"</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Cambia lo que necesites: casa, mes, año, cantidad de meses, fecha, monto, observación.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Si quieres reemplazar el comprobante, usa el botón de subida.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">4</div>
+              <div class="paso-texto">Toca <strong>"Guardar Cambios"</strong>. La aportación <strong>sigue pendiente</strong> (no se aprueba automáticamente).</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">5</div>
+              <div class="paso-texto">Cuando estés seguro, vuelve a Pendientes y toca <strong>"Aprobar"</strong>.</div>
+            </div>
+
+            <div class="nota warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>Editar <strong>no aprueba</strong>. Son dos acciones separadas. Primero corriges, luego apruebas.</div>
+            </div>
+
+            <div class="nota info">
+              <i class="fas fa-layer-group"></i>
+              <div>Si editas un grupo de varios meses, puedes cambiar el rango completo. El sistema valida que no existan duplicados antes de guardar.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Registrar egreso -->
+      <div class="articulo-ayuda" id="art-egreso" data-titulo="registrar egreso gasto retiro pago vigilancia mantenimiento comprobante">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-money-bill-wave"></i></div>
+          <div class="articulo-titulo">
+            <h3>Registrar un egreso</h3>
+            <p>Registra los gastos o retiros que hace la colonia</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">Los egresos son los gastos que hace la colonia (vigilancia, mantenimiento, reparaciones, etc.).</p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">En la pestaña <strong>"Egresos e Intereses"</strong>, toca el botón rojo <strong>"Egreso"</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Ingresa la <strong>fecha</strong>, el <strong>monto</strong> y una <strong>observación obligatoria</strong> (motivo del gasto).</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Opcionalmente, sube una <strong>foto del comprobante</strong> del gasto (factura, recibo).</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">4</div>
+              <div class="paso-texto">Toca <strong>"Registrar"</strong>. Se descuenta automáticamente del saldo de la colonia.</div>
+            </div>
+
+            <div class="nota info">
+              <i class="fas fa-info-circle"></i>
+              <div>Los vecinos ven todos los egresos con su motivo y comprobante. Es parte de la transparencia.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Registrar interés -->
+      <div class="articulo-ayuda" id="art-interes" data-titulo="registrar interés ingresos intereses bancarios cuenta banco ganancia">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-piggy-bank"></i></div>
+          <div class="articulo-titulo">
+            <h3>Registrar un interés</h3>
+            <p>Suma los intereses bancarios que genera la cuenta</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">Los intereses son las ganancias que genera la cuenta bancaria de la colonia. Son ingresos que suman al saldo.</p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">En la pestaña <strong>"Egresos e Intereses"</strong>, ve a la sub-pestaña <strong>"Intereses"</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Toca el botón azul <strong>"Interés"</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Ingresa la <strong>fecha</strong>, el <strong>monto</strong> y una <strong>observación</strong> (ej: "Intereses de marzo").</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">4</div>
+              <div class="paso-texto">Opcionalmente, sube un comprobante.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">5</div>
+              <div class="paso-texto">Toca <strong>"Registrar"</strong>. Se suma automáticamente al saldo de la colonia.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matriz admin -->
+      <div class="articulo-ayuda" id="art-matriz-admin" data-titulo="matriz de pago admin buscar casa filtro deuda al día ver años futuros">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-table"></i></div>
+          <div class="articulo-titulo">
+            <h3>Matriz de Pago (vista del tesorero)</h3>
+            <p>Ve el estado completo de pagos con filtros avanzados</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">La pestaña <strong>"Matriz de Pago"</strong> del tesorero incluye filtros extra que el vecino no tiene.</p>
+
+            <p style="font-size: 0.9rem;">Puedes:</p>
+            <ul class="lista-simple">
+              <li><strong>Buscar casa:</strong> escribe el número o nombre del propietario</li>
+              <li><strong>Filtrar por deuda:</strong> "Solo con deuda" o "Solo al día"</li>
+              <li><strong>Cambiar de año:</strong> usa las flechas ◀ ▶</li>
+            </ul>
+
+            <div class="nota tip">
+              <i class="fas fa-lightbulb"></i>
+              <div>Con el filtro "Solo con deuda" puedes ver rápidamente qué casas deben pagar, ideal para enviar recordatorios.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edo cuenta admin -->
+      <div class="articulo-ayuda" id="art-edo-cuenta-admin" data-titulo="estado de cuenta admin descargar pdf mes año filtro">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-file-invoice"></i></div>
+          <div class="articulo-titulo">
+            <h3>Estado de Cuenta (tesorero)</h3>
+            <p>Descarga reportes globales de la colonia</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">Funciona igual que el del vecino, pero con el detalle completo de todas las casas.</p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">Ve a la pestaña <strong>"Estado de Cuenta"</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Selecciona el <strong>año</strong> y opcionalmente un <strong>mes específico</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Toca <strong>"Ver en Pantalla"</strong> o <strong>"Descargar PDF"</strong>.</div>
+            </div>
+
+            <div class="nota success">
+              <i class="fas fa-file-pdf"></i>
+              <div>El PDF incluye un <strong>comparativo automático</strong> con el mes anterior. Ideal para enviar por WhatsApp a los vecinos.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reset contraseña -->
+      <div class="articulo-ayuda" id="art-reset-pass" data-titulo="resetear contraseña reset pass contraseña temporal nueva contraseña desde admin">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-redo"></i></div>
+          <div class="articulo-titulo">
+            <h3>Resetear la contraseña de un vecino</h3>
+            <p>Genera una contraseña temporal nueva para una casa</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">Si un vecino olvidó su contraseña y no puede recuperarla por correo, puedes resetearla manualmente.</p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">Ve a la pestaña <strong>"Casas"</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">En la fila de la casa, toca el botón amarillo con el ícono de <strong>llave</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Confirma el reseteo.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">4</div>
+              <div class="paso-texto">Se genera una <strong>contraseña temporal nueva</strong>. Cópiala y entrégasela al vecino.</div>
+            </div>
+
+            <div class="nota warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>El vecino deberá cambiar esa contraseña en su próximo ingreso. La anterior deja de funcionar de inmediato.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="seccion-titulo-grupo" style="margin-top: 40px;">
+        <i class="fas fa-question-circle"></i> Preguntas Frecuentes
+      </div>
+
+      <div class="articulo-ayuda" id="art-faq" data-titulo="preguntas frecuentes faq dudas comunes ayuda">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-question-circle"></i></div>
+          <div class="articulo-titulo">
+            <h3>Preguntas frecuentes</h3>
+            <p>Respuestas rápidas a las dudas más comunes</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Cuánto debo pagar cada mes?</div>
+              <div class="faq-respuesta">La aportación mensual es de <strong>L. 300</strong>, salvo que el tesorero indique otro monto. Lo puedes ver en la pestaña "Meses".</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Puedo pagar varios meses de una vez?</div>
+              <div class="faq-respuesta">Sí. En el formulario de "Nueva Aportación", cambia la cantidad de meses a pagar y selecciona el mes de inicio. El sistema calcula los meses siguientes automáticamente.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Qué pasa si subo el comprobante equivocado?</div>
+              <div class="faq-respuesta">El tesorero revisará la aportación antes de aprobarla. Si hay error, la rechazará con un motivo y podrás subirla de nuevo corrigiendo el problema.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Cuánto tarda en aprobarse mi aportación?</div>
+              <div class="faq-respuesta">Depende del tesorero, normalmente en 24-72 horas. Verás el estado "Pendiente" mientras espera. Cuando la apruebe, el saldo se actualiza automáticamente.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> Olvidé mi contraseña, ¿qué hago?</div>
+              <div class="faq-respuesta">En el login toca "Olvidé mi contraseña", ingresa tu correo y tu número de casa. Recibirás una contraseña temporal por correo. Si no la recibes, contacta al tesorero.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Puedo cambiar mi número de casa?</div>
+              <div class="faq-respuesta">No. El número de casa lo asigna el tesorero y no se puede modificar. Si te equivocaste al crearla, contacta al tesorero.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Qué pasa si pierdo mi celular?</div>
+              <div class="faq-respuesta">Contacta inmediatamente al tesorero por WhatsApp para que resetee tu contraseña. Nadie podrá entrar a tu cuenta sin la nueva contraseña.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Los otros vecinos ven cuánto he pagado?</div>
+              <div class="faq-respuesta">No. Solo el tesorero ve el detalle completo. Los otros vecinos ven los movimientos generales (aportaciones de todas las casas sin nombres), pero no tus datos personales ni tu saldo individual.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Cómo puedo ver el comprobante de mis aportaciones?</div>
+              <div class="faq-respuesta">En "Mi Historial", cada aportación tiene un botón con ícono de recibo para ver la foto del comprobante.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Qué significa el color amarillo en la matriz?</div>
+              <div class="faq-respuesta">Amarillo significa <strong>pendiente de aprobar</strong> (hay una aportación enviada pero el tesorero aún no la revisa). Verde es pagado, rojo es pendiente de pago, gris es mes futuro.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Cómo contactar al tesorero?</div>
+              <div class="faq-respuesta">En la sección de "Contacto" abajo tienes un botón de WhatsApp directo al tesorero.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Contacto -->
+      <div class="articulo-ayuda" id="art-contacto" data-titulo="contacto whatsapp tesorero soporte ayuda escribir problema consulta">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon"><i class="fas fa-headset"></i></div>
+          <div class="articulo-titulo">
+            <h3>Contacto y soporte</h3>
+            <p>Escríbele directamente al tesorero por WhatsApp</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <div class="contacto-card">
+              <i class="fas fa-headset ico"></i>
+              <h3>¿Necesitas ayuda personalizada?</h3>
+              <p>Escríbele al tesorero por WhatsApp si tienes alguna duda, problema con tu cuenta o necesitas resetear tu contraseña.</p>
+              <a href="https://wa.me/50433449842" target="_blank" rel="noopener" class="btn-whatsapp">
+                <i class="fab fa-whatsapp" style="font-size: 1.3rem;"></i>
+                Escribir por WhatsApp
+              </a>
+              <p style="font-size: 0.82rem; margin-top: 16px; opacity: 0.8;">
+                <i class="fas fa-clock me-1"></i> Normalmente responde en horario diurno
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón volver -->
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="index.html" class="btn-volver">
+          <i class="fas fa-arrow-left"></i> Volver a la app
+        </a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<button class="btn-subir" id="btnSubir" onclick="scrollToTop()" title="Volver arriba">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<script>
+function toggleArticulo(header) {
+  const articulo = header.closest('.articulo-ayuda');
+  articulo.classList.toggle('abierto');
+}
+
+function irA(id) {
+  const art = document.getElementById(id);
+  if (!art) return;
+  art.classList.add('abierto');
+  setTimeout(() => {
+    art.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+  document.querySelectorAll('.indice-link').forEach(l => l.classList.remove('activo'));
+  const btn = document.querySelector(`.indice-link[onclick*="${id}"]`);
+  if (btn) btn.classList.add('activo');
+}
+
+const buscador = document.getElementById('buscador');
+const btnLimpiar = document.getElementById('btnLimpiar');
+const sinResultados = document.getElementById('sinResultados');
+
+buscador.addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  btnLimpiar.classList.toggle('visible', q.length > 0);
+
+  if (!q) {
+    document.querySelectorAll('.articulo-ayuda').forEach(a => a.classList.remove('oculto'));
+    document.querySelectorAll('.seccion-titulo-grupo').forEach(s => s.style.display = '');
+    sinResultados.classList.remove('show');
+    return;
+  }
+
+  let encontrados = 0;
+  document.querySelectorAll('.articulo-ayuda').forEach(art => {
+    const titulo = (art.dataset.titulo || '').toLowerCase();
+    const textoContenido = art.textContent.toLowerCase();
+    const match = titulo.includes(q) || textoContenido.includes(q);
+    art.classList.toggle('oculto', !match);
+    if (match) encontrados++;
+  });
+
+  document.querySelectorAll('.seccion-titulo-grupo').forEach(grupo => {
+    let siguiente = grupo.nextElementSibling;
+    let hayVisibles = false;
+    while (siguiente && siguiente.classList.contains('articulo-ayuda')) {
+      if (!siguiente.classList.contains('oculto')) { hayVisibles = true; break; }
+      siguiente = siguiente.nextElementSibling;
+    }
+    grupo.style.display = hayVisibles ? '' : 'none';
+  });
+
+  sinResultados.classList.toggle('show', encontrados === 0);
+
+  if (encontrados > 0) {
+    const primero = document.querySelector('.articulo-ayuda:not(.oculto)');
+    if (primero) primero.classList.add('abierto');
+  }
+});
+
+function limpiarBusqueda() {
+  buscador.value = '';
+  buscador.dispatchEvent(new Event('input'));
+  buscador.focus();
+}
+
+window.addEventListener('scroll', () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+
+  const btnSubir = document.getElementById('btnSubir');
+  btnSubir.classList.toggle('show', scrollTop > 400);
+});
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const primerLink = document.querySelector('.indice-link');
+  if (primerLink) primerLink.classList.add('activo');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && buscador.value) {
+    limpiarBusqueda();
+  }
+});
+</script>
+
+</body>
+</html>
