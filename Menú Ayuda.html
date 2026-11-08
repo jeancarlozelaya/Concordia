@@ -346,7 +346,7 @@ html, body {
   transition: max-height 0.4s ease;
 }
 .articulo-ayuda.abierto .articulo-body {
-  max-height: 4000px;
+  max-height: 6000px;
 }
 .articulo-body-inner {
   padding: 0 20px 20px;
@@ -501,6 +501,120 @@ html, body {
 .mockup-box .mockup-row .value.green { color: var(--accent); }
 .mockup-box .mockup-row .value.red { color: var(--danger); }
 .mockup-box .mockup-row .value.blue { color: var(--info); }
+
+/* Mockup específico para QR */
+.qr-mockup {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.qr-mockup .qr-icon-box {
+  width: 140px;
+  height: 140px;
+  border-radius: 12px;
+  background: #fff;
+  border: 4px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  font-size: 4rem;
+  color: var(--primary);
+}
+.qr-mockup .qr-token {
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  word-break: break-all;
+  margin-bottom: 8px;
+}
+.qr-mockup .qr-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.qr-mockup .qr-buttons .fake-btn {
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+}
+.qr-mockup .qr-buttons .fake-btn.primary { background: var(--primary); }
+.qr-mockup .qr-buttons .fake-btn.info { background: var(--info); }
+.qr-mockup .qr-buttons .fake-btn.warning { background: var(--warning); }
+
+/* Mockup para visitantes */
+.qr-visitante-mockup {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 8px;
+}
+.qr-visitante-mockup .qv-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(52,152,219,0.15);
+  color: var(--info);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.qr-visitante-mockup .qv-body { flex: 1; min-width: 0; text-align: left; }
+.qr-visitante-mockup .qv-title {
+  font-weight: 700;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.qr-visitante-mockup .qv-badge {
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.qr-visitante-mockup .qv-badge.activo { background: rgba(46,204,113,0.15); color: #1e8449; }
+.qr-visitante-mockup .qv-meta {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.qr-visitante-mockup .qv-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.qr-visitante-mockup .qv-actions .fake-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #fff;
+}
+.qr-visitante-mockup .qv-actions .fake-icon.eye { background: var(--info); }
+.qr-visitante-mockup .qv-actions .fake-icon.edit { background: var(--warning); }
+.qr-visitante-mockup .qv-actions .fake-icon.trash { background: var(--danger); }
 
 .faq-item {
   border-bottom: 1px solid var(--border);
@@ -722,6 +836,7 @@ html, body {
       <button class="indice-link" onclick="irA('art-matriz')"><i class="fas fa-table"></i> Matriz de Pago</button>
       <button class="indice-link" onclick="irA('art-estadocuenta')"><i class="fas fa-file-invoice"></i> Estado de Cuenta</button>
       <button class="indice-link" onclick="irA('art-datosdeposito')"><i class="fas fa-university"></i> Datos de Depósito</button>
+      <button class="indice-link" onclick="irA('art-accesosqr')"><i class="fas fa-qrcode"></i> Accesos QR</button>
       <button class="indice-link" onclick="irA('art-perfil')"><i class="fas fa-user-circle"></i> Mi Perfil</button>
 
       <div class="indice-titulo" style="margin-top: 12px;">Para Tesorero</div>
@@ -1048,7 +1163,7 @@ html, body {
         </div>
       </div>
 
-      <!-- Datos de Depósito (CORREGIDO) -->
+      <!-- Datos de Depósito -->
       <div class="articulo-ayuda" id="art-datosdeposito" data-titulo="datos de depósito cuenta bac banco número de cuenta titular transferencia depósito">
         <div class="articulo-header" onclick="toggleArticulo(this)">
           <div class="articulo-icon"><i class="fas fa-university"></i></div>
@@ -1077,6 +1192,281 @@ html, body {
               <i class="fas fa-copy"></i>
               <div>Puedes tocar el botón <strong>"Copiar"</strong> al lado del número de cuenta para copiarlo fácilmente en tu app bancaria.</div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- ACCESOS QR (NUEVA SECCIÓN SOLO PARA VECINOS)                  -->
+      <!-- ============================================================ -->
+      <div class="articulo-ayuda" id="art-accesosqr" data-titulo="accesos qr código qr residente visitante invitado generar crear qr expiración vencimiento whatsapp compartir descargar revocar eliminar historial accesos entrada residencial colonia">
+        <div class="articulo-header" onclick="toggleArticulo(this)">
+          <div class="articulo-icon" style="background: rgba(142,68,173,0.12); color: var(--purple);"><i class="fas fa-qrcode"></i></div>
+          <div class="articulo-titulo">
+            <h3>Accesos QR (residente y visitantes)</h3>
+            <p>Genera códigos QR para tu familia y para tus invitados</p>
+          </div>
+          <i class="fas fa-chevron-down articulo-chevron"></i>
+        </div>
+        <div class="articulo-body">
+          <div class="articulo-body-inner">
+            <p style="margin-top: 0; color: var(--text-muted); font-size: 0.9rem;">
+              Desde la pestaña <strong>"Accesos QR"</strong> puedes ver tu código personal de residente y crear códigos temporales para tus visitantes.
+            </p>
+
+            <div class="nota info">
+              <i class="fas fa-info-circle"></i>
+              <div>
+                Esta pestaña es <strong>solo para ti como vecino</strong>. Aquí generas los QRs que luego se usan para acceder a la residencial.
+              </div>
+            </div>
+
+            <!-- ============ 1. Mi QR de Residente ============ -->
+            <p style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-top: 20px; margin-bottom: 10px;">
+              <i class="fas fa-id-card me-1"></i> 1. Mi QR de Residente
+            </p>
+
+            <p style="font-size: 0.9rem;">
+              Es un código <strong>permanente</strong> asociado a tu casa. Lo pueden usar tú y tu familia para entrar sin más.
+            </p>
+
+            <div class="mockup-preview">
+              <div class="mockup-box qr-mockup">
+                <div class="qr-icon-box"><i class="fas fa-qrcode"></i></div>
+                <div class="qr-token">LCR-A1B2C3D4E5F6</div>
+                <div class="qr-buttons">
+                  <span class="fake-btn primary"><i class="fas fa-download"></i> Descargar</span>
+                  <span class="fake-btn info"><i class="fas fa-share-alt"></i> Compartir</span>
+                  <span class="fake-btn warning"><i class="fas fa-redo"></i> Regenerar</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">Entra a la pestaña <strong>"Accesos QR"</strong>. La primera tarjeta muestra tu QR con el ícono de cuadrícula.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Toca <strong>"Descargar"</strong> para guardar la imagen en tu celular, o <strong>"Compartir"</strong> para enviarla por WhatsApp a tu familia.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Si crees que alguien lo filtró, toca <strong>"Regenerar"</strong>. El anterior deja de funcionar y se genera uno nuevo.</div>
+            </div>
+
+            <div class="nota warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>
+                Si <strong>regeneras</strong> tu QR, el anterior ya no servirá. Deberás enviarle el nuevo a todos tus familiares.
+              </div>
+            </div>
+
+            <div class="nota tip">
+              <i class="fas fa-lightbulb"></i>
+              <div>
+                Guarda la imagen del QR en la galería de cada miembro de tu familia, así lo tienen a mano cuando lleguen a la caseta.
+              </div>
+            </div>
+
+            <!-- ============ 2. QRs de Visitantes ============ -->
+            <p style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-top: 24px; margin-bottom: 10px;">
+              <i class="fas fa-user-friends me-1"></i> 2. QRs de Visitantes
+            </p>
+
+            <p style="font-size: 0.9rem;">
+              Son códigos <strong>temporales</strong> para tus invitados. Puedes definir cuánto tiempo duran y si sirven una sola vez o varias.
+            </p>
+
+            <div class="mockup-preview" style="flex-direction: column;">
+              <div class="qr-visitante-mockup">
+                <div class="qv-icon"><i class="fas fa-qrcode"></i></div>
+                <div class="qv-body">
+                  <div class="qv-title">José Martínez <span class="qv-badge activo">Activo</span></div>
+                  <div class="qv-meta">
+                    <span><i class="far fa-clock"></i> Expira: 24/12/2026 14:00</span>
+                    <span><i class="fas fa-car"></i> HAB1234</span>
+                  </div>
+                </div>
+                <div class="qv-actions">
+                  <div class="fake-icon eye"><i class="fas fa-eye"></i></div>
+                  <div class="fake-icon edit"><i class="fas fa-edit"></i></div>
+                  <div class="fake-icon trash"><i class="fas fa-trash"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">En la tarjeta <strong>"QRs de Visitantes"</strong>, toca el botón verde <strong>"+ Nuevo"</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Llena los datos: <strong>nombre del visitante</strong> (obligatorio), <strong>placa del vehículo</strong> (opcional), <strong>cantidad de personas</strong> y <strong>notas</strong> (opcional, ej: "viene a dejar un paquete").</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Elige la <strong>duración</strong>: 1h, 4h, 8h, 12h, 24h, 48h o 1 semana. Cuenta desde el momento en que lo creas.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">4</div>
+              <div class="paso-texto">Marca <strong>"Permitir múltiples usos"</strong> si quieres que el visitante pueda entrar más de una vez con el mismo QR. Si no lo marcas, el QR solo sirve 1 vez.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">5</div>
+              <div class="paso-texto">Toca <strong>"Crear QR"</strong>. Se genera el código y aparece en pantalla para que lo <strong>descargues</strong> o lo <strong>compartas por WhatsApp</strong> con tu visitante.</div>
+            </div>
+
+            <div class="nota success">
+              <i class="fab fa-whatsapp"></i>
+              <div>
+                Al tocar <strong>"Compartir"</strong>, el sistema te deja enviar la imagen del QR por WhatsApp, Telegram, correo, etc. Ideal para que tu visitante lo tenga en su celular al llegar.
+              </div>
+            </div>
+
+            <div class="nota info">
+              <i class="fas fa-info-circle"></i>
+              <div>
+                Cada QR muestra su estado: <strong>Activo</strong> (verde), <strong>Vencido</strong> (amarillo), <strong>Usado</strong> (rojo) o <strong>Revocado</strong> (rojo). Solo los activos permiten acceso.
+              </div>
+            </div>
+
+            <!-- ============ 3. Editar / Revocar / Eliminar ============ -->
+            <p style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-top: 24px; margin-bottom: 10px;">
+              <i class="fas fa-cog me-1"></i> 3. Editar, Revocar o Eliminar un QR
+            </p>
+
+            <p style="font-size: 0.9rem;">
+              Cada QR de visitante tiene 4 botones con íconos:
+            </p>
+
+            <ul class="lista-simple">
+              <li><strong>👁 Ver</strong> — abre el QR en grande para descargarlo o compartirlo</li>
+              <li><strong>✏ Editar</strong> — cambia nombre, placa, cantidad, duración, notas y usos</li>
+              <li><strong>🚫 Deshabilitar</strong> — el QR queda inválido inmediatamente (solo si está activo)</li>
+              <li><strong>🗑 Eliminar</strong> — lo borra permanentemente de la lista</li>
+            </ul>
+
+            <p style="font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-top: 16px;">
+              <i class="fas fa-edit me-1"></i> Editar un QR
+            </p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">Toca el botón con ícono de <strong>lápiz ✏</strong> en el QR que quieras editar.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Puedes cambiar cualquier dato: nombre, placa, cantidad de personas, duración, notas o si permite múltiples usos.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Toca <strong>"Guardar cambios"</strong>.</div>
+            </div>
+
+            <div class="nota success">
+              <i class="fas fa-magic"></i>
+              <div>
+                <strong>Reactivar un QR vencido o usado:</strong> si editas un QR que ya venció, la nueva duración se cuenta desde el momento en que lo guardas. El QR vuelve a estar <strong>Activo</strong> y sirve de nuevo. ¡Ideal para reutilizar códigos!
+              </div>
+            </div>
+
+            <p style="font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-top: 16px;">
+              <i class="fas fa-ban me-1"></i> Deshabilitar un QR
+            </p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">Toca el botón con ícono de <strong>prohibido 🚫</strong> en el QR que quieras deshabilitar.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Confirma. El QR queda <strong>Revocado</strong> al instante: ya no permitirá acceso aunque aún no haya vencido.</div>
+            </div>
+
+            <div class="nota warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>
+                Solo puedes deshabilitar QRs que estén <strong>Activos</strong>. Si un QR ya está vencido o usado, usa el botón de <strong>Editar</strong> si quieres reactivarlo, o <strong>Eliminar</strong> si ya no lo necesitas.
+              </div>
+            </div>
+
+            <p style="font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-top: 16px;">
+              <i class="fas fa-trash me-1"></i> Eliminar un QR
+            </p>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">Toca el botón con ícono de <strong>basura 🗑</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Confirma. El QR se elimina <strong>permanentemente</strong> de la lista.</div>
+            </div>
+
+            <div class="nota danger">
+              <i class="fas fa-exclamation-circle"></i>
+              <div>
+                Eliminar un QR es <strong>permanente</strong>. Si lo borras por error, tendrás que crear uno nuevo. En cambio, <strong>deshabilitar</strong> lo conserva en la lista como revocado.
+              </div>
+            </div>
+
+            <!-- ============ 4. Historial de Accesos ============ -->
+            <p style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-top: 24px; margin-bottom: 10px;">
+              <i class="fas fa-history me-1"></i> 4. Historial de Accesos
+            </p>
+
+            <p style="font-size: 0.9rem;">
+              En la misma pestaña "Accesos QR" verás al final una tarjeta con el <strong>historial de accesos</strong> de tu casa. Ahí se registra cada vez que se intenta usar un QR.
+            </p>
+
+            <p style="font-size: 0.9rem;">Cada registro muestra:</p>
+            <ul class="lista-simple">
+              <li><strong>Tipo:</strong> Residente o Visitante</li>
+              <li><strong>Resultado:</strong> Permitido, Vencido, Ya usado, Inválido o Revocado</li>
+              <li><strong>Fecha y hora</strong> del intento</li>
+            </ul>
+
+            <div class="paso">
+              <div class="paso-num">1</div>
+              <div class="paso-texto">Baja hasta la tarjeta <strong>"Historial de Accesos"</strong>.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">2</div>
+              <div class="paso-texto">Si quieres limpiar todo el historial, toca el botón rojo <strong>"Limpiar"</strong> en la esquina superior derecha.</div>
+            </div>
+            <div class="paso">
+              <div class="paso-num">3</div>
+              <div class="paso-texto">Confirma. Se borran <strong>todos los registros</strong> de tu casa. Los QRs activos <strong>no se ven afectados</strong>.</div>
+            </div>
+
+            <div class="nota tip">
+              <i class="fas fa-lightbulb"></i>
+              <div>
+                Revisa el historial si quieres confirmar si tu visitante ya ingresó o si hubo algún intento sospechoso con tu código.
+              </div>
+            </div>
+
+            <!-- ============ Consejos finales ============ -->
+            <p style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-top: 24px; margin-bottom: 10px;">
+              <i class="fas fa-star me-1"></i> Consejos rápidos
+            </p>
+
+            <ul class="lista-simple">
+              <li><strong>Usos:</strong> si no marcas "múltiples usos", el QR del visitante solo sirve una vez. Elige bien antes de compartirlo.</li>
+              <li><strong>Duración:</strong> elige el tiempo justo. Si el visitante llega en 2 horas, no generes un QR de 1 semana.</li>
+              <li><strong>Reactivar:</strong> si un QR venció y tu visitante sigue en camino, edítalo y guardá para darle más tiempo.</li>
+              <li><strong>Compartir:</strong> envía la imagen del QR por WhatsApp directamente a tu visitante, así lo tendrá a mano al llegar.</li>
+              <li><strong>Seguridad:</strong> si alguien ajeno tuvo acceso a tu QR de residente, regeneralo lo antes posible.</li>
+            </ul>
+
+            <div class="nota info">
+              <i class="fas fa-shield-alt"></i>
+              <div>
+                Los códigos QR son únicos e imposibles de adivinar. Solo quien tenga la imagen o el código en texto puede usarlos. Trátalos como una llave.
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -1512,7 +1902,17 @@ html, body {
             </div>
 
             <div class="faq-item">
-              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Cómo contactar al tesorero?</div>
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Cuánto dura un QR de visitante?</div>
+              <div class="faq-respuesta">Lo eliges tú al crearlo: 1h, 4h, 8h, 12h, 24h, 48h o 1 semana. Cuenta desde el momento de la creación. Una vez vencido, deja de servir.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Qué pasa si mi visitante llega después de que venció el QR?</div>
+              <div class="faq-respuesta">Puedes <strong>editar</strong> el QR y darle una nueva duración. Al guardar, el QR se reactiva y vuelve a ser válido con el nuevo tiempo.</div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-pregunta"><i class="fas fa-question"></i> ¿Cómo contacto al tesorero?</div>
               <div class="faq-respuesta">En la sección de "Contacto" abajo tienes un botón de WhatsApp directo al tesorero.</div>
             </div>
 
@@ -1656,17 +2056,13 @@ document.addEventListener('keydown', (e) => {
 
 // Detectar si estamos dentro de un iframe (modal de ayuda en index.html)
 if (window.parent && window.parent !== window) {
-  // Reemplazar el comportamiento del botón "Volver a la app"
   document.querySelectorAll('a[href="index.html"]').forEach(function(el) {
     el.addEventListener('click', function(e) {
       e.preventDefault();
-      // Avisar al padre que cierre el modal
       window.parent.postMessage({ tipo: "cerrarAyudaIframe" }, "*");
     });
   });
 }
-
-  
 </script>
 
 </body>
