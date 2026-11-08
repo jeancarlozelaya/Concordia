@@ -46,6 +46,33 @@ html, body {
 .login-title { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin: 0; }
 .login-subtitle { color: var(--text-muted); font-size: 0.9rem; margin: 4px 0 0; }
 
+.recordar-sesion-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+.recordar-sesion-wrap:hover { background: #e8eef5; }
+.recordar-sesion-wrap input[type="checkbox"] {
+  width: 20px; height: 20px; cursor: pointer;
+  accent-color: var(--primary); flex-shrink: 0;
+}
+.recordar-sesion-wrap .recordar-info { flex: 1; min-width: 0; }
+.recordar-sesion-wrap .recordar-label {
+  font-size: 0.88rem; font-weight: 700; color: var(--text);
+  display: block; line-height: 1.2;
+}
+.recordar-sesion-wrap .recordar-sub {
+  font-size: 0.72rem; color: var(--text-muted);
+  margin-top: 2px; display: block; line-height: 1.2;
+}
+
 .form-label-lc { font-weight: 600; color: var(--text); font-size: 0.9rem; margin-bottom: 6px; display: block; }
 .form-control-lc {
   width: 100%; padding: 11px 14px;
@@ -98,6 +125,8 @@ html, body {
   font-size: 1.05rem; cursor: pointer; transition: all 0.25s ease;
 }
 .header-btn:hover { background: rgba(255,255,255,0.25); }
+.header-btn.spinning i { animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 .container-main { max-width: 640px; margin: 0 auto; padding: 20px 16px 40px; }
 
@@ -141,7 +170,6 @@ html, body {
 }
 .manual-box input:focus { outline: none; border-color: var(--info); }
 
-/* Escáner */
 #qrReaderWrapper {
   position: fixed; inset: 0; z-index: 9999;
   background: #000;
@@ -170,7 +198,6 @@ html, body {
   padding: 12px 18px; font-size: 0.85rem; text-align: center;
 }
 
-/* Resultado */
 .resultado-fullscreen {
   position: fixed; inset: 0; z-index: 9998;
   display: none;
@@ -278,13 +305,20 @@ html, body {
       <p class="login-subtitle">Control de Accesos · Seguridad</p>
     </div>
     <form id="formLogin" onsubmit="return false;">
-      <div class="mb-3" style="margin-bottom: 16px;">
+      <div class="mb-3" style="margin-bottom: 14px;">
         <label class="form-label-lc">Contraseña de seguridad</label>
         <div class="input-wrap">
           <input type="password" class="form-control-lc" id="loginPassInput" placeholder="Contraseña" autocomplete="current-password" required>
           <button type="button" class="toggle-pass" onclick="togglePass('loginPassInput', this)"><i class="fas fa-eye"></i></button>
         </div>
       </div>
+      <label class="recordar-sesion-wrap">
+        <input type="checkbox" id="loginRecordar" checked>
+        <div class="recordar-info">
+          <span class="recordar-label">Mantener sesión abierta</span>
+          <span class="recordar-sub">No tendrás que volver a ingresar</span>
+        </div>
+      </label>
       <button type="submit" class="btn-lc btn-lc-primary" id="btnLogin">
         <i class="fas fa-sign-in-alt"></i> Entrar
       </button>
@@ -299,7 +333,7 @@ html, body {
       <i class="fas fa-shield-alt"></i>
       <div>
         <div class="header-brand-title">La Concordia · Seguridad</div>
-        <div class="header-brand-subtitle" id="headerGuardiaNombre">Guardia</div>
+        <div class="header-brand-subtitle">Guardia</div>
       </div>
     </div>
     <div class="header-actions">
@@ -357,14 +391,13 @@ html, body {
 </div>
 
 <script>
-const QR_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeMDkfE-CW2wij3gy0M0LE65yrSevu_SdRqIb3kEp5yjReP7eHRn62FPdHZ-JUqVSD/exec";
+const QR_SCRIPT_URL = "PEGAR_AQUI_LA_URL_DEL_NUEVO_DEPLOYMENT";
 const SESSION_KEY = "LaConcordiaGuardiaSesion";
 const DB_NAME = "LaConcordiaGuardiaDB";
 const DB_VERSION = 1;
 const STORE_SESION = "sesion";
 
 let dbGuardia = null;
-let currentGuardia = "";
 let currentPassword = "";
 let html5QrCode = null;
 let scannerActivo = false;
@@ -447,6 +480,7 @@ function togglePass(inputId, btn) {
 document.getElementById("formLogin").addEventListener("submit", async (e) => {
   e.preventDefault();
   const password = document.getElementById("loginPassInput").value;
+  const recordar = document.getElementById("loginRecordar").checked;
   if (!password) return Swal.fire("Falta contraseña", "Ingresa la contraseña.", "warning");
 
   const btn = document.getElementById("btnLogin");
@@ -456,9 +490,14 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
 
   try {
     await apiQR({ action: "validarPasswordSeguridad", password });
-    currentGuardia = "Guardia";          // valor genérico para el registro
     currentPassword = password;
-    await guardarSesion({ password });
+
+    if (recordar) {
+      await guardarSesion({ password, recordar: true });
+    } else {
+      await borrarSesion();
+    }
+
     mostrarPantalla("guardia");
     await cargarHistorial();
   } catch (err) {
@@ -477,10 +516,10 @@ function cerrarSesion() {
   }).then(async (r) => {
     if (r.isConfirmed) {
       await borrarSesion();
-      currentGuardia = "";
       currentPassword = "";
       mostrarPantalla("login");
       document.getElementById("loginPassInput").value = "";
+      document.getElementById("loginRecordar").checked = true;
     }
   });
 }
@@ -488,9 +527,6 @@ function cerrarSesion() {
 function mostrarPantalla(cual) {
   document.getElementById("pantallaLogin").classList.toggle("d-none-lc", cual !== "login");
   document.getElementById("pantallaGuardia").classList.toggle("d-none-lc", cual !== "guardia");
-  if (cual === "guardia") {
-    document.getElementById("headerGuardiaNombre").textContent = "Guardia: " + currentGuardia;
-  }
 }
 
 // ============ ESCÁNER ============
@@ -509,10 +545,8 @@ async function abrirEscaner() {
     await html5QrCode.start(
       { facingMode: "environment" },
       { fps: 10, qrbox: { width: 250, height: 250 } },
-      (decodedText) => {
-        onQRLeido(decodedText);
-      },
-      (err) => { /* errores de frame, ignorar */ }
+      (decodedText) => { onQRLeido(decodedText); },
+      (err) => { /* ignorar */ }
     );
     scannerActivo = true;
   } catch (err) {
@@ -542,7 +576,6 @@ function onQRLeido(token) {
   if (token === ultimoTokenEscaneado && (ahora - ultimoTimestampEscaneo) < 2500) return;
   ultimoTokenEscaneado = token;
   ultimoTimestampEscaneo = ahora;
-
   cerrarEscaner();
   validarToken(token);
 }
@@ -567,7 +600,7 @@ async function validarToken(token) {
     const res = await apiQR({
       action: "qrValidar",
       token,
-      guardia: currentGuardia
+      guardia: "Guardia"
     });
     Swal.close();
     mostrarResultado(res);
@@ -646,7 +679,7 @@ async function cargarHistorial() {
     const res = await apiQR({
       action: "qrListarRegistrosDelDia",
       password: currentPassword,
-      guardia: currentGuardia
+      guardia: "Guardia"
     });
     const regs = res.registros || [];
     if (regs.length === 0) {
@@ -674,19 +707,18 @@ async function cargarHistorial() {
 }
 
 async function refrescarHistorial(btn) {
-  btn.classList.add("fa-spin");
-  try { await cargarHistorial(); } finally { btn.classList.remove("fa-spin"); }
+  btn.classList.add("spinning");
+  try { await cargarHistorial(); } finally { btn.classList.remove("spinning"); }
 }
 
-// ============ AUTO-LOGIN ============
+// ============ AUTO-LOGIN (solo si el usuario marcó "Mantener sesión abierta") ============
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     await abrirDB();
     const ses = await obtenerSesion();
-    if (ses && ses.password) {
+    if (ses && ses.password && ses.recordar === true) {
       try {
         await apiQR({ action: "validarPasswordSeguridad", password: ses.password });
-        currentGuardia = "Guardia";
         currentPassword = ses.password;
         mostrarPantalla("guardia");
         await cargarHistorial();
@@ -700,7 +732,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   mostrarPantalla("login");
 });
-
 </script>
 </body>
 </html>
