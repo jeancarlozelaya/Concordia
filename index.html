@@ -265,6 +265,26 @@ select.form-control-lc { cursor: pointer; }
 .mes-item.futuro { opacity: 0.5; }
 .mes-item i { display: block; font-size: 1.1rem; margin-top: 6px; }
 
+/* ===== NUEVO v7: meses "No aplica" (anteriores a inicio de operación) ===== */
+.mes-item.no-aplica {
+  background: #f7f9fb;
+  border-color: #e1e8ed;
+  color: #b0b8c1;
+  opacity: 0.6;
+}
+.mes-item.no-aplica .mes-nombre { color: #95a5a6; }
+.mes-item.no-aplica .mes-estado { color: #b0b8c1; font-weight: 600; }
+.mes-item.no-aplica i { color: #cbd5e0; }
+
+.matriz-cell.no-aplica {
+  background: #f7f9fb;
+  color: #cbd5e0;
+  font-weight: 600;
+}
+
+.matriz-leyenda-item.no-aplica { background: #f7f9fb; color: #95a5a6; }
+.matriz-leyenda-item.no-aplica .dot-icon { background: #e1e8ed; color: #b0b8c1; }
+
 .year-nav {
   display: flex; align-items: center; justify-content: center; gap: 16px;
   padding: 12px; background: var(--bg); border-radius: var(--radius-sm); margin-bottom: 16px;
@@ -1213,6 +1233,7 @@ select.form-control-lc { cursor: pointer; }
           <div class="matriz-leyenda-item pendiente-aprobar"><span class="dot-icon"><i class="fas fa-clock"></i></span> Pendiente de aprobar</div>
           <div class="matriz-leyenda-item pendiente"><span class="dot-icon"><i class="fas fa-times"></i></span> Pendiente</div>
           <div class="matriz-leyenda-item futuro"><span class="dot-icon">–</span> Futuro</div>
+          <div class="matriz-leyenda-item no-aplica"><span class="dot-icon">–</span> No aplica</div>
         </div>
         <div id="matrizVecinoContenedor"></div>
       </div>
@@ -1450,6 +1471,7 @@ select.form-control-lc { cursor: pointer; }
           <div class="matriz-leyenda-item pendiente-aprobar"><span class="dot-icon"><i class="fas fa-clock"></i></span> Pendiente de aprobar</div>
           <div class="matriz-leyenda-item pendiente"><span class="dot-icon"><i class="fas fa-times"></i></span> Pendiente</div>
           <div class="matriz-leyenda-item futuro"><span class="dot-icon">–</span> Futuro</div>
+          <div class="matriz-leyenda-item no-aplica"><span class="dot-icon">–</span> No aplica</div>
         </div>
         <div id="adminMatrizContenedor"></div>
       </div>
@@ -2061,16 +2083,17 @@ select.form-control-lc { cursor: pointer; }
 
 <script>
 // =========================================================================
-// LA CONCORDIA - JS v21
-// Cambios v21:
-//   · Loader QR residente mejorado
-//   · Bloqueo global en operaciones QR (evita lag / doble-click)
-//   · Refresco selectivo (sin recargar todo tras eliminar/editar)
-//   · Editar / eliminar QRs de visitantes + limpiar historial
+// LA CONCORDIA - JS v22
+// Cambios v22 (respecto a v21):
+//   · ANIO_MINIMO sube de 2025 a 2026
+//   · Soporte para "no aplica" en meses anteriores a 2026-11
+//   · renderMesesVecino: respeta m.noAplica (gris, sin ícono de alerta)
+//   · renderMatrizGenerica: respeta m.noAplica (celda gris con "–")
+//   · Backend bloquea meses < 2026-11 (ni admin ni vecino)
 // =========================================================================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzskS77FkyY8Mr7KsBAJ7q8qE-f3tqT9Ck1jk33B8SrnKI1GQVHn9_YyLHlNC8NsZAnQ/exec";
 const QR_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeMDkfE-CW2wij3gy0M0LE65yrSevu_SdRqIb3kEp5yjReP7eHRn62FPdHZ-JUqVSD/exec";
-const ANIO_MINIMO = 2025;
+const ANIO_MINIMO = 2026;
 const ANIO_MAXIMO_MATRIZ = 2100;
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -2838,6 +2861,7 @@ function renderVecino() {
   const mesActualStr = `${new Date().getFullYear()}-${String(mesActual).padStart(2, "0")}`;
   const mesActualObj = (d.mesesDelAnioActual || []).find(m => m.mes === mesActualStr);
   if (mesActualObj && mesActualObj.pagado) document.getElementById("vecinoMesActualInfo").textContent = `¡Ya pagaste ${nombreMesCorto(mesActual)}! Gracias.`;
+  else if (mesActualObj && mesActualObj.noAplica) document.getElementById("vecinoMesActualInfo").textContent = "";
   else document.getElementById("vecinoMesActualInfo").textContent = `Aún no has pagado ${nombreMesCorto(mesActual)}.`;
   if (state.anioVecino === new Date().getFullYear()) {
     renderMesesVecino(d.mesesDelAnioActual);
@@ -2851,6 +2875,11 @@ function renderVecino() {
 function renderMesesVecino(meses) {
   const html = meses.map(m => {
     const clases = ["mes-item"];
+    // Prioridad: noAplica > pagado > pendiente > actual > futuro
+    if (m.noAplica) {
+      clases.push("no-aplica");
+      return `<div class="${clases.join(" ")}"><span class="mes-nombre">${nombreMesCorto(parseInt(m.mes.split("-")[1], 10))}</span><span class="mes-estado">No aplica</span><i class="fas fa-minus"></i></div>`;
+    }
     if (m.pagado) clases.push("pagado");
     else if (m.pendiente) clases.push("pendiente-aprobar");
     if (m.esActual) clases.push("actual");
@@ -3001,11 +3030,20 @@ function renderMatrizGenerica(containerId, data) {
   const filas = data.casas.map(c => {
     const celdas = c.meses.map(m => {
       let clase = "matriz-cell", contenido = "";
-      if (m.pagado) { clase += " pagado"; contenido = '<i class="fas fa-check"></i>'; }
-      else if (m.pendiente) { clase += " pendiente-aprobar"; contenido = '<i class="fas fa-clock"></i>'; }
-      else if (m.esFuturo) { clase += " futuro"; contenido = "–"; }
-      else { clase += " pendiente"; contenido = '<i class="fas fa-times"></i>'; }
-      if (m.esActual) clase += " actual";
+      // Prioridad: noAplica > pagado > pendiente > futuro > pendiente
+      if (m.noAplica) {
+        clase += " no-aplica";
+        contenido = "–";
+      } else if (m.pagado) {
+        clase += " pagado"; contenido = '<i class="fas fa-check"></i>';
+      } else if (m.pendiente) {
+        clase += " pendiente-aprobar"; contenido = '<i class="fas fa-clock"></i>';
+      } else if (m.esFuturo) {
+        clase += " futuro"; contenido = "–";
+      } else {
+        clase += " pendiente"; contenido = '<i class="fas fa-times"></i>';
+      }
+      if (m.esActual && !m.noAplica) clase += " actual";
       return `<td class="matriz-mes"><span class="${clase}">${contenido}</span></td>`;
     }).join("");
     return `<tr data-casa="${escapeHtml(c.casa.toUpperCase())}"><td>${escapeHtml(c.casa)}${c.nombre ? `<div class="casa-nombre">${escapeHtml(c.nombre)}</div>` : ""}</td>${celdas}</tr>`;
@@ -4011,8 +4049,8 @@ function aplicarFiltroMatrizAdmin() {
   const mesActual = hoy.getMonth() + 1;
   let casas = data.casas || [];
   if (filtro) casas = casas.filter(c => (c.casa || "").toLowerCase().includes(filtro) || (c.nombre || "").toLowerCase().includes(filtro));
-  if (filtroDeuda === "deuda") casas = casas.filter(c => c.meses.some(m => !m.pagado && !m.pendiente && !m.esFuturo && m.numero <= mesActual));
-  else if (filtroDeuda === "aldia") casas = casas.filter(c => !c.meses.some(m => !m.pagado && !m.pendiente && !m.esFuturo && m.numero <= mesActual));
+  if (filtroDeuda === "deuda") casas = casas.filter(c => c.meses.some(m => !m.pagado && !m.pendiente && !m.esFuturo && !m.noAplica && m.numero <= mesActual));
+  else if (filtroDeuda === "aldia") casas = casas.filter(c => !c.meses.some(m => !m.pagado && !m.pendiente && !m.esFuturo && !m.noAplica && m.numero <= mesActual));
   renderMatrizGenerica("adminMatrizContenedor", { ...data, casas });
 }
 
@@ -4104,7 +4142,6 @@ async function cargarAccesosQR() {
   if (!state.casa) return;
   _qrLoaderVisible(true);
   try {
-    // Secuencial para evitar carreras de creación de hojas en el servidor
     const resRes = await apiQR({ action: "qrObtenerMiResidente", casa: state.casa, password: state.password });
     _qrState.miResidente = resRes;
     renderMiQRResidente();
@@ -4151,7 +4188,6 @@ function renderMiQRResidente() {
   if (!_qrState.miResidente) return;
   const url = _qrImgUrl(_qrState.miResidente.token);
 
-  // Precargar la imagen y solo mostrarla cuando el navegador la tenga
   const pre = new Image();
   pre.onload = () => {
     img.src = url;
@@ -4161,7 +4197,6 @@ function renderMiQRResidente() {
     _qrLoaderVisible(false);
   };
   pre.onerror = () => {
-    // Si falla, igual mostramos la URL
     img.src = url;
     img.style.display = "block";
     img.style.margin = "0 auto";
@@ -4251,7 +4286,6 @@ async function crearQRVisitante() {
   try {
     const res = await apiQR({ action: "qrCrearVisitante", casa: state.casa, password: state.password, nombreVisitante: nombre, placa, cantidadPersonas: personas, duracionHoras: duracion, multiuso, notas });
     bootstrap.Modal.getInstance(document.getElementById("modalQRVisitante"))?.hide();
-    // Solo recargamos la lista de visitantes (no todo)
     await _recargarSoloVisitantes();
     hideLoading();
     verQRVisitante(res.id);
@@ -4522,7 +4556,7 @@ const swalObserver = new MutationObserver(() => {
 });
 swalObserver.observe(document.body, { childList: true, subtree: true });
 
-console.log("La Concordia - App v21 cargada");
+console.log("La Concordia - App v22 cargada");
 </script>
 </body>
 </html>
