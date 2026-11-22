@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>La Concordia · Seguridad</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://script.google.com" crossorigin>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -28,7 +32,7 @@ html, body {
 }
 .d-none-lc { display: none !important; }
 
-/* ============ PANTALLA ESPERA (auto-login) ============ */
+/* ============ PANTALLA ESPERA ============ */
 #pantallaEspera {
   position: fixed; inset: 0; z-index: 240000;
   background: linear-gradient(135deg, #1a5490, #0f3a66);
@@ -42,10 +46,7 @@ html, body {
   font-size: 2.4rem; margin-bottom: 18px;
   animation: pulseLogo 1.8s ease-in-out infinite;
 }
-@keyframes pulseLogo {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.06); opacity: 0.85; }
-}
+@keyframes pulseLogo { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
 #pantallaEspera .espera-titulo { font-size: 1.4rem; font-weight: 800; margin: 0 0 6px; letter-spacing: 0.5px; }
 #pantallaEspera .espera-sub { font-size: 0.85rem; opacity: 0.8; margin: 0; }
 
@@ -80,14 +81,8 @@ html, body {
   accent-color: var(--primary); flex-shrink: 0;
 }
 .recordar-sesion-wrap .recordar-info { flex: 1; min-width: 0; }
-.recordar-sesion-wrap .recordar-label {
-  font-size: 0.88rem; font-weight: 700; color: var(--text);
-  display: block; line-height: 1.2;
-}
-.recordar-sesion-wrap .recordar-sub {
-  font-size: 0.72rem; color: var(--text-muted);
-  margin-top: 2px; display: block; line-height: 1.2;
-}
+.recordar-sesion-wrap .recordar-label { font-size: 0.88rem; font-weight: 700; color: var(--text); display: block; line-height: 1.2; }
+.recordar-sesion-wrap .recordar-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; display: block; line-height: 1.2; }
 
 .form-label-lc { font-weight: 600; color: var(--text); font-size: 0.9rem; margin-bottom: 6px; display: block; }
 .form-control-lc {
@@ -110,13 +105,7 @@ html, body {
 }
 .btn-lc-primary { background: var(--primary); color: #fff; width: 100%; }
 .btn-lc-primary:hover { background: var(--primary-dark); color: #fff; }
-.btn-lc-success { background: var(--accent); color: #fff; }
-.btn-lc-success:hover { background: #27ae60; color: #fff; }
-.btn-lc-danger { background: var(--danger); color: #fff; }
-.btn-lc-warning { background: var(--warning); color: #fff; }
 .btn-lc-info { background: var(--info); color: #fff; }
-.btn-lc-ghost { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
-.btn-lc-sm { padding: 7px 14px; font-size: 0.83rem; }
 .btn-lc:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* ============ HEADER ============ */
@@ -154,44 +143,29 @@ html, body {
 }
 
 .scan-btn {
-  width: 100%;
-  padding: 28px;
+  width: 100%; padding: 28px;
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: #fff;
-  border: none;
-  border-radius: var(--radius);
-  font-size: 1.2rem;
-  font-weight: 800;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 8px 24px rgba(26,84,144,0.35);
-  transition: all 0.25s ease;
+  color: #fff; border: none; border-radius: var(--radius);
+  font-size: 1.2rem; font-weight: 800; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  box-shadow: 0 8px 24px rgba(26,84,144,0.35); transition: all 0.25s ease;
 }
 .scan-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(26,84,144,0.45); }
 .scan-btn i { font-size: 2.5rem; }
 
 .manual-box { margin-top: 18px; }
 .manual-box input {
-  width: 100%;
-  padding: 14px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 1rem;
-  font-family: monospace;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  width: 100%; padding: 14px;
+  border: 2px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 1rem; font-family: monospace; text-align: center;
+  text-transform: uppercase; letter-spacing: 1px;
 }
 .manual-box input:focus { outline: none; border-color: var(--info); }
 
-/* ============ NAV TABS (Escáner / Directorio) ============ */
+/* ============ NAV TABS ============ */
 .nav-tabs-lc {
   display: flex; gap: 6px; background: #fff; padding: 6px;
-  border-radius: var(--radius-sm); box-shadow: var(--shadow);
-  margin-bottom: 20px;
+  border-radius: var(--radius-sm); box-shadow: var(--shadow); margin-bottom: 20px;
 }
 .nav-tab-lc {
   flex: 1; background: transparent; border: none;
@@ -209,15 +183,17 @@ html, body {
 #qrReaderWrapper.show { display: flex; }
 #qrReaderWrapper .qr-header {
   background: rgba(0,0,0,0.85); color: #fff; padding: 14px 18px;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
 }
-#qrReaderWrapper .qr-header .qr-title { font-weight: 700; font-size: 1rem; }
-#qrReaderWrapper .qr-close {
+#qrReaderWrapper .qr-header .qr-title { font-weight: 700; font-size: 1rem; flex: 1; }
+#qrReaderWrapper .qr-actions { display: flex; gap: 8px; }
+#qrReaderWrapper .qr-icon-btn {
   width: 40px; height: 40px; border-radius: 50%;
   background: rgba(255,255,255,0.15); border: none; color: #fff;
   font-size: 1rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
 }
+#qrReaderWrapper .qr-icon-btn.active { background: var(--warning); color: #000; }
 #qrReader { flex: 1; position: relative; }
 #qrReader video { width: 100% !important; height: 100% !important; object-fit: cover; }
 #qrReaderWrapper .qr-hint {
@@ -235,27 +211,16 @@ html, body {
 .resultado-fullscreen.verde { background: linear-gradient(160deg, #27ae60, #1e8449); }
 .resultado-fullscreen.rojo { background: linear-gradient(160deg, #c0392b, #922b21); }
 .resultado-fullscreen.naranja { background: linear-gradient(160deg, #d68910, #b9770e); }
-.resultado-fullscreen .res-icon {
-  font-size: 5rem; text-align: center; margin-top: 40px; margin-bottom: 20px;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.4);
-}
-.resultado-fullscreen .res-title {
-  font-size: 1.8rem; font-weight: 900; text-align: center;
-  letter-spacing: 1px; margin-bottom: 14px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-.resultado-fullscreen .res-message {
-  text-align: center; font-size: 1rem; opacity: 0.95; margin-bottom: 24px;
-}
+.resultado-fullscreen .res-icon { font-size: 5rem; text-align: center; margin-top: 40px; margin-bottom: 20px; text-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+.resultado-fullscreen .res-title { font-size: 1.8rem; font-weight: 900; text-align: center; letter-spacing: 1px; margin-bottom: 14px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+.resultado-fullscreen .res-message { text-align: center; font-size: 1rem; opacity: 0.95; margin-bottom: 24px; }
 .resultado-fullscreen .res-datos {
-  background: rgba(255,255,255,0.15);
-  border-radius: var(--radius); padding: 18px; margin-bottom: 20px;
-  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.15); border-radius: var(--radius);
+  padding: 18px; margin-bottom: 20px; backdrop-filter: blur(8px);
 }
 .resultado-fullscreen .res-datos .fila {
   display: flex; justify-content: space-between;
-  padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.15);
-  font-size: 0.92rem;
+  padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.15); font-size: 0.92rem;
 }
 .resultado-fullscreen .res-datos .fila:last-child { border-bottom: none; }
 .resultado-fullscreen .res-datos .fila .lbl { opacity: 0.85; }
@@ -263,8 +228,7 @@ html, body {
 .resultado-fullscreen .btn-cerrar {
   margin-top: auto; padding: 18px; font-size: 1.1rem; font-weight: 800;
   background: #fff; color: var(--primary); border: none;
-  border-radius: var(--radius); cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  border-radius: var(--radius); cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
 
 /* ============ HISTORIAL ============ */
@@ -278,10 +242,7 @@ html, body {
 .historial-item .info { flex: 1; }
 .historial-item .info .casa { font-weight: 700; }
 .historial-item .info .detalle { color: var(--text-muted); font-size: 0.78rem; }
-.historial-item .badge {
-  padding: 4px 10px; border-radius: 12px;
-  font-size: 0.7rem; font-weight: 800; color: #fff;
-}
+.historial-item .badge { padding: 4px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 800; color: #fff; }
 .historial-item .badge.ok { background: var(--accent); }
 .historial-item .badge.fail { background: var(--danger); }
 .historial-item .badge.warn { background: var(--warning); }
@@ -290,28 +251,18 @@ html, body {
 .empty-state i { font-size: 2.5rem; opacity: 0.3; margin-bottom: 10px; display: block; }
 
 /* ============ DIRECTORIO ============ */
-.directorio-search {
-  position: relative;
-  margin-bottom: 14px;
-}
+.directorio-search { position: relative; margin-bottom: 14px; }
 .directorio-search input {
-  width: 100%;
-  padding: 12px 14px 12px 42px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 0.95rem;
+  width: 100%; padding: 12px 14px 12px 42px;
+  border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 0.95rem;
 }
 .directorio-search input:focus { outline: none; border-color: var(--info); }
-.directorio-search .search-icon {
-  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-  color: var(--text-muted);
-}
+.directorio-search .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
 .directorio-item {
   display: flex; align-items: center; gap: 12px;
   padding: 12px 14px; border-radius: var(--radius-sm);
-  border: 1px solid var(--border); margin-bottom: 8px;
-  background: #fff;
+  border: 1px solid var(--border); margin-bottom: 8px; background: #fff;
 }
 .directorio-item .avatar {
   width: 44px; height: 44px; border-radius: 50%;
@@ -320,52 +271,31 @@ html, body {
   font-weight: 800; font-size: 0.95rem; flex-shrink: 0;
 }
 .directorio-item .dir-info { flex: 1; min-width: 0; }
-.directorio-item .dir-casa {
-  font-weight: 800; font-size: 0.95rem; color: var(--primary);
-}
-.directorio-item .dir-nombre {
-  font-size: 0.82rem; color: var(--text); margin-top: 2px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.directorio-item .dir-tel {
-  font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;
-  font-family: monospace;
-}
-.directorio-item .dir-actions {
-  display: flex; gap: 6px; flex-shrink: 0;
-}
+.directorio-item .dir-casa { font-weight: 800; font-size: 0.95rem; color: var(--primary); }
+.directorio-item .dir-nombre { font-size: 0.82rem; color: var(--text); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.directorio-item .dir-tel { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; font-family: monospace; }
+.directorio-item .dir-actions { display: flex; gap: 6px; flex-shrink: 0; }
 .dir-btn {
-  width: 40px; height: 40px; border-radius: 50%;
-  border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem; transition: all 0.2s ease;
-  flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  transition: all 0.2s ease; flex-shrink: 0;
 }
 .dir-btn.call { background: rgba(52,152,219,0.15); color: var(--info); }
 .dir-btn.call:hover { background: var(--info); color: #fff; transform: translateY(-2px); }
 .dir-btn.wsp { background: rgba(37,211,102,0.15); color: #25d366; }
 .dir-btn.wsp:hover { background: #25d366; color: #fff; transform: translateY(-2px); }
 .dir-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-
-.dir-sin-datos {
-  font-size: 0.7rem; color: var(--danger); font-weight: 600;
-  padding: 2px 8px; background: rgba(231,76,60,0.1);
-  border-radius: 10px; display: inline-block; margin-top: 2px;
-}
+.dir-sin-datos { font-size: 0.7rem; color: var(--danger); font-weight: 600; padding: 2px 8px; background: rgba(231,76,60,0.1); border-radius: 10px; display: inline-block; margin-top: 2px; }
 </style>
 </head>
 <body>
 
-<!-- ================ PANTALLA ESPERA ================ -->
 <div id="pantallaEspera">
-  <div class="espera-logo">
-    <i class="fas fa-handshake"></i>
-  </div>
+  <div class="espera-logo"><i class="fas fa-handshake"></i></div>
   <h1 class="espera-titulo">La Concordia</h1>
   <p class="espera-sub">Cargando...</p>
 </div>
 
-<!-- ================ LOGIN ================ -->
 <div id="pantallaLogin" class="login-wrapper d-none-lc">
   <div class="login-card">
     <div class="login-logo">
@@ -374,7 +304,7 @@ html, body {
       <p class="login-subtitle">Control de Accesos · Seguridad</p>
     </div>
     <form id="formLogin" onsubmit="return false;">
-      <div class="mb-3" style="margin-bottom: 14px;">
+      <div style="margin-bottom: 14px;">
         <label class="form-label-lc">Contraseña de seguridad</label>
         <div class="input-wrap">
           <input type="password" class="form-control-lc" id="loginPassInput" placeholder="Contraseña" autocomplete="current-password" required>
@@ -395,7 +325,6 @@ html, body {
   </div>
 </div>
 
-<!-- ================ PANEL GUARDIA ================ -->
 <div id="pantallaGuardia" class="d-none-lc">
   <div class="header">
     <div class="header-brand">
@@ -421,7 +350,6 @@ html, body {
       </button>
     </div>
 
-    <!-- TAB ESCÁNER -->
     <div id="tabEscaner" class="tab-panel">
       <div class="card-lc">
         <button class="scan-btn" onclick="abrirEscaner()">
@@ -442,7 +370,7 @@ html, body {
       </div>
 
       <div class="card-lc">
-        <h3 style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 10px;">
+        <h3 style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; margin-top: 0;">
           <i class="fas fa-list"></i> Accesos de hoy
         </h3>
         <div id="historialLista" class="historial-lista">
@@ -451,18 +379,15 @@ html, body {
       </div>
     </div>
 
-    <!-- TAB DIRECTORIO -->
     <div id="tabDirectorio" class="tab-panel d-none-lc">
       <div class="card-lc">
-        <h3 style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 14px;">
+        <h3 style="font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 14px; margin-top: 0;">
           <i class="fas fa-address-book"></i> Directorio Telefónico
         </h3>
-
         <div class="directorio-search">
           <i class="fas fa-search search-icon"></i>
           <input type="text" id="directorioBusqueda" placeholder="Buscar por casa o nombre..." oninput="filtrarDirectorio()">
         </div>
-
         <div id="directorioLista">
           <div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Cargando directorio...</p></div>
         </div>
@@ -471,17 +396,18 @@ html, body {
   </div>
 </div>
 
-<!-- ================ ESCÁNER ================ -->
 <div id="qrReaderWrapper">
   <div class="qr-header">
     <div class="qr-title"><i class="fas fa-camera"></i> Escanear QR</div>
-    <button class="qr-close" onclick="cerrarEscaner()"><i class="fas fa-times"></i></button>
+    <div class="qr-actions">
+      <button id="btnLinterna" class="qr-icon-btn d-none-lc" onclick="toggleLinterna()" title="Linterna"><i class="fas fa-bolt"></i></button>
+      <button class="qr-icon-btn" onclick="cerrarEscaner()" title="Cerrar"><i class="fas fa-times"></i></button>
+    </div>
   </div>
   <div id="qrReader"></div>
   <div class="qr-hint">Coloca el código QR dentro del recuadro</div>
 </div>
 
-<!-- ================ RESULTADO ================ -->
 <div id="resultadoFull" class="resultado-fullscreen">
   <div class="res-icon" id="resIcon"><i class="fas fa-check-circle"></i></div>
   <div class="res-title" id="resTitle">PERMITIDO</div>
@@ -493,57 +419,57 @@ html, body {
 </div>
 
 <script>
-const QR_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeMDkfE-CW2wij3gy0M0LE65yrSevu_SdRqIb3kEp5yjReP7eHRn62FPdHZ-JUqVSD/exec";
+const QR_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4ubK8_AcfGmYEoYoFwIW9z8OLsT-y_RZFMZ52VMZawTTaUYR2mQiwv0H9qbNfVyM2Ag/exec";
 const SESSION_KEY = "LaConcordiaGuardiaSesion";
+const CACHE_HIST_KEY = "GuardiaHistHoy";
+const CACHE_DIR_KEY = "GuardiaDirectorio";
 const DB_NAME = "LaConcordiaGuardiaDB";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STORE_SESION = "sesion";
 
 let dbGuardia = null;
-let currentPassword = "";
+let currentToken = "";
 let html5QrCode = null;
 let scannerActivo = false;
+let linternaActiva = false;
 let directorioCache = [];
+let historialCache = [];
 
-// ============ IndexedDB sesión ============
+// ============ IndexedDB ============
 function abrirDB() {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = (e) => {
       const db = e.target.result;
-      if (!db.objectStoreNames.contains(STORE_SESION)) {
-        db.createObjectStore(STORE_SESION, { keyPath: "key" });
-      }
+      if (!db.objectStoreNames.contains(STORE_SESION)) db.createObjectStore(STORE_SESION, { keyPath: "key" });
     };
     req.onsuccess = (e) => { dbGuardia = e.target.result; resolve(dbGuardia); };
     req.onerror = (e) => reject(e.target.error);
   });
 }
-function guardarSesion(obj) {
+function guardarEnDB(key, obj) {
   return new Promise((resolve) => {
     if (!dbGuardia) return resolve();
     const tx = dbGuardia.transaction([STORE_SESION], "readwrite");
-    tx.objectStore(STORE_SESION).put({ key: SESSION_KEY, ...obj });
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => resolve();
+    tx.objectStore(STORE_SESION).put({ key, ...obj, ts: Date.now() });
+    tx.oncomplete = () => resolve(); tx.onerror = () => resolve();
   });
 }
-function obtenerSesion() {
+function leerDeDB(key) {
   return new Promise((resolve) => {
     if (!dbGuardia) return resolve(null);
     const tx = dbGuardia.transaction([STORE_SESION], "readonly");
-    const req = tx.objectStore(STORE_SESION).get(SESSION_KEY);
+    const req = tx.objectStore(STORE_SESION).get(key);
     req.onsuccess = () => resolve(req.result || null);
     req.onerror = () => resolve(null);
   });
 }
-function borrarSesion() {
+function borrarDeDB(key) {
   return new Promise((resolve) => {
     if (!dbGuardia) return resolve();
     const tx = dbGuardia.transaction([STORE_SESION], "readwrite");
-    tx.objectStore(STORE_SESION).delete(SESSION_KEY);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => resolve();
+    tx.objectStore(STORE_SESION).delete(key);
+    tx.oncomplete = () => resolve(); tx.onerror = () => resolve();
   });
 }
 
@@ -595,22 +521,31 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
 
   const btn = document.getElementById("btnLogin");
   const htmlOrig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
 
   try {
-    await apiQR({ action: "validarPasswordSeguridad", password });
-    currentPassword = password;
-    if (recordar) await guardarSesion({ password, recordar: true });
-    else await borrarSesion();
+    // 1 sola llamada inicializa sesión + historial + directorio
+    const res = await apiQR({ action: "qrInicializarGuardia", password });
+    currentToken = res.sessionToken;
+    historialCache = res.registros || [];
+    directorioCache = res.directorio || [];
+
+    if (recordar) {
+      await guardarEnDB(SESSION_KEY, { sessionToken: currentToken, recordar: true });
+      await guardarEnDB(CACHE_HIST_KEY, { registros: historialCache });
+      await guardarEnDB(CACHE_DIR_KEY, { directorio: directorioCache });
+    } else {
+      await borrarDeDB(SESSION_KEY);
+    }
+
+    document.getElementById("loginPassInput").value = "";
+    renderHistorial();
+    renderDirectorio();
     mostrarPantalla("guardia");
-    await cargarHistorial();
-    cargarDirectorio(true); // pre-cargar en background
   } catch (err) {
     Swal.fire("Error", err.message, "error");
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = htmlOrig;
+    btn.disabled = false; btn.innerHTML = htmlOrig;
   }
 });
 
@@ -621,9 +556,12 @@ function cerrarSesion() {
     confirmButtonColor: "#e74c3c"
   }).then(async (r) => {
     if (r.isConfirmed) {
-      await borrarSesion();
-      currentPassword = "";
+      await borrarDeDB(SESSION_KEY);
+      await borrarDeDB(CACHE_HIST_KEY);
+      await borrarDeDB(CACHE_DIR_KEY);
+      currentToken = "";
       directorioCache = [];
+      historialCache = [];
       mostrarPantalla("login");
       document.getElementById("loginPassInput").value = "";
       document.getElementById("loginRecordar").checked = true;
@@ -644,10 +582,15 @@ function cambiarTab(tab, btn) {
   }
 }
 
-// ============ ESCÁNER ============
+// ============ ESCÁNER + LINTERNA ============
 async function abrirEscaner() {
   const wrapper = document.getElementById("qrReaderWrapper");
   wrapper.classList.add("show");
+  linternaActiva = false;
+  const btnTorch = document.getElementById("btnLinterna");
+  btnTorch.classList.add("d-none-lc");
+  btnTorch.classList.remove("active");
+
   if (!html5QrCode) {
     html5QrCode = new Html5Qrcode("qrReader", {
       formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
@@ -657,22 +600,49 @@ async function abrirEscaner() {
   try {
     await html5QrCode.start(
       { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 250, height: 250 } },
+      { fps: 12, qrbox: { width: 250, height: 250 } },
       (decodedText) => { onQRLeido(decodedText); },
       () => {}
     );
     scannerActivo = true;
+    // Mostrar botón linterna solo si el dispositivo la soporta
+    try {
+      const caps = html5QrCode.getRunningTrackCameraCapabilities();
+      if (caps && caps.torchFeature && caps.torchFeature().isSupported()) {
+        btnTorch.classList.remove("d-none-lc");
+      }
+    } catch (e) {}
   } catch (err) {
     console.error("Error cámara:", err);
-    Swal.fire("Cámara no disponible", "No se pudo abrir la cámara. Puedes ingresar el token manualmente.", "warning");
+    Swal.fire("Cámara no disponible", "Permiso denegado o cámara no disponible. Puedes ingresar el token manualmente.", "warning");
     cerrarEscaner();
   }
 }
+
+async function toggleLinterna() {
+  if (!html5QrCode || !scannerActivo) return;
+  try {
+    linternaActiva = !linternaActiva;
+    await html5QrCode.applyVideoConstraints({ advanced: [{ torch: linternaActiva }] });
+    document.getElementById("btnLinterna").classList.toggle("active", linternaActiva);
+  } catch (e) {
+    linternaActiva = false;
+    document.getElementById("btnLinterna").classList.remove("active");
+  }
+}
+
 async function cerrarEscaner() {
   document.getElementById("qrReaderWrapper").classList.remove("show");
   if (html5QrCode && scannerActivo) {
-    try { await html5QrCode.stop(); await html5QrCode.clear(); } catch (e) {}
+    try {
+      if (linternaActiva) {
+        await html5QrCode.applyVideoConstraints({ advanced: [{ torch: false }] }).catch(() => {});
+      }
+      await html5QrCode.stop();
+      await html5QrCode.clear();
+    } catch (e) {}
     scannerActivo = false;
+    linternaActiva = false;
   }
 }
 
@@ -687,12 +657,10 @@ function onQRLeido(token) {
   validarToken(token);
 }
 
-// Formato automático del input manual: agrega "-" después de los primeros 3 caracteres (LCR/LCV)
+// Solo agrega "-" cuando hay más de 3 caracteres para permitir borrar con Backspace
 function formatearTokenInput(input) {
   let v = input.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
-  // Forzar prefijo LCR o LCV
-  // Si el usuario escribe solo 3 letras, ya ponemos el guión
-  if (v.length >= 3) {
+  if (v.length > 3) {
     v = v.substring(0, 3) + "-" + v.substring(3, 15);
   }
   input.value = v;
@@ -715,10 +683,11 @@ async function validarToken(token) {
     didOpen: () => Swal.showLoading()
   });
   try {
-    const res = await apiQR({ action: "qrValidar", token, guardia: "Guardia" });
+    const res = await apiQR({ action: "qrValidar", sessionToken: currentToken, token, guardia: "Guardia" });
     Swal.close();
     mostrarResultado(res);
-    await cargarHistorial();
+    // Refrescar historial en segundo plano sin bloquear el resultado
+    cargarHistorial(true);
   } catch (err) {
     Swal.fire("Error", err.message, "error");
   }
@@ -780,45 +749,55 @@ function escapeHtml(s) {
 }
 
 // ============ HISTORIAL ============
-async function cargarHistorial() {
+function renderHistorial() {
   const cont = document.getElementById("historialLista");
-  cont.innerHTML = '<div class="empty-state"><p>Cargando...</p></div>';
+  const regs = historialCache || [];
+  if (regs.length === 0) {
+    cont.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>Sin accesos registrados hoy.</p></div>';
+    return;
+  }
+  cont.innerHTML = regs.map(r => {
+    let badgeClass = "warn";
+    if (r.resultado === "PERMITIDO") badgeClass = "ok";
+    else if (r.resultado === "VENCIDO" || r.resultado === "YA-USADO") badgeClass = "warn";
+    else badgeClass = "fail";
+    return `
+      <div class="historial-item">
+        <div class="hora">${escapeHtml(r.fechaHora)}</div>
+        <div class="info">
+          <div class="casa">${escapeHtml(r.casa || "—")} · ${escapeHtml(r.tipo)}</div>
+          <div class="detalle">Guardia: ${escapeHtml(r.guardia)}</div>
+        </div>
+        <div class="badge ${badgeClass}">${escapeHtml(r.resultado)}</div>
+      </div>`;
+  }).join("");
+}
+
+async function cargarHistorial(silencioso = false) {
+  const cont = document.getElementById("historialLista");
+  if (!silencioso && historialCache.length === 0) {
+    cont.innerHTML = '<div class="empty-state"><p>Cargando...</p></div>';
+  }
   try {
-    const res = await apiQR({ action: "qrListarRegistrosDelDia", password: currentPassword, guardia: "Guardia" });
-    const regs = res.registros || [];
-    if (regs.length === 0) {
-      cont.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>Sin accesos registrados hoy.</p></div>';
-      return;
-    }
-    cont.innerHTML = regs.map(r => {
-      let badgeClass = "warn";
-      if (r.resultado === "PERMITIDO") badgeClass = "ok";
-      else if (r.resultado === "VENCIDO" || r.resultado === "YA-USADO") badgeClass = "warn";
-      else badgeClass = "fail";
-      return `
-        <div class="historial-item">
-          <div class="hora">${r.fechaHora}</div>
-          <div class="info">
-            <div class="casa">${escapeHtml(r.casa || "—")} · ${escapeHtml(r.tipo)}</div>
-            <div class="detalle">Guardia: ${escapeHtml(r.guardia)}</div>
-          </div>
-          <div class="badge ${badgeClass}">${r.resultado}</div>
-        </div>`;
-    }).join("");
+    const res = await apiQR({ action: "qrListarRegistrosDelDia", sessionToken: currentToken, guardia: "Guardia" });
+    historialCache = res.registros || [];
+    await guardarEnDB(CACHE_HIST_KEY, { registros: historialCache });
+    renderHistorial();
   } catch (err) {
-    cont.innerHTML = `<div class="empty-state"><p>${escapeHtml(err.message)}</p></div>`;
+    if (!silencioso) cont.innerHTML = `<div class="empty-state"><p>${escapeHtml(err.message)}</p></div>`;
   }
 }
 
 // ============ DIRECTORIO ============
 async function cargarDirectorio(background) {
   const cont = document.getElementById("directorioLista");
-  if (!background) {
+  if (!background && directorioCache.length === 0) {
     cont.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Cargando directorio...</p></div>';
   }
   try {
-    const res = await apiQR({ action: "qrListarDirectorio", password: currentPassword });
+    const res = await apiQR({ action: "qrListarDirectorio", sessionToken: currentToken });
     directorioCache = res.directorio || [];
+    await guardarEnDB(CACHE_DIR_KEY, { directorio: directorioCache });
     renderDirectorio();
   } catch (err) {
     if (!background) {
@@ -827,9 +806,7 @@ async function cargarDirectorio(background) {
   }
 }
 
-function filtrarDirectorio() {
-  renderDirectorio();
-}
+function filtrarDirectorio() { renderDirectorio(); }
 
 function renderDirectorio() {
   const cont = document.getElementById("directorioLista");
@@ -837,10 +814,11 @@ function renderDirectorio() {
 
   let lista = directorioCache;
   if (filtro) {
+    const filtroNum = filtro.replace(/\D/g, "");
     lista = lista.filter(d =>
       (d.casa || "").toLowerCase().includes(filtro) ||
       (d.nombre || "").toLowerCase().includes(filtro) ||
-      (d.telefono || "").replace(/\D/g, "").includes(filtro.replace(/\D/g, ""))
+      (filtroNum && (d.telefono || "").replace(/\D/g, "").includes(filtroNum))
     );
   }
 
@@ -851,14 +829,14 @@ function renderDirectorio() {
 
   cont.innerHTML = lista.map(d => {
     const inicial = (d.casa || "?").substring(0, 2).toUpperCase();
-    const telLimpio = (d.telefono || "").replace(/\D/g, "");
+    let telLimpio = (d.telefono || "").replace(/\D/g, "");
+    // Normalizar si ya viene con prefijo 504
+    if (telLimpio.length === 11 && telLimpio.startsWith("504")) {
+      telLimpio = telLimpio.slice(3);
+    }
     const telValido = telLimpio.length >= 8;
-    // Para llamar: 8 dígitos → si empieza por 3/9 (celular) queda igual; si no, es fijo.
-    // Como Honduras es +504, agregamos prefijo si solo hay 8 dígitos.
     const telParaLlamar = telValido ? ("+504" + telLimpio) : "";
     const telParaWsp = telValido ? ("504" + telLimpio) : "";
-
-    const sinDatos = !telValido;
 
     return `<div class="directorio-item">
       <div class="avatar">${escapeHtml(inicial)}</div>
@@ -870,26 +848,14 @@ function renderDirectorio() {
           : `<span class="dir-sin-datos">Sin teléfono registrado</span>`}
       </div>
       <div class="dir-actions">
-        <button class="dir-btn call" title="Llamar"
-                ${sinDatos ? "disabled" : ""}
-                onclick="llamarCasa('${escapeHtml(telParaLlamar)}')">
-          <i class="fas fa-phone"></i>
-        </button>
-        <button class="dir-btn wsp" title="WhatsApp"
-                ${sinDatos ? "disabled" : ""}
-                onclick="whatsappCasa('${escapeHtml(telParaWsp)}', '${escapeHtml(d.casa)}')">
-          <i class="fab fa-whatsapp"></i>
-        </button>
+        <button class="dir-btn call" title="Llamar" ${!telValido ? "disabled" : ""} onclick="llamarCasa('${escapeHtml(telParaLlamar)}')"><i class="fas fa-phone"></i></button>
+        <button class="dir-btn wsp" title="WhatsApp" ${!telValido ? "disabled" : ""} onclick="whatsappCasa('${escapeHtml(telParaWsp)}', '${escapeHtml(d.casa)}')"><i class="fab fa-whatsapp"></i></button>
       </div>
     </div>`;
   }).join("");
 }
 
-function llamarCasa(numero) {
-  if (!numero) return;
-  window.location.href = "tel:" + numero;
-}
-
+function llamarCasa(numero) { if (numero) window.location.href = "tel:" + numero; }
 function whatsappCasa(numero, casa) {
   if (!numero) return;
   const mensaje = encodeURIComponent("Hola, le saludamos desde la caseta de seguridad de La Concordia (Casa " + casa + ").");
@@ -900,8 +866,13 @@ function whatsappCasa(numero, casa) {
 async function refrescarPanel(btn) {
   btn.classList.add("spinning");
   try {
-    await cargarHistorial();
-    await cargarDirectorio(true);
+    const res = await apiQR({ action: "qrInicializarGuardia", sessionToken: currentToken });
+    historialCache = res.registros || [];
+    directorioCache = res.directorio || [];
+    await guardarEnDB(CACHE_HIST_KEY, { registros: historialCache });
+    await guardarEnDB(CACHE_DIR_KEY, { directorio: directorioCache });
+    renderHistorial();
+    renderDirectorio();
     Swal.fire({ icon: "success", title: "Actualizado", timer: 1200, showConfirmButton: false, toast: true, position: "top-end" });
   } catch (e) {
     Swal.fire("Error", e.message, "error");
@@ -910,27 +881,75 @@ async function refrescarPanel(btn) {
   }
 }
 
-// ============ AUTO-LOGIN ============
+// ============ AUTO-LOGIN CON OPTIMISTIC UI ============
 document.addEventListener("DOMContentLoaded", async () => {
   mostrarPantalla("espera");
 
   try {
     await abrirDB();
-    const ses = await obtenerSesion();
-    if (ses && ses.password && ses.recordar === true) {
-      try {
-        await apiQR({ action: "validarPasswordSeguridad", password: ses.password });
-        currentPassword = ses.password;
+    const ses = await leerDeDB(SESSION_KEY);
+    if (ses && ses.recordar === true) {
+      let token = ses.sessionToken;
+      // Migración si venía de versión anterior con password
+      if (!token && ses.password) {
+        const res = await apiQR({ action: "qrInicializarGuardia", password: ses.password });
+        token = res.sessionToken;
+        currentToken = token;
+        historialCache = res.registros || [];
+        directorioCache = res.directorio || [];
+        await guardarEnDB(SESSION_KEY, { sessionToken: token, recordar: true });
+        await guardarEnDB(CACHE_HIST_KEY, { registros: historialCache });
+        await guardarEnDB(CACHE_DIR_KEY, { directorio: directorioCache });
+        renderHistorial();
+        renderDirectorio();
         mostrarPantalla("guardia");
-        await cargarHistorial();
-        cargarDirectorio(true);
         return;
-      } catch (e) {
-        await borrarSesion();
+      }
+
+      if (token) {
+        currentToken = token;
+        // Optimistic UI: mostrar datos en caché al instante si existen
+        const [histDB, dirDB] = await Promise.all([leerDeDB(CACHE_HIST_KEY), leerDeDB(CACHE_DIR_KEY)]);
+        if (histDB || dirDB) {
+          historialCache = (histDB && histDB.registros) || [];
+          directorioCache = (dirDB && dirDB.directorio) || [];
+          renderHistorial();
+          renderDirectorio();
+          mostrarPantalla("guardia");
+
+          // Actualizar en segundo plano
+          apiQR({ action: "qrInicializarGuardia", sessionToken: token }).then(async (res) => {
+            historialCache = res.registros || [];
+            directorioCache = res.directorio || [];
+            await guardarEnDB(CACHE_HIST_KEY, { registros: historialCache });
+            await guardarEnDB(CACHE_DIR_KEY, { directorio: directorioCache });
+            renderHistorial();
+            renderDirectorio();
+          }).catch(async (err) => {
+            if (err.message && (err.message.includes("expirada") || err.message.includes("incorrecta"))) {
+              await borrarDeDB(SESSION_KEY);
+              mostrarPantalla("login");
+              Swal.fire("Sesión expirada", "Ingresa la contraseña nuevamente.", "info");
+            }
+          });
+          return;
+        }
+
+        // Sin caché previo → inicializar en 1 llamada
+        const res = await apiQR({ action: "qrInicializarGuardia", sessionToken: token });
+        historialCache = res.registros || [];
+        directorioCache = res.directorio || [];
+        await guardarEnDB(CACHE_HIST_KEY, { registros: historialCache });
+        await guardarEnDB(CACHE_DIR_KEY, { directorio: directorioCache });
+        renderHistorial();
+        renderDirectorio();
+        mostrarPantalla("guardia");
+        return;
       }
     }
   } catch (e) {
-    console.warn("Sin IndexedDB:", e);
+    console.warn("Error auto-login:", e);
+    await borrarDeDB(SESSION_KEY).catch(() => {});
   }
   mostrarPantalla("login");
 });
