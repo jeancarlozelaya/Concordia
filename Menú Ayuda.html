@@ -368,8 +368,8 @@ html, body {
 @keyframes caer { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
 /* FAQ y CONTACTO */
-#pantallaFAQ, #pantallaContacto { display: none; }
-#pantallaFAQ.show, #pantallaContacto.show { display: block; }
+#pantallaFAQ, #pantallaContacto, #pantallaAcerca { display: none; }
+#pantallaFAQ.show, #pantallaContacto.show, #pantallaAcerca.show { display: block; }
 .extra-container { max-width: 800px; margin: 0 auto; padding: 24px 16px 60px; }
 .faq-card {
   background: #fff; border-radius: var(--radius);
@@ -766,6 +766,18 @@ html, body {
       </div>
     </div>
 
+    <div class="recorrido-card extra" onclick="irPantalla('acerca')">
+      <div class="recorrido-card-icon"><i class="fas fa-code"></i></div>
+      <h3>Acerca de</h3>
+      <p>Información del desarrollador de la aplicación.</p>
+      <div class="card-footer-row">
+        <span class="pasos-count">Créditos</span>
+        <span class="empezar-txt">Ver <i class="fas fa-arrow-right"></i></span>
+      </div>
+    </div>
+
+
+
   </div>
 
 </div>
@@ -880,6 +892,28 @@ html, body {
       <p style="font-size: 0.8rem; margin-top: 18px; opacity: 0.8;">
         <i class="fas fa-clock me-1"></i> Normalmente responde en horario diurno
       </p>
+    </div>
+  </div>
+</div>
+
+<!-- ACERCA DE -->
+<div id="pantallaAcerca">
+  <div class="extra-container">
+    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+      <button class="btn-volver-tut" onclick="volverHome()">
+        <i class="fas fa-arrow-left"></i> Recorridos
+      </button>
+    </div>
+    <div class="contacto-bloque">
+      <i class="fas fa-laptop-code ico-big"></i>
+      <h2 style="font-size: 1.5rem; margin-bottom: 6px;">Jeancarlo Zelaya</h2>
+      <p style="margin-bottom: 10px; font-size: 1rem; font-weight: 600;">Ingeniero Industrial</p>
+      <p style="margin-bottom: 16px;">
+        <a href="mailto:Jz.92@live.com" style="color: #ffffff; text-decoration: underline; font-weight: 600;">Jz.92@live.com</a>
+      </p>
+      <div style="display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); padding: 8px 20px; border-radius: 24px; font-size: 0.9rem; font-weight: 700; position: relative; z-index: 1;">
+        Desarrollador de la APP
+      </div>
     </div>
   </div>
 </div>
@@ -2936,6 +2970,7 @@ function iniciarRecorrido(id) {
   document.getElementById('pantallaHome').classList.add('hide');
   document.getElementById('pantallaFAQ').classList.remove('show');
   document.getElementById('pantallaContacto').classList.remove('show');
+  document.getElementById('pantallaAcerca').classList.remove('show');
   document.getElementById('pantallaTutorial').classList.add('show');
 
   renderPaso();
@@ -3047,6 +3082,7 @@ function volverHome() {
   document.getElementById('pantallaTutorial').classList.remove('show');
   document.getElementById('pantallaFAQ').classList.remove('show');
   document.getElementById('pantallaContacto').classList.remove('show');
+  document.getElementById('pantallaAcerca').classList.remove('show');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -3055,6 +3091,7 @@ function irPantalla(cual) {
   document.getElementById('pantallaTutorial').classList.remove('show');
   document.getElementById('pantallaFAQ').classList.toggle('show', cual === 'faq');
   document.getElementById('pantallaContacto').classList.toggle('show', cual === 'contacto');
+  document.getElementById('pantallaAcerca').classList.toggle('show', cual === 'acerca');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
