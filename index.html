@@ -400,31 +400,57 @@ select.form-control-lc { cursor: pointer; }
   border: 1px solid var(--border); border-radius: var(--radius-sm);
   position: relative; background: #fff;
 }
-.matriz-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.78rem; min-width: 780px; }
+.matriz-table {
+  width: 100%; min-width: 720px; table-layout: fixed;
+  border-collapse: separate; border-spacing: 0; font-size: 0.78rem;
+}
 .matriz-table thead th {
   position: sticky; top: 0; z-index: 2; background: var(--bg);
-  padding: 10px 6px; font-weight: 700; color: var(--text-muted);
+  padding: 10px 4px; font-weight: 700; color: var(--text-muted);
   text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.5px;
+  text-align: center;
   border-bottom: 2px solid var(--border);
 }
 .matriz-table thead th:first-child {
-  position: sticky; top: 0; left: 0; z-index: 4; text-align: left; padding-left: 12px; min-width: 115px;
+  position: sticky; top: 0; left: 0; z-index: 4; text-align: left; padding: 10px 8px 10px 10px;
+  width: 110px;
   background: var(--bg); box-shadow: 2px 0 6px rgba(0,0,0,0.06);
 }
-.matriz-table tbody td { padding: 8px 6px; border-bottom: 1px solid var(--border); text-align: center; background: #fff; }
+.matriz-table tbody td {
+  padding: 8px 4px; border-bottom: 1px solid var(--border);
+  text-align: center; vertical-align: middle; background: #fff;
+}
 .matriz-table tbody td:first-child {
-  position: sticky; left: 0; z-index: 3; text-align: left; padding-left: 12px;
-  font-weight: 700; color: var(--text); min-width: 115px;
+  position: sticky; left: 0; z-index: 3; text-align: left; padding: 8px 8px 8px 10px;
+  font-weight: 700; color: var(--text);
+  width: 110px;
   background: #fff; box-shadow: 2px 0 6px rgba(0,0,0,0.06);
 }
-.matriz-table td.casa-nombre { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
-.matriz-mes { width: 34px; }
+.matriz-table .casa-nombre {
+  display: block; width: 100%;
+  font-size: 0.68rem; color: var(--text-muted); font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.matriz-mes { width: auto; }
 .matriz-cell { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; font-size: 0.72rem; font-weight: 800; }
 .matriz-cell.pagado { background: rgba(46,204,113,0.2); color: #1e8449; }
 .matriz-cell.pendiente-aprobar { background: rgba(243,156,18,0.2); color: #b9770e; }
 .matriz-cell.pendiente { background: rgba(231,76,60,0.15); color: #c0392b; }
 .matriz-cell.futuro { background: #f0f4f8; color: #cbd5e0; }
 .matriz-cell.actual { box-shadow: 0 0 0 2px var(--info); }
+
+@media (max-width: 576px) {
+  .matriz-table { min-width: 520px; font-size: 0.72rem; }
+  .matriz-table thead th:first-child,
+  .matriz-table tbody td:first-child {
+    width: 78px;
+    padding-left: 8px; padding-right: 6px;
+  }
+  .matriz-table thead th { padding: 8px 2px; font-size: 0.60rem; }
+  .matriz-table tbody td { padding: 7px 2px; }
+  .matriz-table .casa-nombre { font-size: 0.60rem; }
+  .matriz-cell { width: 22px; height: 22px; font-size: 0.65rem; }
+}
 
 .edo-cuenta-preview { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 20px; font-size: 0.85rem; max-height: 600px; overflow-y: auto; }
 .edo-seccion-title { font-weight: 800; font-size: 0.92rem; padding-bottom: 8px; margin: 18px 0 12px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 8px; }
@@ -530,6 +556,7 @@ select.form-control-lc { cursor: pointer; }
 .qr-residente-img-wrap img { max-width: 260px; width: 100%; height: auto; display: block; margin: 0 auto; border: 4px solid var(--border); border-radius: 14px; background: #fff; }
 .qr-residente-token { font-family: monospace; font-size: 0.82rem; color: var(--text-muted); margin-top: 12px; word-break: break-all; text-align: center; }
 </style>
+
 </head>
 <body>
 
@@ -1240,7 +1267,7 @@ const ANIO_MAXIMO_MATRIZ = 2100;
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 const DB_SESION_NAME = "LaConcordiaSesionDB";
-const DB_SESION_VERSION = 2;
+const DB_SESION_VERSION = 4;
 const STORE_SESION = "sesiones";
 const STORE_CACHE = "cache";
 const SESSION_KEY_VECINO = "vecino";
@@ -1790,6 +1817,7 @@ function cerrarSesion() {
       const tokenARevocar = state.adminToken || state.sessionToken;
       if (tokenARevocar) apiCall({ action: "logout", sessionToken: tokenARevocar }).catch(() => {});
       await borrarTodasLasSesiones();
+      if (state.casa) await borrarSesionDB("qr_residente_" + state.casa);
       state.casa = null; state.sessionToken = null; state.esAdmin = false; state.adminToken = null;
       state.datosVecino = null; state.datosAdmin = { casas: [], pendientes: [], movimientos: [] };
       state.perfilCompletadoEnSesion = false;
@@ -2019,6 +2047,7 @@ function cancelarCompletarPerfil() {
     if (r.isConfirmed) {
       if (state.sessionToken) apiCall({ action: "logout", sessionToken: state.sessionToken }).catch(() => {});
       await borrarTodasLasSesiones();
+      if (state.casa) await borrarSesionDB("qr_residente_" + state.casa);
       state.casa = null; state.sessionToken = null; state.datosVecino = null; state.perfilCompletadoEnSesion = false;
       mostrarPantalla("login");
     }
@@ -3257,7 +3286,7 @@ async function descargarEstadoCuentaAdmin() {
 }
 
 // =========================================================================
-// ACCESOS QR + TARJETA INVITACIÓN VISITANTES
+// ACCESOS QR + TARJETA INVITACIÓN VISITANTES + TARJETA DORADA RESIDENTE
 // =========================================================================
 const _qrState = { miResidente: null, visitantes: [], historial: [], qrVerActual: null, qrEditActual: null, procesando: false, cargado: false, dataUrls: {} };
 
@@ -3495,6 +3524,186 @@ async function _generarTarjetaQRVisitante(v) {
   return outUrl;
 }
 
+async function _generarTarjetaQRResidente() {
+  if (!_qrState.miResidente) throw new Error("No hay QR de residente cargado");
+  const r = _qrState.miResidente;
+  const nombreResidente = (state.datosVecino && state.datosVecino.nombre) ? state.datosVecino.nombre : "";
+  const cacheKey = `CARD_RES_${r.token}_${state.casa}_${nombreResidente}`;
+  if (_qrState.dataUrls[cacheKey]) return _qrState.dataUrls[cacheKey];
+
+  const qrDataUrl = await _generarQRDataUrl(r.token);
+  const qrImg = await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("No se pudo cargar imagen QR"));
+    img.src = qrDataUrl;
+  });
+
+  const W = 900, H = 1360;
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#f5eedc";
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.shadowColor = "rgba(138, 98, 10, 0.18)";
+  ctx.shadowBlur = 34;
+  ctx.shadowOffsetY = 12;
+  ctx.fillStyle = "#ffffff";
+  _roundRect(ctx, 36, 36, W - 72, H - 72, 30);
+  ctx.fill();
+  ctx.restore();
+
+  ctx.strokeStyle = "#e5cf93";
+  ctx.lineWidth = 3;
+  _roundRect(ctx, 36, 36, W - 72, H - 72, 30);
+  ctx.stroke();
+
+  const grad = ctx.createLinearGradient(36, 36, W - 36, 200);
+  grad.addColorStop(0, "#8f650a");
+  grad.addColorStop(0.5, "#cfa22c");
+  grad.addColorStop(1, "#7d5606");
+  ctx.fillStyle = grad;
+  _roundRect(ctx, 36, 36, W - 72, 168, { tl: 30, tr: 30, br: 0, bl: 0 });
+  ctx.fill();
+
+  ctx.fillStyle = "#f2d57e";
+  ctx.fillRect(36, 200, W - 72, 5);
+
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#fff1c2";
+  ctx.font = '700 18px "Segoe UI", Arial, sans-serif';
+  ctx.fillText("PASE EXCLUSIVO · RESIDENTE", W / 2, 92);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = '800 40px "Segoe UI", Arial, sans-serif';
+  ctx.fillText("Residencial La Concordia", W / 2, 146);
+
+  ctx.fillStyle = "#4a3b18";
+  ctx.font = '600 24px "Segoe UI", Arial, sans-serif';
+  ctx.fillText("Credencial digital de acceso permanente,", W / 2, 248);
+  ctx.font = '700 24px "Segoe UI", Arial, sans-serif';
+  ctx.fillStyle = "#9c700c";
+  ctx.fillText("presenta este código para poder ingresar", W / 2, 284);
+
+  const qrBoxSize = 410, qrBoxX = (W - qrBoxSize) / 2, qrBoxY = 316;
+  ctx.save();
+  ctx.shadowColor = "rgba(184, 134, 11, 0.16)";
+  ctx.shadowBlur = 22;
+  ctx.shadowOffsetY = 6;
+  ctx.fillStyle = "#ffffff";
+  _roundRect(ctx, qrBoxX, qrBoxY, qrBoxSize, qrBoxSize, 24);
+  ctx.fill();
+  ctx.restore();
+
+  ctx.strokeStyle = "#d4af37";
+  ctx.lineWidth = 3.5;
+  _roundRect(ctx, qrBoxX, qrBoxY, qrBoxSize, qrBoxSize, 24);
+  ctx.stroke();
+
+  const qrDrawSize = 370;
+  ctx.drawImage(qrImg, (W - qrDrawSize) / 2, qrBoxY + (qrBoxSize - qrDrawSize) / 2, qrDrawSize, qrDrawSize);
+
+  ctx.fillStyle = "#8a7a52";
+  ctx.font = '700 20px "Courier New", monospace';
+  ctx.fillText(r.token, W / 2, 762);
+
+  ctx.fillStyle = "#fdf5db";
+  _roundRect(ctx, 84, 786, W - 168, 56, 16);
+  ctx.fill();
+  ctx.strokeStyle = "#d4af37";
+  ctx.lineWidth = 2;
+  _roundRect(ctx, 84, 786, W - 168, 56, 16);
+  ctx.stroke();
+
+  ctx.fillStyle = "#7d5806";
+  _dibujarTextoAjustado(ctx, "★ ACCESO PERMANENTE · RESIDENTE AUTORIZADO ★", W / 2, 822, W - 200, 21, "800");
+
+  const lineaResidente = nombreResidente
+    ? `Residente: ${nombreResidente}  |  Casa ${state.casa}`
+    : `Residente  ·  Casa ${state.casa}`;
+
+  ctx.fillStyle = "#fcfaf3";
+  _roundRect(ctx, 84, 862, W - 168, 92, 16);
+  ctx.fill();
+  ctx.strokeStyle = "#e6d5a3";
+  ctx.lineWidth = 1.5;
+  _roundRect(ctx, 84, 862, W - 168, 92, 16);
+  ctx.stroke();
+
+  ctx.fillStyle = "#8a6208";
+  _dibujarTextoAjustado(ctx, lineaResidente, W / 2, 900, W - 200, 23, "800");
+
+  ctx.fillStyle = "#6e6142";
+  ctx.font = '600 18px "Segoe UI", Arial, sans-serif';
+  ctx.fillText("Uso exclusivo para propietarios y familiares autorizados", W / 2, 934);
+
+  const guiaTop = 988;
+  ctx.strokeStyle = "#e5d5a7";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(84, guiaTop); ctx.lineTo(255, guiaTop); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W - 255, guiaTop); ctx.lineTo(W - 84, guiaTop); ctx.stroke();
+
+  ctx.fillStyle = "#8a6208";
+  ctx.font = '800 20px "Segoe UI", Arial, sans-serif';
+  ctx.fillText("CONVIVENCIA RESIDENCIAL", W / 2, guiaTop + 7);
+
+  const normas = [
+    { bg: "#fdf2d6", icono: "🚗", titulo: "Máx. 20 km/h", sub: "Velocidad moderada" },
+    { bg: "#fdf2d6", icono: "🚸", titulo: "Niños jugando", sub: "Conduce alerta" },
+    { bg: "#fdf2d6", icono: "🐕", titulo: "Mascotas en vía", sub: "Respeta su paseo" },
+    { bg: "#fdf2d6", icono: "♻️", titulo: "No tirar basura", sub: "Cuida el ambiente" },
+    { bg: "#fdf2d6", icono: "🅿️", titulo: "Estaciona bien", sub: "No bloquees portones" },
+    { bg: "#fdf2d6", icono: "🔒", titulo: "QR Personal", sub: "No difundir en redes" }
+  ];
+
+  const cardW = 232, cardH = 116, gapX = 18, gapY = 16;
+  const startX = (W - (cardW * 3 + gapX * 2)) / 2;
+  const startY = guiaTop + 32;
+
+  normas.forEach((n, idx) => {
+    const col = idx % 3, row = Math.floor(idx / 3);
+    const x = startX + col * (cardW + gapX), y = startY + row * (cardH + gapY);
+
+    ctx.fillStyle = "#fffdf7";
+    _roundRect(ctx, x, y, cardW, cardH, 16);
+    ctx.fill();
+    ctx.strokeStyle = "#eadbb3";
+    ctx.lineWidth = 1.5;
+    _roundRect(ctx, x, y, cardW, cardH, 16);
+    ctx.stroke();
+
+    ctx.fillStyle = n.bg;
+    ctx.beginPath();
+    ctx.arc(x + cardW / 2, y + 36, 24, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.font = '26px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+    ctx.fillStyle = "#2c3e50";
+    ctx.fillText(n.icono, x + cardW / 2, y + 46);
+
+    ctx.fillStyle = "#4a3b18";
+    ctx.font = '800 17px "Segoe UI", Arial, sans-serif';
+    ctx.fillText(n.titulo, x + cardW / 2, y + 81);
+
+    ctx.fillStyle = "#8a7a52";
+    ctx.font = '600 14px "Segoe UI", Arial, sans-serif';
+    ctx.fillText(n.sub, x + cardW / 2, y + 102);
+  });
+
+  ctx.fillStyle = "#9c8856";
+  ctx.font = '600 16px "Segoe UI", Arial, sans-serif';
+  ctx.fillText("Pase Permanente de Residente · Residencial La Concordia", W / 2, H - 58);
+
+  const outUrl = canvas.toDataURL("image/png");
+  _qrState.dataUrls[cacheKey] = outUrl;
+  return outUrl;
+}
+
 function _qrLoaderVisible(visible) {
   const loader = document.getElementById("miQRResidenteLoader");
   const wrap = document.getElementById("miQRResidenteWrap");
@@ -3510,17 +3719,57 @@ function _qrLoaderVisible(visible) {
 async function cargarAccesosQR(forzar = false) {
   if (!state.casa) return;
   if (_qrState.cargado && !forzar) return;
-  _qrLoaderVisible(true);
+
+  const cacheKey = "qr_residente_" + state.casa;
+  let tieneCacheLocal = false;
+
+  if (!forzar) {
+    const cachedQR = await obtenerSesionDB(cacheKey);
+    if (cachedQR && cachedQR.residente && cachedQR.residente.token) {
+      _qrState.miResidente = cachedQR.residente;
+      if (cachedQR.qrDataUrl) {
+        _qrState.dataUrls[cachedQR.residente.token] = cachedQR.qrDataUrl;
+      }
+      await renderMiQRResidente();
+      tieneCacheLocal = true;
+    }
+  }
+
+  if (!tieneCacheLocal) _qrLoaderVisible(true);
+
   try {
     const res = await apiQR({ action: "qrObtenerPanelVecino", casa: state.casa, sessionToken: state.sessionToken });
+    const tokenCambio = !_qrState.miResidente || _qrState.miResidente.token !== res.residente.token;
+
     _qrState.miResidente = res.residente;
     _qrState.visitantes = res.visitantes || [];
     _qrState.historial = res.accesos || [];
     _qrState.cargado = true;
-    await renderMiQRResidente();
+
+    if (tokenCambio || !tieneCacheLocal || !_qrState.dataUrls[res.residente.token]) {
+      const qrDataUrl = await _generarQRDataUrl(res.residente.token);
+      await guardarSesionDB(cacheKey, { residente: res.residente, qrDataUrl });
+      await renderMiQRResidente();
+    }
+
     renderQRVisitantes();
     renderHistorialQR();
-  } catch (err) { _qrLoaderVisible(false); Swal.fire("Error QR", err.message, "error"); }
+  } catch (err) {
+    _qrLoaderVisible(false);
+    if (!tieneCacheLocal) {
+      Swal.fire("Error QR", err.message, "error");
+    } else {
+      Swal.fire({
+        icon: "info",
+        title: "QR cargado desde caché",
+        text: "No se pudieron actualizar los visitantes por conexión.",
+        timer: 2200,
+        showConfirmButton: false,
+        toast: true,
+        position: "top-end"
+      });
+    }
+  }
 }
 
 async function _recargarSoloVisitantes() {
@@ -3709,8 +3958,12 @@ async function regenerarMiQRResidente() {
   if (!conf.isConfirmed) return;
   _qrState.procesando = true; _qrLoaderVisible(true); showLoading("Regenerando QR...");
   try {
-    _qrState.miResidente = await apiQR({ action: "qrRegenerarResidente", casa: state.casa, sessionToken: state.sessionToken });
-    await renderMiQRResidente(); hideLoading();
+    const nuevoResidente = await apiQR({ action: "qrRegenerarResidente", casa: state.casa, sessionToken: state.sessionToken });
+    _qrState.miResidente = nuevoResidente;
+    const qrDataUrl = await _generarQRDataUrl(nuevoResidente.token);
+    await guardarSesionDB("qr_residente_" + state.casa, { residente: nuevoResidente, qrDataUrl });
+    await renderMiQRResidente();
+    hideLoading();
     Swal.fire({ icon: "success", title: "QR actualizado", timer: 1500, showConfirmButton: false });
   } catch (err) { hideLoading(); _qrLoaderVisible(false); Swal.fire("Error", err.message, "error"); }
   finally { _qrState.procesando = false; }
@@ -3729,8 +3982,41 @@ async function limpiarHistorialQR() {
   finally { _qrState.procesando = false; }
 }
 
-async function descargarMiQRResidente() { if (_qrState.miResidente) await _descargarImagenQR(_qrState.miResidente.token, `QR-Residente-${state.casa}.png`); }
-function compartirMiQRResidente() { if (_qrState.miResidente) _compartirQR(_qrState.miResidente.token, `QR de residente Casa ${state.casa}`, `QR-Residente-${state.casa}.png`); }
+async function descargarMiQRResidente() {
+  if (!_qrState.miResidente) return;
+  const nombreArchivo = `Pase-Residente-Casa-${state.casa}.png`;
+  try {
+    const dataUrl = await _generarTarjetaQRResidente();
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = nombreArchivo;
+    link.click();
+  } catch (e) {
+    await _descargarImagenQR(_qrState.miResidente.token, nombreArchivo);
+  }
+}
+
+async function compartirMiQRResidente() {
+  if (!_qrState.miResidente) return;
+  const nombreArchivo = `Pase-Residente-Casa-${state.casa}.png`;
+  const texto = `Pase de residente · Residencial La Concordia · Casa ${state.casa}`;
+  try {
+    const dataUrl = await _generarTarjetaQRResidente();
+    const resp = await fetch(dataUrl);
+    const blob = await resp.blob();
+    const file = new File([blob], nombreArchivo, { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: "Pase Residente La Concordia", text: texto });
+    } else if (navigator.share) {
+      await navigator.share({ title: "Pase Residente La Concordia", text: `${texto} · Token: ${_qrState.miResidente.token}` });
+    } else {
+      await descargarMiQRResidente();
+      Swal.fire({ icon: "info", title: "Imagen descargada", text: "Envíala desde tu galería por WhatsApp.", timer: 2500, showConfirmButton: false });
+    }
+  } catch (err) {
+    if (err.name !== "AbortError") Swal.fire("Error", "No se pudo compartir.", "error");
+  }
+}
 
 async function descargarQRVer() {
   if (!_qrState.qrVerActual) return;
@@ -3838,5 +4124,6 @@ swalObserver.observe(document.body, { childList: true, subtree: true });
 
 console.log("La Concordia - App v24 cargada");
 </script>
+
 </body>
 </html>
